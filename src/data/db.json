@@ -1,0 +1,13 @@
+{
+  "deposits": [],
+  "users": [
+    {
+      "id": "f422e00b-8f71-40f5-b3ba-0fa2b0a4360a",
+      "username": "تميم علي اللغبي",
+      "email": "tymlghby@gmail.com",
+      "password": "Tmeem-123455",
+      "balance": 0,
+      "createdAt": "2026-04-03T18:23:20.369Z"
+    }
+  ]
+}

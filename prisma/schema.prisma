@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  balance   Float    @default(0.0)
+  role      String   @default("USER") // USER or ADMIN
+  apiKey    String   @default(uuid()) @unique // For Reseller API
+  emailVerified Boolean  @default(false)
+  verificationToken String? @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+  deposits  Deposit[]
+  tickets   Ticket[]
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  providerOrderId String
+  service         String
+  link            String
+  quantity        Int
+  charge          Float
+  startCount      Int      @default(0)
+  remains         Int
+  status          String   @default("pending") // pending, processing, completed, cancelled
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Deposit {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String
+  method       String
+  amount       Float
+  receiptImage String
+  status       String   @default("pending") // pending, completed, rejected
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Ticket {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  subject   String
+  message   String
+  status    String   @default("open") // open, closed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
