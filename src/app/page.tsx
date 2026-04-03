@@ -41,7 +41,8 @@ const services = [
   { name: 'ديسكورد', desc: 'تعزيز عدد الأعضاء والتفاعل في خادم الديسكورد لبناء مجتمع نشط.', icon: 'https://img.icons8.com/fluency/256/discord-logo.png' },
 ];
 
-const testimonials = [
+// Testimonials will be fetched from the API
+const initialTestimonials = [
   { name: 'سارة الأحمدي', text: 'خدمة ممتازة وسريعة جداً! حسابي نمى بشكل ملحوظ خلال أيام.', rating: 5 },
   { name: 'أحمد المالكي', text: 'أفضل موقع تعاملت معه. الأسعار معقولة والتوصيل فوري. أنصح الكل فيه!', rating: 5 },
   { name: 'نورة العتيبي', text: 'من أفضل المواقع اللي تعاملت معها. ثقة وإنجاز سريع والدعم ممتاز 💜', rating: 5 },
@@ -92,10 +93,21 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [stats, setStats] = useState({ users: 0, orders: 0 });
 
+  const [testimonials, setTestimonials] = useState<any[]>(initialTestimonials);
+
   useEffect(() => {
     fetch('/api/stats')
       .then(res => res.json())
       .then(data => setStats(data))
+      .catch(() => {});
+
+    fetch('/api/testimonials')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) {
+          setTestimonials(data);
+        }
+      })
       .catch(() => {});
   }, []);
 
@@ -396,12 +408,16 @@ export default function Home() {
                   <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>شاهد نمو مستخدمينا</h3>
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1.5rem' }}>
                     <div style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', background: 'var(--bg-secondary)' }}>
-                      <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--brand-primary)' }}>56K+</span>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>😍 متابعون</p>
+                      <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--brand-primary)' }}>
+                        <AnimatedCounter target={stats.orders} />
+                      </span>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>📦 طلبات مكتملة</p>
                     </div>
                     <div style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', background: 'var(--bg-secondary)' }}>
-                      <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--brand-success)' }}>11K+</span>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>👍 إعجابات</p>
+                      <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--brand-success)' }}>
+                        <AnimatedCounter target={stats.users} />
+                      </span>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>👥 مستخدم نشط</p>
                     </div>
                   </div>
                 </div>
@@ -439,8 +455,12 @@ export default function Home() {
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>⭐ Trustpilot</span>
                     <span style={{ fontSize: '0.75rem', color: 'var(--brand-success)', fontWeight: 700 }}>({t.rating}/5)</span>
                   </div>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem' }}>
-                    <span style={{ color: 'white', fontWeight: 800, fontSize: '1.1rem' }}>{t.name[0]}</span>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem', overflow: 'hidden' }}>
+                    {t.avatarUrl ? (
+                      <img src={t.avatarUrl} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ color: 'white', fontWeight: 800, fontSize: '1.1rem' }}>{t.name[0]}</span>
+                    )}
                   </div>
                   <h4 style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: '1rem' }}>{t.name}</h4>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.7 }}>{t.text}</p>

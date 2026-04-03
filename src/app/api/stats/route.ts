@@ -15,6 +15,6 @@ export async function GET() {
       orders: orderCount,
     });
   } catch (error) {
-    return NextResponse.json({ users: 250000, orders: 36879984 });
+    return NextResponse.json({ users: 0, orders: 0 });
   }
 }

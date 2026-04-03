@@ -136,7 +136,7 @@ export default function APIDocs() {
     alert('تم نسخ الرمز السري بنجاح!');
   };
 
-  const maskedKey = apiKey ? `smm_live_${'*'.repeat(24)}` : 'يجب تسجيل الدخول لرؤية رمزك';
+  const maskedKey = apiKey ? `tf_live_${'*'.repeat(24)}` : 'يجب تسجيل الدخول لرؤية رمزك';
 
   return (
     <>
@@ -162,7 +162,7 @@ export default function APIDocs() {
               </div>
               <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>API URL</p>
-                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }} dir="ltr">https://smmviral.com/api/v2</p>
+                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }} dir="ltr">https://tafaulkom.com/api/v2</p>
               </div>
               <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>صيغة الاستجابة</p>
@@ -230,7 +230,7 @@ export default function APIDocs() {
               <div style={{ padding: '1rem 2rem' }}>
                 <pre style={{ background: 'var(--bg-secondary)', padding: '1.5rem', borderRadius: 'var(--radius-md)', overflow: 'auto', direction: 'ltr', textAlign: 'left' }}>
                   <code style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: 'var(--text-primary)' }}>{`<?php
-$api_url = 'https://smmviral.com/api/v2';
+$api_url = 'https://tafaulkom.com/api/v2';
 $api_key = 'YOUR_API_KEY';
 
 $data = [

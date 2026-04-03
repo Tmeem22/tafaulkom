@@ -18,7 +18,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem('smmviral-theme') as Theme;
+    const saved = localStorage.getItem('tafaulkom-theme') as Theme;
     if (saved) {
       setTheme(saved);
       document.documentElement.setAttribute('data-theme', saved);
@@ -29,7 +29,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const next = theme === 'light' ? 'dark' : 'light';
     setTheme(next);
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('smmviral-theme', next);
+    localStorage.setItem('tafaulkom-theme', next);
   };
 
   if (!mounted) {

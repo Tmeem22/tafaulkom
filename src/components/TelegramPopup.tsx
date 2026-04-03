@@ -75,7 +75,7 @@ export default function TelegramPopup() {
         </div>
 
         <a
-          href="https://t.me/smmviral"
+          href="https://t.me/tafaulkom"
           target="_blank"
           rel="noopener noreferrer"
           onClick={dismiss}
