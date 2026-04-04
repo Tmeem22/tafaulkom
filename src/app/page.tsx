@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -43,12 +44,12 @@ const services = [
 
 // Testimonials will be fetched from the API
 const initialTestimonials = [
-  { name: 'سارة الأحمدي', text: 'خدمة ممتازة وسريعة جداً! حسابي نمى بشكل ملحوظ خلال أيام.', rating: 5 },
-  { name: 'أحمد المالكي', text: 'أفضل موقع تعاملت معه. الأسعار معقولة والتوصيل فوري. أنصح الكل فيه!', rating: 5 },
-  { name: 'نورة العتيبي', text: 'من أفضل المواقع اللي تعاملت معها. ثقة وإنجاز سريع والدعم ممتاز 💜', rating: 5 },
-  { name: 'محمد الدوسري', text: 'جربت مواقع كثير لكن تفاعلكم أفضلهم بفرق. سريع ومضمون.', rating: 5 },
-  { name: 'ريم الحربي', text: 'موقع احترافي جداً. استخدمته لحسابات عملائي والنتائج ممتازة!', rating: 5 },
-  { name: 'خالد العنزي', text: 'الـ API سهل الاستخدام وربطته بلوحتي بدون مشاكل. خدمة عظيمة!', rating: 5 },
+  { name: 'سارة الأحمدي', text: 'صراحة سهولة بالتعامل، مجرد ما طلبت تم التنفيذ بسلاسة. أنصح بتجربتهم لو تدورون سرعة.', rating: 5 },
+  { name: 'أحمد المالكي', text: 'حبيت توفر خيارات الدفع وتنوع الخدمات. الأسعار تعتبر تنافسية جداً وتوفر وقت وجهد.', rating: 5 },
+  { name: 'نورة العتيبي', text: 'الدعم الفني مره متجاوبين صراحة، كان عندي طلب تعديل على الرابط وتجاوبوا معي بثواني 💜', rating: 5 },
+  { name: 'محمد الدوسري', text: 'من تجربة، جودة المتابعين بالخدمات المضمونة فعلاً ثابته وما تنقص كثير مقارنة بالباقين.', rating: 5 },
+  { name: 'ريم الحربي', text: 'دائماً اعتمد عليهم في تسويق حسابات متجري، ما شاء الله سرعة التنفيذ تبيض الوجه قدام العملاء.', rating: 5 },
+  { name: 'خالد العنزي', text: 'الربط البرمجي API ريحني كثير. المستندات واضحة والرد من السيرفر سريع بدون أي تأخير.', rating: 5 },
 ];
 
 const faqs = [
@@ -123,12 +124,13 @@ export default function Home() {
       const data = await res.json();
       
       if (res.ok) {
+        showToast("Welcome back! Login successful.", "success");
         router.push('/dashboard');
       } else {
-        alert(data.error || "فشل تسجيل الدخول");
+        showToast(data.error || "فشل تسجيل الدخول", "error");
       }
     } catch (e) {
-      alert("فشل الاتصال بخادم السيرفر");
+      showToast("فشل الاتصال بخادم السيرفر", "error");
     } finally {
       setLoginLoading(false);
     }
@@ -433,45 +435,6 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ====================== TESTIMONIALS ====================== */}
-        <section style={{ padding: '5rem 1.5rem', background: 'var(--bg-secondary)' }}>
-          <div style={{ maxWidth: '1280px', margin: '0 auto', textAlign: 'center' }}>
-            <span className="section-badge">آراء العملاء</span>
-            <h2 style={{ fontSize: '2.2rem', fontWeight: 800, marginTop: '1rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>
-              مستخدمونا <span className="gradient-text">يتحدثون عنا</span>
-            </h2>
-            <p style={{ color: 'var(--text-secondary)', maxWidth: '500px', margin: '0 auto 3rem' }}>
-              يشارك مستخدمونا تجاربهم الواقعية مع تفاعلكم حيث تحسّن التفاعل بشكل ملحوظ.
-            </p>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-              {testimonials.map((t, i) => (
-                <div key={i} className="testimonial-card" style={{ textAlign: 'right' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.75rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>⭐ Trustpilot</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--brand-success)', fontWeight: 700 }}>({t.rating}/5)</span>
-                  </div>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.75rem', overflow: 'hidden' }}>
-                    {t.avatarUrl ? (
-                      <img src={t.avatarUrl} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <span style={{ color: 'white', fontWeight: 800, fontSize: '1.1rem' }}>{t.name[0]}</span>
-                    )}
-                  </div>
-                  <h4 style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: '1rem' }}>{t.name}</h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.7 }}>{t.text}</p>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ marginTop: '2.5rem' }}>
-              <Link href="/register" className="btn-accent">
-                اكتب مراجعة ✍️
-              </Link>
             </div>
           </div>
         </section>

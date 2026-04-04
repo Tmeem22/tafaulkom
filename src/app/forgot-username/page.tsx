@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { showToast } from '@/hooks/useNotification';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -24,13 +25,13 @@ export default function ForgotUsername() {
       const data = await res.json();
       
       if (res.ok) {
-        setMessage({ type: 'success', text: data.message || 'إذا كان البريد مسجلاً، فستصلك رسالة قريباً.' });
+        showToast(data.message || 'إذا كان البريد مسجلاً، فستصلك رسالة قريباً.', 'success');
         setEmail('');
       } else {
-        setMessage({ type: 'error', text: data.error || 'فشل إرسال الطلب' });
+        showToast(data.error || 'فشل إرسال الطلب', 'error');
       }
     } catch (e) {
-      setMessage({ type: 'error', text: 'فشل الاتصال بخادم تفاعلكم' });
+      showToast('فشل الاتصال بخادم تفاعلكم', 'error');
     } finally {
       setIsLoading(false);
     }

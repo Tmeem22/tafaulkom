@@ -1,5 +1,5 @@
-"use client";
 import { useEffect, useState } from 'react';
+import { showToast } from '@/hooks/useNotification';
 
 export default function AdminDeposits() {
   const [deposits, setDeposits] = useState<any[]>([]);
@@ -35,13 +35,13 @@ export default function AdminDeposits() {
       });
 
       if (res.ok) {
-        alert("تم تحديث حالة الطلب بنجاح");
+        showToast("تم تحديث حالة الطلب بنجاح", "success");
         fetchDeposits();
       } else {
-        alert("حدث خطأ أثناء التحديث");
+        showToast("حدث خطأ أثناء التحديث", "error");
       }
     } catch (e) {
-      alert("فشل الاتصال بالخادم");
+      showToast("فشل الاتصال بالخادم", "error");
     }
   };
 

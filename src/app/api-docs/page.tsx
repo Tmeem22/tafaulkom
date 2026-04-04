@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import { showToast } from '@/hooks/useNotification';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -123,17 +124,17 @@ export default function APIDocs() {
       const data = await res.json();
       if (data.apiKey) {
         setApiKey(data.apiKey);
-        alert('تم تغيير رمز API بنجاح!');
+        showToast('تم تغيير رمز API بنجاح!', 'success');
       }
     } catch {
-      alert('حدث خطأ');
+      showToast('حدث خطأ', 'error');
     }
   };
 
   const handleCopy = () => {
     if (!apiKey) return;
     navigator.clipboard.writeText(apiKey);
-    alert('تم نسخ الرمز السري بنجاح!');
+    showToast('تم نسخ الرمز السري بنجاح!', 'success');
   };
 
   const maskedKey = apiKey ? `tf_live_${'*'.repeat(24)}` : 'يجب تسجيل الدخول لرؤية رمزك';

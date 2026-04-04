@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react';
+import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
@@ -24,7 +25,7 @@ export default function Deposit() {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("حجم الصورة يجب أن يكون أقل من 5 ميجابايت");
+        showToast("حجم الصورة يجب أن يكون أقل من 5 ميجابايت", "error");
         return;
       }
       const reader = new FileReader();
@@ -37,7 +38,7 @@ export default function Deposit() {
 
   const handleSubmit = async () => {
     if (!amount || !image) {
-      alert("الرجاء إدخال المبلغ وإرفاق صورة الإيصال");
+      showToast("الرجاء إدخال المبلغ وإرفاق صورة الإيصال", "error");
       return;
     }
 
@@ -57,11 +58,12 @@ export default function Deposit() {
         setShowSuccess(true);
         setAmount('');
         setImage(null);
+        showToast("تم إرسال طلب الشحن بنجاح", "success");
       } else {
-        alert("حدث خطأ أثناء الإرسال");
+        showToast("حدث خطأ أثناء الإرسال", "error");
       }
     } catch (error) {
-      alert("فشل الاتصال بالخادم");
+      showToast("فشل الاتصال بالخادم", "error");
     } finally {
       setIsSubmitting(false);
     }

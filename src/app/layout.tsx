@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import TelegramPopup from "@/components/TelegramPopup";
+import Notification from "@/components/Notification";
 
 export const metadata: Metadata = {
   title: "تفاعلكم",
@@ -23,6 +24,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
           <TelegramPopup />
+          <Notification />
         </ThemeProvider>
       </body>
     </html>

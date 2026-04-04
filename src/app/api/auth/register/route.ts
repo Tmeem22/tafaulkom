@@ -50,12 +50,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'البريد الإلكتروني أو اسم المستخدم مستخدم مسبقاً' }, { status: 400 });
     }
     
-    // 4. Hash Password
+    // 4. Hash Password & Generate 6-char Alphanumeric Code
     const hashedPassword = await bcrypt.hash(password, 10);
-    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let verificationToken = '';
+    for(let i = 0; i < 6; i++) {
+      verificationToken += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
 
     // 5. Create user
-    const role = email.toLowerCase() === 'tymlghby@gmail.com' ? 'ADMIN' : 'USER';
+    const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase() || 'tymlghby@gmail.com';
+    const adminUsername = process.env.ADMIN_USERNAME || '0501645063';
+    
+    const role = (email.toLowerCase() === adminEmail || username === adminUsername) ? 'ADMIN' : 'USER';
     const newUser = await prisma.user.create({
       data: {
         username,
@@ -68,21 +75,18 @@ export async function POST(req: Request) {
       }
     });
 
-    // 6. Verification Link
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const verifyLink = `${origin}/api/auth/verify?token=${verificationToken}`;
-    
+    // 6. Verification Code Email
     const html = `
     <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px; text-align: center;">
       <div style="background: #6C3CE1; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
         <h1 style="color: white; margin: 0;">تفاعلكم</h1>
       </div>
-      <h2 style="color: #333;">تفعيل الحساب 🚀</h2>
-      <p style="color: #666; font-size: 1.1rem;">أهلاً بك في <b>تفاعلكم</b>! يرجى الضغط على الزر أدناه لتفعيل حسابك والبدء في استخدام المنصة.</p>
+      <h2 style="color: #333;">رمز تفعيل الحساب 🚀</h2>
+      <p style="color: #666; font-size: 1.1rem;">أهلاً بك في <b>تفاعلكم</b>! رمز التحقق الخاص بك هو:</p>
       <div style="margin: 30px 0;">
-        <a href="${verifyLink}" style="display:inline-block; padding: 14px 30px; background: #6C3CE1; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(108,60,225,0.3);">تفعيل حسابي الآن</a>
+        <div style="display:inline-block; padding: 15px 40px; background: #f4f4f4; color: #333; letter-spacing: 5px; border-radius: 12px; font-weight: bold; font-size: 2rem; border: 2px dashed #6C3CE1;">${verificationToken}</div>
       </div>
-      <p style="margin-top:20px; font-size:0.85rem; color:#999;">إذا واجهت أي مشكلة، لا تتردد في التواصل معنا.</p>
+      <p style="margin-top:20px; font-size:0.85rem; color:#999;">يرجى إدخال هذا الرمز في صفحة التسجيل لتفعيل حسابك.</p>
       <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
       <p style="color: #888; font-size: 0.8rem;">© 2026 تفاعلكم - أفضل منصة SMM عربية</p>
     </div>`;

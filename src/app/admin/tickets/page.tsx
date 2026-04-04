@@ -1,5 +1,5 @@
-"use client";
 import { useEffect, useState } from 'react';
+import { showToast } from '@/hooks/useNotification';
 
 export default function AdminTickets() {
   const [tickets, setTickets] = useState<any[]>([]);
@@ -33,13 +33,13 @@ export default function AdminTickets() {
       });
 
       if (res.ok) {
-        alert("تم إغلاق التذكرة بنجاح");
+        showToast("تم إغلاق التذكرة بنجاح", "success");
         fetchTickets();
       } else {
-        alert("حدث خطأ أثناء التحديث");
+        showToast("حدث خطأ أثناء التحديث", "error");
       }
     } catch (e) {
-      alert("فشل الاتصال بالخادم");
+      showToast("فشل الاتصال بالخادم", "error");
     }
   };
 

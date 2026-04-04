@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { showToast } from '@/hooks/useNotification';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -26,12 +27,13 @@ export default function Login() {
       
       if (res.ok) {
         // Here we could store JWT/user info, for demo we just redirect
+        showToast("تم تسجيل الدخول بنجاح! مرحباً بك.", "success");
         router.push('/dashboard');
       } else {
-        alert(data.error || "فشل تسجيل الدخول");
+        showToast(data.error || "فشل تسجيل الدخول", "error");
       }
     } catch (e) {
-      alert("فشل الاتصال بخادم السيرفر");
+      showToast("فشل الاتصال بخادم السيرفر", "error");
     } finally {
       setIsLoading(false);
     }

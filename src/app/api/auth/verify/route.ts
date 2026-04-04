@@ -1,21 +1,25 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-    const token = searchParams.get('token');
+    const data = await req.json();
+    const { email, code } = data;
 
-    if (!token) {
-      return NextResponse.redirect(new URL('/login?error=InvalidToken', req.url));
+    if (!email || !code) {
+      return NextResponse.json({ error: 'Email and code are required' }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({
-      where: { verificationToken: token }
+      where: { email }
     });
 
     if (!user) {
-      return NextResponse.redirect(new URL('/login?error=TokenNotFound', req.url));
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    if (user.verificationToken !== code) {
+      return NextResponse.json({ error: 'رمز التحقق غير صحيح' }, { status: 400 });
     }
 
     await prisma.user.update({
@@ -26,9 +30,9 @@ export async function GET(req: Request) {
       }
     });
 
-    return NextResponse.redirect(new URL('/login?verified=true', req.url));
+    return NextResponse.json({ success: true, message: 'تم التحقق بنجاح' });
   } catch (error) {
     console.error('Verification error:', error);
-    return NextResponse.redirect(new URL('/login?error=InternalError', req.url));
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

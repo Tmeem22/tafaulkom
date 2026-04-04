@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
@@ -82,7 +83,7 @@ export default function Support() {
         setOrderId('');
         setMessage('');
         fetchTickets();
-        alert('تم إرسال التذكرة بنجاح');
+        showToast('تم إرسال التذكرة بنجاح', 'success');
       } else {
         setSubmitObj({ loading: false, error: data.error || 'حدث خطأ غير متوقع' });
       }

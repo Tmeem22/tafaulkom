@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -29,6 +30,8 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -44,7 +47,7 @@ export default function Register() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("كلمتا المرور غير متطابقتين");
+      showToast("كلمتا المرور غير متطابقتين", "error");
       return;
     }
     
@@ -60,11 +63,12 @@ export default function Register() {
       if (res.ok) {
         setIsSuccess(true);
         setUserEmail(formData.email);
+        showToast("لقد تم إرسال رمز التحقق إلى بريدك الإلكتروني", "success");
       } else {
-        alert(data.error || "فشل التسجيل");
+        showToast(data.error || "فشل التسجيل", "error");
       }
     } catch (e) {
-      alert("فشل الاتصال بالخادم");
+      showToast("فشل الاتصال بالخادم", "error");
     } finally {
       setIsLoading(false);
     }
@@ -84,6 +88,30 @@ export default function Register() {
     { name: 'confirmPassword', label: 'تأكيد كلمة المرور', type: 'password', icon: '🔐', placeholder: '••••••••••••', dir: 'ltr' },
   ];
 
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!verificationCode) return;
+    setIsVerifying(true);
+    try {
+      const res = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, code: verificationCode })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showToast("تم التفعيل بنجاح! جاري تحويلك لتسجيل الدخول...", "success");
+        router.push('/login?verified=true');
+      } else {
+        showToast(data.error || "رمز التحقق غير صحيح", "error");
+      }
+    } catch(err) {
+      showToast("حدث خطأ في الاتصال بالخادم", "error");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -92,19 +120,42 @@ export default function Register() {
           
           {isSuccess ? (
             <div className="animate-fade-in-up" style={{ maxWidth: '600px', margin: '4rem auto', textAlign: 'center', background: 'var(--bg-card)', padding: '4rem 2rem', borderRadius: 'var(--radius-xl)', border: '1.5px solid var(--border-color)', boxShadow: 'var(--shadow-lg)' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--brand-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', fontSize: '2.5rem' }}>✅</div>
-              <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem' }}>افحص بريدك الإلكتروني!</h1>
+              <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--brand-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', fontSize: '2.5rem' }}>📧</div>
+              <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem' }}>أدخل رمز التحقق</h1>
               <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '2rem' }}>
-                لقد تم إرسال رابط تفعيل الحساب إلى البريد الإلكتروني: <br/>
+                لقد أرسلنا رمز تحقق (مكون من 6 أرقام وحروف عشوائية) إلى: <br/>
                 <strong style={{ color: 'var(--brand-primary)' }}>{userEmail}</strong>
               </p>
-              <p style={{ color: 'var(--text-tertiary)', fontSize: '0.9rem', marginBottom: '2rem' }}>
-                يرجى الضغط على الرابط الموجود في الرسالة لتتمكن من تسجيل الدخول إلى لوحة التحكم. <br/>
-                (إذا لم تجد الرسالة في الوارد، يرجى تفقد ملف "الرسائل غير المرغوب فيها" أو Spam).
+              
+              <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '300px', margin: '0 auto 2rem' }}>
+                <input 
+                  type="text" 
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value.toUpperCase())}
+                  placeholder="أدخل الرمز هنا"
+                  maxLength={6}
+                  style={{ 
+                    textAlign: 'center', letterSpacing: '8px', fontSize: '1.5rem', fontWeight: 'bold', 
+                    padding: '1rem', background: 'var(--bg-elevated)', border: '2px solid var(--brand-primary)', 
+                    borderRadius: '12px', color: 'var(--text-primary)', textTransform: 'uppercase'
+                  }}
+                  required
+                />
+                <button 
+                  type="submit" 
+                  className="btn-primary" 
+                  disabled={isVerifying || verificationCode.length < 6}
+                  style={{ padding: '0.8rem', fontSize: '1.1rem' }}
+                >
+                  {isVerifying ? '⏳ جاري التحقق...' : 'تأكيد الحساب'}
+                </button>
+              </form>
+              
+              <p style={{ color: 'var(--text-tertiary)', fontSize: '0.9rem', marginBottom: '1rem' }}>
+                (إذا لم تجد الرسالة، يرجى تفقد ملف "الرسائل غير المرغوب فيها" أو Spam)
               </p>
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                <Link href="/login" className="btn-primary" style={{ padding: '0.8rem 2.5rem' }}>الذهاب لصفحة الدخول</Link>
-                <button onClick={() => setIsSuccess(false)} style={{ background: 'none', border: 'none', color: 'var(--text-tertiary)', cursor: 'pointer', fontSize: '0.9rem', textDecoration: 'underline' }}>تعديل البيانات</button>
+                <button onClick={() => setIsSuccess(false)} style={{ background: 'none', border: 'none', color: 'var(--text-tertiary)', cursor: 'pointer', fontSize: '0.9rem', textDecoration: 'underline' }}>العودة وتعديل البيانات</button>
               </div>
             </div>
           ) : (

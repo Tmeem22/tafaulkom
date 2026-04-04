@@ -3,11 +3,15 @@ import nodemailer from 'nodemailer';
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '465'),
-  secure: true,
+  secure: true, // Use SSL
+  pool: true,   // Use pooled connections
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  tls: {
+    rejectUnauthorized: false // Helps with some cloud network restrictions
+  }
 });
 
 export const sendMail = async (to: string, subject: string, html: string) => {

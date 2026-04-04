@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { showToast } from '@/hooks/useNotification';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -25,12 +26,13 @@ export default function ResetPassword() {
       
       if (res.ok) {
         setSent(true);
+        showToast("تم إرسال رابط استعادة كلمة المرور بنجاح", "success");
       } else {
         const data = await res.json();
-        setError(data.error || "فشل إرسال رابط الاستعادة");
+        showToast(data.error || "فشل إرسال رابط الاستعادة", "error");
       }
     } catch (err) {
-      setError("حدث خطأ في الاتصال بالسيرفر");
+      showToast("حدث خطأ في الاتصال بالسيرفر", "error");
     } finally {
       setIsLoading(false);
     }

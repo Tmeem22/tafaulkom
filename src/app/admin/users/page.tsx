@@ -1,5 +1,5 @@
-"use client";
 import { useEffect, useState } from 'react';
+import { showToast } from '@/hooks/useNotification';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState<any[]>([]);
@@ -49,13 +49,13 @@ export default function AdminUsers() {
       });
 
       if (res.ok) {
-        alert("تم التنفيذ بنجاح");
+        showToast("تم التنفيذ بنجاح", "success");
         fetchUsers();
       } else {
-        alert("حدث خطأ أثناء التنفيذ");
+        showToast("حدث خطأ أثناء التنفيذ", "error");
       }
     } catch (e) {
-      alert("فشل الاتصال بالخادم");
+      showToast("فشل الاتصال بالخادم", "error");
     }
   };
 
