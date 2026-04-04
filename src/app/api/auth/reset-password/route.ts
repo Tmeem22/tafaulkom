@@ -15,18 +15,36 @@ export async function POST(req: Request) {
     const resetLink = `${origin}/reset-password/confirm?email=${encodeURIComponent(email)}`;
       
       const html = `
-      <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px; text-align: center;">
-        <div style="background: #6C3CE1; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 20px;">
-          <h1 style="color: white; margin: 0;">تفاعلكم</h1>
+      <div dir="rtl" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f7f8fc; padding: 40px 20px; text-align: center; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #6C3CE1 0%, #4B28A1 100%); padding: 40px 20px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -1px;">تفاعلكم</h1>
+            <p style="color: rgba(255,255,255,0.8); margin-top: 10px; font-size: 16px;">مرحباً بك في أفضل منصة خدمات SMM 🚀</p>
+          </div>
+          
+          <!-- Content -->
+          <div style="padding: 40px 30px;">
+            <h2 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px;">استعادة كلمة المرور 🔐</h2>
+            <p style="font-size: 16px; line-height: 1.6; color: #555; margin-bottom: 30px;">
+              لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك في <b>تفاعلكم</b>. 
+              لتغيير كلمة المرور، يرجى الضغط على الزر أدناه:
+            </p>
+            
+            <div style="margin-bottom: 30px;">
+              <a href="${resetLink}" style="display:inline-block; padding: 16px 36px; background-color: #6C3CE1; color: #ffffff; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 16px; box-shadow: 0 4px 15px rgba(108,60,225,0.3);">إعادة تعيين كلمة المرور</a>
+            </div>
+            
+            <p style="font-size: 14px; color: #888; line-height: 1.5;">
+              تنتهي صلاحية هذا الرابط بعد 24 ساعة. إذا لم تكن أنت من طلب هذا الرابط، يمكنك تجاهل هذا البريد بأمان.
+            </p>
+          </div>
+          
+          <!-- Footer -->
+          <div style="padding: 20px; background-color: #fafbfd; border-top: 1px solid #eeeeee; text-align: center;">
+            <p style="font-size: 12px; color: #aaa; margin: 0;">&copy; 2026 Tafaulkom. All rights reserved.</p>
+          </div>
         </div>
-        <h2 style="color: #333;">استعادة كلمة المرور</h2>
-        <p style="color: #666; font-size: 1.1rem;">لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك في <b>تفاعلكم</b>.</p>
-        <div style="margin: 30px 0;">
-          <a href="${resetLink}" style="display:inline-block; padding: 14px 30px; background: #6C3CE1; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(108,60,225,0.3);">إعادة تعيين كلمة المرور</a>
-        </div>
-        <p style="margin-top:20px; font-size:0.85rem; color:#999;">إذا لم تكن أنت من طلب ذلك، يمكنك تجاهل هذه الرسالة بكل بساطة.</p>
-        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-        <p style="color: #888; font-size: 0.8rem;">© 2026 تفاعلكم - جميع الحقوق محفوظة</p>
       </div>`;
       
       try {
