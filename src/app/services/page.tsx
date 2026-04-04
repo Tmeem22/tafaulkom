@@ -5,16 +5,27 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
+const platformIcons: Record<string, string> = {
+  instagram: 'https://img.icons8.com/fluency/256/instagram-new.png',
+  tiktok: 'https://img.icons8.com/fluency/256/tiktok.png',
+  youtube: 'https://img.icons8.com/fluency/256/youtube-play.png',
+  twitter: 'https://img.icons8.com/fluency/256/twitter.png',
+  facebook: 'https://img.icons8.com/fluency/256/facebook-new.png',
+  snapchat: 'https://img.icons8.com/fluency/256/snapchat.png',
+  telegram: 'https://img.icons8.com/fluency/256/telegram-app.png',
+  spotify: 'https://img.icons8.com/fluency/256/spotify.png',
+};
+
 const categories = [
   { name: 'الكل', key: 'all' },
-  { name: 'Instagram', key: 'instagram', icon: '📸' },
-  { name: 'TikTok', key: 'tiktok', icon: '🎵' },
-  { name: 'YouTube', key: 'youtube', icon: '▶️' },
-  { name: 'Twitter', key: 'twitter', icon: '🐦' },
-  { name: 'Facebook', key: 'facebook', icon: '👤' },
-  { name: 'Snapchat', key: 'snapchat', icon: '👻' },
-  { name: 'Telegram', key: 'telegram', icon: '✈️' },
-  { name: 'Spotify', key: 'spotify', icon: '🎧' },
+  { name: 'Instagram', key: 'instagram', icon: platformIcons.instagram },
+  { name: 'TikTok', key: 'tiktok', icon: platformIcons.tiktok },
+  { name: 'YouTube', key: 'youtube', icon: platformIcons.youtube },
+  { name: 'Twitter', key: 'twitter', icon: platformIcons.twitter },
+  { name: 'Facebook', key: 'facebook', icon: platformIcons.facebook },
+  { name: 'Snapchat', key: 'snapchat', icon: platformIcons.snapchat },
+  { name: 'Telegram', key: 'telegram', icon: platformIcons.telegram },
+  { name: 'Spotify', key: 'spotify', icon: platformIcons.spotify },
 ];
 
 export default function Services() {
@@ -78,15 +89,18 @@ export default function Services() {
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
                   style={{
-                    padding: '0.5rem 1.2rem', borderRadius: 'var(--radius-full)',
+                    padding: '0.6rem 1.4rem', borderRadius: 'var(--radius-full)',
                     border: `1.5px solid ${activeCategory === cat.key ? 'var(--brand-primary)' : 'var(--border-color)'}`,
                     background: activeCategory === cat.key ? 'var(--gradient-cta)' : 'var(--bg-card)',
                     color: activeCategory === cat.key ? 'white' : 'var(--text-secondary)',
                     fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s',
-                    fontFamily: 'inherit'
+                    fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '0.6rem'
                   }}
                 >
-                  {cat.icon ? `${cat.icon} ` : ''}{cat.name}
+                  {cat.icon && (
+                    <img src={cat.icon} alt={cat.name} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                  )}
+                  {cat.name}
                 </button>
               ))}
             </div>
