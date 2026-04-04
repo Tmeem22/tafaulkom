@@ -251,7 +251,7 @@ export default function Home() {
                   </form>
 
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '1.2rem', marginTop: '1rem' }}>
-                    <Link href="/forgot-username" style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>نسيت اسم المستخدم؟</Link>
+                    <Link href="/forgot-username" style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>استعادة الحساب</Link>
                     <Link href="/reset-password" style={{ color: 'var(--brand-primary)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>نسيت كلمة المرور؟</Link>
                   </div>
                   <div style={{ textAlign: 'center', marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-tertiary)' }}>

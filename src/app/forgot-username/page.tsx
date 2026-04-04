@@ -47,8 +47,8 @@ export default function ForgotUsername() {
               <div style={{ width: '80px', height: '80px', background: 'rgba(108,60,225,0.1)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                 <img src="https://img.icons8.com/parakeet/256/search.png" width={48} height={48} />
               </div>
-              <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>تذكير اسم المستخدم</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6 }}>أدخل بريدك الإلكتروني وسنقوم بإرسال اسم المستخدم الخاص بك.</p>
+              <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>استعادة الحساب</h1>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6 }}>أدخل بريدك الإلكتروني وسنقوم بإرسال بيانات الدخول الخاصة بك.</p>
             </div>
 
             {message.text && (
@@ -96,7 +96,7 @@ export default function ForgotUsername() {
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
                     <img src="https://img.icons8.com/parakeet/256/search.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
-                    إرسال اسم المستخدم
+                    إرسال بيانات الدخول
                   </div>
                 )}
               </button>

