@@ -219,7 +219,7 @@ export default function Home() {
                           <img src="https://img.icons8.com/parakeet/256/envelope.png" width={22} height={22} />
                         </span>
                         <input 
-                          type="email" 
+                          type="text" 
                           required
                           className="input-field" 
                           placeholder="البريد الإلكتروني" 

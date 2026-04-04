@@ -72,7 +72,7 @@ export default function Register() {
   };
 
   const fields = [
-    { name: 'email', label: 'البريد الإلكتروني', type: 'email', icon: 'https://img.icons8.com/parakeet/256/envelope.png', placeholder: 'name@example.com', dir: 'ltr' },
+    { name: 'email', label: 'البريد الإلكتروني', type: 'text', icon: 'https://img.icons8.com/parakeet/256/envelope.png', placeholder: 'name@example.com', dir: 'ltr' },
     { name: 'password', label: 'كلمة المرور', type: 'password', icon: 'https://img.icons8.com/parakeet/256/lock.png', placeholder: '••••••••••••', dir: 'ltr' },
     { name: 'confirmPassword', label: 'تأكيد كلمة المرور', type: 'password', icon: 'https://img.icons8.com/parakeet/256/checked-checkbox.png', placeholder: '••••••••••••', dir: 'ltr' },
   ];
