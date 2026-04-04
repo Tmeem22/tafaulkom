@@ -208,7 +208,7 @@ export default function Home() {
                      </span>
                    </div>
 
-                  <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '0.5rem', marginTop: '0.5rem', color: 'var(--text-primary)' }}>تسجيل الدخول</h2>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '0.5rem', marginTop: '0.5rem', color: 'var(--text-primary)' }}>تسجيل الدخول (V3)</h2>
                   <p style={{ textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>ادخل لحسابك وابدأ بتنفيذ الطلبات</p>
 
                   <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} autoComplete="off">
