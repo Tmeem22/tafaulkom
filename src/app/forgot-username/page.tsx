@@ -45,7 +45,7 @@ export default function ForgotUsername() {
           <div className="card animate-fade-in-up" style={{ padding: '3.5rem 2.5rem', borderRadius: '30px', boxShadow: '0 20px 60px rgba(0,0,0,0.1)' }}>
             <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
               <div style={{ width: '80px', height: '80px', background: 'rgba(108,60,225,0.1)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                <span style={{ fontSize: '2.5rem' }}>🔍</span>
+                <img src="https://img.icons8.com/parakeet/256/search.png" width={48} height={48} />
               </div>
               <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>تذكير اسم المستخدم</h1>
               <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6 }}>أدخل بريدك الإلكتروني وسنقوم بإرسال اسم المستخدم الخاص بك.</p>
@@ -59,7 +59,7 @@ export default function ForgotUsername() {
                 display: 'flex', alignItems: 'center', gap: '0.8rem', border: '1px solid transparent',
                 borderColor: message.type === 'success' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'
               }}>
-                <span style={{ fontSize: '1.2rem' }}>{message.type === 'success' ? '✅' : '❌'}</span> {message.text}
+                <img src={message.type === 'success' ? 'https://img.icons8.com/parakeet/256/checkmark.png' : 'https://img.icons8.com/parakeet/256/error.png'} width={20} height={20} /> {message.text}
               </div>
             )}
 
@@ -67,7 +67,9 @@ export default function ForgotUsername() {
               <div>
                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)', marginBottom: '0.6rem' }}>البريد الإلكتروني</label>
                 <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.2rem', opacity: 0.7 }}>📧</span>
+                  <span style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src="https://img.icons8.com/parakeet/256/envelope.png" width={20} height={20} />
+                  </span>
                   <input 
                     type="email" 
                     required 
@@ -86,7 +88,17 @@ export default function ForgotUsername() {
                 borderRadius: '16px', boxShadow: '0 8px 25px rgba(108,60,225,0.3)',
                 transition: 'all 0.3s'
               }}>
-                {isLoading ? '⏳ جاري البحث...' : '🔍 إرسال اسم المستخدم'}
+                {isLoading ? (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
+                    <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                    جاري البحث...
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
+                    <img src="https://img.icons8.com/parakeet/256/search.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                    إرسال اسم المستخدم
+                  </div>
+                )}
               </button>
             </form>
 
@@ -96,7 +108,7 @@ export default function ForgotUsername() {
                 color: 'var(--brand-primary)', fontWeight: 700, textDecoration: 'none',
                 fontSize: '0.95rem'
               }}>
-                <span style={{ fontSize: '1.1rem' }}>➡️</span> العودة لصفحة الدخول
+                <img src="https://img.icons8.com/parakeet/256/left.png" width={20} height={20} /> العودة لصفحة الدخول
               </Link>
             </div>
           </div>

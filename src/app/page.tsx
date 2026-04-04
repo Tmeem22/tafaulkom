@@ -46,7 +46,7 @@ const services = [
 const initialTestimonials = [
   { name: 'سارة الأحمدي', text: 'صراحة سهولة بالتعامل، مجرد ما طلبت تم التنفيذ بسلاسة. أنصح بتجربتهم لو تدورون سرعة.', rating: 5 },
   { name: 'أحمد المالكي', text: 'حبيت توفر خيارات الدفع وتنوع الخدمات. الأسعار تعتبر تنافسية جداً وتوفر وقت وجهد.', rating: 5 },
-  { name: 'نورة العتيبي', text: 'الدعم الفني مره متجاوبين صراحة، كان عندي طلب تعديل على الرابط وتجاوبوا معي بثواني 💜', rating: 5 },
+  { name: 'نورة العتيبي', text: 'الدعم الفني مره متجاوبين صراحة، كان عندي طلب تعديل على الرابط وتجاوبوا معي بثواني.', rating: 5 },
   { name: 'محمد الدوسري', text: 'من تجربة، جودة المتابعين بالخدمات المضمونة فعلاً ثابته وما تنقص كثير مقارنة بالباقين.', rating: 5 },
   { name: 'ريم الحربي', text: 'دائماً اعتمد عليهم في تسويق حسابات متجري، ما شاء الله سرعة التنفيذ تبيض الوجه قدام العملاء.', rating: 5 },
   { name: 'خالد العنزي', text: 'الربط البرمجي API ريحني كثير. المستندات واضحة والرد من السيرفر سريع بدون أي تأخير.', rating: 5 },
@@ -167,8 +167,9 @@ export default function Home() {
                 </p>
 
                 <div style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
-                  <Link href="/register" className="btn-primary" style={{ padding: '1.1rem 3.5rem', fontSize: '1.1rem', boxShadow: '0 10px 40px rgba(108,60,225,0.4)', borderRadius: 'var(--radius-full)' }}>
-                    🚀 ابدأ الآن مجاناً
+                  <Link href="/register" className="btn-primary" style={{ padding: '1.1rem 3.5rem', fontSize: '1.1rem', boxShadow: '0 10px 40px rgba(108,60,225,0.4)', borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', gap: '0.8rem' }}>
+                    <img src="https://img.icons8.com/parakeet/256/rocket.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                    ابدأ الآن مجاناً
                   </Link>
                   <Link href="/services" className="btn-secondary" style={{ padding: '1.1rem 2.2rem', borderRadius: 'var(--radius-full)' }}>
                     قائمة الخدمات
@@ -200,33 +201,52 @@ export default function Home() {
               {/* Right: Login Form */}
               <div className="animate-slide-right stagger-2" style={{ display: 'flex', justifyContent: 'center' }}>
                 <div className="card" style={{ padding: '2.5rem', width: '100%', maxWidth: '420px', position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: '-20px', left: '50%', transform: 'translateX(-50%)' }}>
-                    <span style={{ background: 'var(--gradient-primary)', color: 'white', padding: '0.4rem 1.5rem', borderRadius: 'var(--radius-full)', fontSize: '0.8rem', fontWeight: 700, boxShadow: '0 4px 15px rgba(108,60,225,0.3)' }}>
-                      أكبر منصة عربية 🌍
-                    </span>
-                  </div>
+                   <div style={{ position: 'absolute', top: '-18px', left: '50%', transform: 'translateX(-50%)' }}>
+                     <span style={{ background: 'var(--gradient-primary)', color: 'white', padding: '0.5rem 1.8rem', borderRadius: 'var(--radius-full)', fontSize: '0.85rem', fontWeight: 800, boxShadow: '0 8px 25px rgba(108,60,225,0.4)', display: 'flex', alignItems: 'center', gap: '0.6rem', whiteSpace: 'nowrap' }}>
+                       <img src="https://img.icons8.com/parakeet/256/globe.png" width={18} height={18} style={{ filter: 'brightness(0) invert(1)' }} />
+                       أكبر منصة عربية
+                     </span>
+                   </div>
 
                   <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '0.5rem', marginTop: '0.5rem', color: 'var(--text-primary)' }}>تسجيل الدخول</h2>
                   <p style={{ textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>ادخل لحسابك وابدأ بتنفيذ الطلبات</p>
 
                   <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} autoComplete="off">
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>اسم المستخدم</label>
+                      <label style={{ display: 'block', fontSize: '0.86rem', fontWeight: 800, color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>البريد الإلكتروني</label>
                       <div style={{ position: 'relative' }}>
-                        <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem' }}>👤</span>
-                        <input type="text" className="input-field" placeholder="اسم المستخدم" style={{ paddingRight: '2.5rem' }} value={login} onChange={e => setLogin(e.target.value)} autoComplete="off" />
+                        <span style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', opacity: 0.8 }}>
+                          <img src="https://img.icons8.com/parakeet/256/envelope.png" width={22} height={22} />
+                        </span>
+                        <input 
+                          type="email" 
+                          required
+                          className="input-field" 
+                          placeholder="البريد الإلكتروني" 
+                          style={{ paddingRight: '3.2rem', height: '54px', borderRadius: '14px' }} 
+                          value={login} 
+                          onChange={e => setLogin(e.target.value)} 
+                          autoComplete="email" 
+                        />
                       </div>
                     </div>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>كلمة المرور</label>
                       <div style={{ position: 'relative' }}>
-                        <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem' }}>🔒</span>
-                        <input type="password" className="input-field" placeholder="••••••••••" style={{ paddingRight: '2.5rem' }} dir="ltr" value={password} onChange={e => setPassword(e.target.value)} autoComplete="new-password" />
+                        <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
+                          <img src="https://img.icons8.com/parakeet/256/lock.png" width={20} height={20} />
+                        </span>
+                        <input type="password" className="input-field" placeholder="••••••••••" style={{ paddingRight: '2.8rem' }} dir="ltr" value={password} onChange={e => setPassword(e.target.value)} autoComplete="new-password" />
                       </div>
                     </div>
 
-                    <button type="submit" disabled={loginLoading} className="btn-dark" style={{ width: '100%', padding: '0.9rem', fontSize: '1rem', marginTop: '0.5rem', opacity: loginLoading ? 0.7 : 1 }}>
-                      {loginLoading ? '⏳ جاري التحقق...' : '🔑 تسجيل الدخول'}
+                    <button type="submit" disabled={loginLoading} className="btn-dark" style={{ width: '100%', padding: '0.9rem', fontSize: '1rem', marginTop: '0.5rem', opacity: loginLoading ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}>
+                      {loginLoading ? '⏳ جاري التحقق...' : (
+                        <>
+                          <img src="https://img.icons8.com/parakeet/256/key.png" width={20} height={20} />
+                          تسجيل الدخول
+                        </>
+                      )}
                     </button>
                   </form>
 
@@ -253,24 +273,31 @@ export default function Home() {
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
               <div className="stat-card animate-fade-in-up stagger-1">
-                <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>⏱️</span>
+                <span style={{ display: 'block', marginBottom: '0.5rem' }}>
+                  <img src="https://img.icons8.com/parakeet/256/clock.png" width={48} height={48} />
+                </span>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 600 }}>طلب جديد كل</p>
                 <p style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-primary)' }}>ثانية</p>
               </div>
               <div className="stat-card animate-fade-in-up stagger-2">
-                <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>🪂</span>
+                <span style={{ display: 'block', marginBottom: '0.5rem' }}>
+                  <img src="https://img.icons8.com/parakeet/256/checkmark.png" width={48} height={48} />
+                </span>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 600 }}>طلب مكتمل</p>
                 <p style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-primary)' }} dir="ltr">+<AnimatedCounter target={stats.orders} /></p>
               </div>
               <div className="stat-card animate-fade-in-up stagger-3">
-                <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>💰</span>
+                <span style={{ display: 'block', marginBottom: '0.5rem' }}>
+                  <img src="https://img.icons8.com/parakeet/256/money.png" width={48} height={48} />
+                </span>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 600 }}>الأسعار تبدأ من</p>
                 <p style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--brand-primary)' }} dir="ltr">$0.001</p>
               </div>
             </div>
             <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-              <Link href="/register" className="btn-primary" style={{ padding: '0.9rem 3rem', fontSize: '1rem' }}>
-                سجّل الآن وابدأ 🚀
+              <Link href="/register" className="btn-primary" style={{ padding: '1.1rem 3.5rem', fontSize: '1.1rem', borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', gap: '0.8rem' }}>
+                <img src="https://img.icons8.com/parakeet/256/rocket.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                سجّل الآن وابدأ
               </Link>
             </div>
           </div>
@@ -290,21 +317,24 @@ export default function Home() {
                 <p style={{ color: 'var(--text-secondary)', lineHeight: 1.9, fontSize: '1rem', marginBottom: '2rem' }}>
                   يعتبر تفاعلكم أحد أفضل منصات التسويق في العالم العربي، حيث يقدّم خدمات سريعة ومناسبة وآمنة تساعد العلامات التجارية والوكالات والمؤثرين على تعزيز حضورهم وزيادة التفاعل الحقيقي وتحقيق نتائج مضمونة.
                 </p>
-                <Link href="/services" className="btn-accent">
-                  استكشف خدمات تفاعلكم ✨
+                <Link href="/services" className="btn-accent" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <img src="https://img.icons8.com/parakeet/256/flash-on.png" width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} />
+                  استكشف خدمات تفاعلكم
                 </Link>
               </div>
 
               {/* Right: Feature Cards */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
                 {[
-                  { icon: '💸', title: 'أسرع لوحة SMM', desc: 'معالجة فورية للطلبات مع تتبع مباشر لضمان أسرع نتائج بدون أي تأخير.' },
-                  { icon: '🏷️', title: 'أرخص لوحة SMM', desc: 'أسعار منخفضة جداً مع أعلى مستويات النمو والتفاعل بتكلفة تنافسية.' },
-                  { icon: '🛡️', title: 'آمن 100% ومضمون', desc: 'جميع الخدمات آمنة وخالية من المخاطر مع تسليم عضوي يحافظ على سلامة حساباتك.' },
-                  { icon: '🎧', title: 'دعم على مدار الساعة', desc: 'فريق الدعم متواجد 24/7 لمساعدتك في الطلبات والمشكلات في أي وقت.' },
+                  { icon: 'https://img.icons8.com/parakeet/256/fast-forward.png', title: 'أسرع لوحة SMM', desc: 'معالجة فورية للطلبات مع تتبع مباشر لضمان أسرع نتائج بدون أي تأخير.' },
+                  { icon: 'https://img.icons8.com/parakeet/256/sale.png', title: 'أرخص لوحة SMM', desc: 'أسعار منخفضة جداً مع أعلى مستويات النمو والتفاعل بتكلفة تنافسية.' },
+                  { icon: 'https://img.icons8.com/parakeet/256/shield.png', title: 'آمن 100% ومضمون', desc: 'جميع الخدمات آمنة وخالية من المخاطر مع تسليم عضوي يحافظ على سلامة حساباتك.' },
+                  { icon: 'https://img.icons8.com/parakeet/256/headset.png', title: 'دعم على مدار الساعة', desc: 'فريق الدعم متواجد 24/7 لمساعدتك في الطلبات والمشكلات في أي وقت.' },
                 ].map((f, i) => (
                   <div key={i} className="feature-card">
-                    <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}>{f.icon}</span>
+                    <span style={{ display: 'block', marginBottom: '0.75rem' }}>
+                      <img src={f.icon} alt={f.title} width={48} height={48} />
+                    </span>
                     <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{f.title}</h3>
                     <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.7 }}>{f.desc}</p>
                   </div>
@@ -353,15 +383,17 @@ export default function Home() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
               {[
-                { num: '01', title: 'التسجيل في تفاعلكم', desc: 'أنشئ حسابك مجاناً وابدأ باستخدام منصتنا لإدارة طلبات التسويق بسهولة.', icon: '📝' },
-                { num: '02', title: 'شحن الرصيد', desc: 'قم بإيداع رصيد من خلال طرق الدفع المتاحة وابدأ في تنفيذ طلباتك بسرعة وأمان.', icon: '💳' },
-                { num: '03', title: 'ابدأ الطلبات', desc: 'اختر الخدمة وأدخل التفاصيل المطلوبة وقدّم الطلب لتحصل على نمو حقيقي في حساباتك.', icon: '🚀' },
+                { num: '01', title: 'التسجيل في تفاعلكم', desc: 'أنشئ حسابك مجاناً وابدأ باستخدام منصتنا لإدارة طلبات التسويق بسهولة.', icon: 'https://img.icons8.com/parakeet/256/registration-form.png' },
+                { num: '02', title: 'شحن الرصيد', desc: 'قم بإيداع رصيد من خلال طرق الدفع المتاحة وابدأ في تنفيذ طلباتك بسرعة وأمان.', icon: 'https://img.icons8.com/parakeet/256/card-exchange.png' },
+                { num: '03', title: 'ابدأ الطلبات', desc: 'اختر الخدمة وأدخل التفاصيل المطلوبة وقدّم الطلب لتحصل على نمو حقيقي في حساباتك.', icon: 'https://img.icons8.com/parakeet/256/rocket.png' },
               ].map((step, i) => (
                 <div key={i} className="card" style={{ padding: '2.5rem 2rem', textAlign: 'center' }}>
                   <div style={{ width: '50px', height: '50px', borderRadius: '14px', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.2rem', fontSize: '0.9rem', fontWeight: 900, color: 'white' }}>
                     {step.num}
                   </div>
-                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '1rem' }}>{step.icon}</span>
+                  <span style={{ display: 'block', marginBottom: '1rem' }}>
+                    <img src={step.icon} alt={step.title} width={64} height={64} style={{ display: 'inline-block' }} />
+                  </span>
                   <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>{step.title}</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.7 }}>{step.desc}</p>
                 </div>
@@ -390,8 +422,8 @@ export default function Home() {
                     </span>
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{svc.name}</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: '1rem' }}>{svc.desc}</p>
-                    <span style={{ display: 'inline-block', padding: '0.4rem 1.2rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-color)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', transition: 'all 0.2s' }}>
-                      استكشف المزيد →
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 1.2rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-color)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', transition: 'all 0.2s' }}>
+                      استكشف المزيد <img src="https://img.icons8.com/parakeet/256/left.png" width={14} height={14} />
                     </span>
                   </div>
                 </Link>
@@ -405,21 +437,25 @@ export default function Home() {
           <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center' }} className="results-grid">
               <div>
-                <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-xl)', padding: '2rem', border: '1px solid var(--border-color)', textAlign: 'center' }}>
-                  <span style={{ fontSize: '4rem', display: 'block', marginBottom: '1rem' }}>📱</span>
+                <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-xl)', padding: '2.5rem 2rem', border: '1px solid var(--border-color)', textAlign: 'center' }}>
+                  <img src="https://img.icons8.com/parakeet/256/smartphone.png" width={80} height={80} style={{ display: 'block', margin: '0 auto 1.5rem' }} />
                   <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>شاهد نمو مستخدمينا</h3>
                   <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1.5rem' }}>
                     <div style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', background: 'var(--bg-secondary)' }}>
                       <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--brand-primary)' }}>
                         <AnimatedCounter target={stats.orders} />
                       </span>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>📦 طلبات مكتملة</p>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>
+                        <img src="https://img.icons8.com/parakeet/256/package.png" width={16} height={16} /> طلبات مكتملة
+                      </p>
                     </div>
                     <div style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', background: 'var(--bg-secondary)' }}>
                       <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--brand-success)' }}>
                         <AnimatedCounter target={stats.users} />
                       </span>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>👥 مستخدم نشط</p>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>
+                        <img src="https://img.icons8.com/parakeet/256/user.png" width={16} height={16} /> مستخدم نشط
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -430,8 +466,9 @@ export default function Home() {
                   <p style={{ lineHeight: 1.8, opacity: 0.9, marginBottom: '2rem' }}>
                     نقدم حلول تسويق فعّالة تساعد المستخدمين والشركات على زيادة المتابعين وتحسين التفاعل وتعزيز نمو حسابات وسائل التواصل الاجتماعي بسرعة وأمان.
                   </p>
-                  <Link href="/register" style={{ display: 'inline-block', padding: '0.85rem 2rem', borderRadius: 'var(--radius-full)', background: 'white', color: '#6C3CE1', fontWeight: 800, textDecoration: 'none', fontSize: '0.95rem' }}>
-                    ابدأ رحلتك الآن! 🌟
+                  <Link href="/register" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.8rem', padding: '1rem 2.5rem', borderRadius: 'var(--radius-full)', background: 'white', color: '#6C3CE1', fontWeight: 800, textDecoration: 'none', fontSize: '1rem' }}>
+                    <img src="https://img.icons8.com/parakeet/256/star.png" width={24} height={24} />
+                    ابدأ رحلتك الآن!
                   </Link>
                 </div>
               </div>
@@ -446,14 +483,14 @@ export default function Home() {
               
               {/* Help Card */}
               <div>
-                <div style={{ background: 'var(--gradient-primary)', borderRadius: 'var(--radius-xl)', padding: '3rem 2rem', color: 'white', textAlign: 'center' }}>
-                  <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>💬</span>
+                <div style={{ background: 'var(--gradient-primary)', borderRadius: 'var(--radius-xl)', padding: '3.5rem 2rem', color: 'white', textAlign: 'center' }}>
+                  <img src="https://img.icons8.com/parakeet/256/headset.png" width={80} height={80} style={{ display: 'block', margin: '0 auto 1.5rem', filter: 'brightness(0) invert(1)' }} />
                   <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem' }}>هل تحتاج مساعدة؟</h3>
                   <p style={{ opacity: 0.9, lineHeight: 1.8, marginBottom: '2rem', fontSize: '0.95rem' }}>
                     فريق الخبراء لدينا جاهز لمساعدتك والإجابة على جميع استفساراتك حول تفاعلكم.
                   </p>
                   <Link href="/register" style={{ display: 'inline-block', padding: '0.85rem 2rem', borderRadius: 'var(--radius-full)', background: 'white', color: '#6C3CE1', fontWeight: 800, textDecoration: 'none' }}>
-                    تحدث مع خبرائنا 🎧
+                    تحدث مع خبرائنا
                   </Link>
                 </div>
               </div>

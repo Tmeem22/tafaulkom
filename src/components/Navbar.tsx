@@ -76,8 +76,12 @@ export default function Navbar() {
 
             <div style={{ width: '1px', height: '24px', background: 'var(--border-color)', margin: '0 0.5rem' }} />
 
-            <button onClick={toggleTheme} className="theme-toggle" aria-label="تبديل الثيم">
-              {theme === 'light' ? '🌙' : '☀️'}
+            <button onClick={toggleTheme} className="theme-toggle" aria-label="تبديل الثيم" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {theme === 'light' ? (
+                <img src="https://img.icons8.com/parakeet/256/moon.png" width={20} height={20} />
+              ) : (
+                <img src="https://img.icons8.com/parakeet/256/sun.png" width={20} height={20} />
+              )}
             </button>
 
             {!loading && (
@@ -105,11 +109,19 @@ export default function Navbar() {
 
           {/* Mobile Hamburger */}
           <div style={{ display: 'none' }} className="mobile-nav-toggle">
-            <button onClick={toggleTheme} className="theme-toggle" style={{ marginLeft: '0.5rem' }}>
-              {theme === 'light' ? '🌙' : '☀️'}
+            <button onClick={toggleTheme} className="theme-toggle" style={{ marginLeft: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {theme === 'light' ? (
+                <img src="https://img.icons8.com/parakeet/256/moon.png" width={20} height={20} />
+              ) : (
+                <img src="https://img.icons8.com/parakeet/256/sun.png" width={20} height={20} />
+              )}
             </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', color: 'var(--text-primary)', cursor: 'pointer', padding: '0.5rem' }}>
-              {mobileOpen ? '✕' : '☰'}
+            <button onClick={() => setMobileOpen(!mobileOpen)} style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-primary)', cursor: 'pointer', padding: '0.5rem' }}>
+              {mobileOpen ? (
+                <img src="https://img.icons8.com/parakeet/256/delete-sign.png" width={24} height={24} />
+              ) : (
+                <img src="https://img.icons8.com/parakeet/256/menu.png" width={24} height={24} />
+              )}
             </button>
           </div>
         </div>

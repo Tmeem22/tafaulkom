@@ -5,12 +5,12 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
 const sideLinks = [
-  { label: 'طلب جديد', href: '/dashboard', icon: '🛒' },
-  { label: 'طلباتي', href: '/dashboard/orders', icon: '📋' },
-  { label: 'خدماتنا', href: '/services', icon: '⚡' },
-  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: '💳' },
-  { label: 'الدعم الفني', href: '/dashboard/support', icon: '🎧', active: true },
-  { label: 'API', href: '/api-docs', icon: '🔗' },
+  { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/parakeet/256/shopping-cart.png' },
+  { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/parakeet/256/list.png' },
+  { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/parakeet/256/flash-on.png' },
+  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/parakeet/256/card-exchange.png' },
+  { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/parakeet/256/headset.png', active: true },
+  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/parakeet/256/code.png' },
 ];
 
 type TicketStatus = 'open' | 'closed';
@@ -105,11 +105,13 @@ export default function Support() {
           </div>
           {sideLinks.map((l, i) => (
             <Link key={i} href={l.href} style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', fontWeight: 600, background: l.active ? 'var(--bg-secondary)' : 'transparent', color: l.active ? 'var(--brand-primary)' : 'var(--text-secondary)', transition: 'all 0.2s' }}>
-              <span>{l.icon}</span> {l.label}
+              <img src={l.icon} alt={l.label} width={20} height={20} style={{ opacity: l.active ? 1 : 0.7 }} /> {l.label}
             </Link>
           ))}
           <div style={{ marginTop: 'auto', padding: '1rem 0', borderTop: '1px solid var(--border-color)' }}>
-            <button onClick={() => { document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; window.location.href="/login"; }} style={{ background: 'none', border: 'none', width: '100%', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-danger)', cursor: 'pointer' }}>🚪 تسجيل الخروج</button>
+            <button onClick={() => { document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; window.location.href="/login"; }} style={{ background: 'none', border: 'none', width: '100%', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-danger)', cursor: 'pointer' }}>
+              <img src="https://img.icons8.com/parakeet/256/exit.png" width={20} height={20} /> تسجيل الخروج
+            </button>
           </div>
         </aside>
 
@@ -117,22 +119,24 @@ export default function Support() {
           <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>الدعم الفني 🎧</h1>
+                <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                  <img src="https://img.icons8.com/parakeet/256/headset.png" width={32} height={32} /> الدعم الفني
+                </h1>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>أرسل تذكرة وسيتم الرد خلال أقل من 24 ساعة</p>
               </div>
-              <button className="btn-primary" onClick={() => setShowNewTicket(true)} style={{ padding: '0.7rem 2rem', fontSize: '0.9rem' }}>
-                ✏️ تذكرة جديدة
+              <button className="btn-primary" onClick={() => setShowNewTicket(true)} style={{ padding: '0.7rem 2rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <img src="https://img.icons8.com/parakeet/128/edit.png" width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} /> تذكرة جديدة
               </button>
             </div>
 
             {/* Quick Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
               {[
-                { label: 'تذاكر مفتوحة', value: tickets.filter(t => t.status === 'open').length, icon: '📭', color: 'var(--brand-accent)' },
-                { label: 'مغلقة', value: tickets.filter(t => t.status === 'closed').length, icon: '✅', color: 'var(--text-tertiary)' },
+                { label: 'تذاكر مفتوحة', value: tickets.filter(t => t.status === 'open').length, icon: 'https://img.icons8.com/parakeet/256/feedback.png', color: 'var(--brand-accent)' },
+                { label: 'مغلقة', value: tickets.filter(t => t.status === 'closed').length, icon: 'https://img.icons8.com/parakeet/256/checkmark.png', color: 'var(--text-tertiary)' },
               ].map((s, i) => (
                 <div key={i} className="card" style={{ padding: '1.2rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>{s.icon}</span>
+                  <img src={s.icon} width={40} height={40} />
                   <div>
                     <p style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)' }}>{s.label}</p>
                     <p style={{ fontSize: '1.5rem', fontWeight: 900, color: s.color }}>{s.value}</p>
@@ -162,7 +166,7 @@ export default function Support() {
                 <div style={{ textAlign: 'center', padding: '3rem' }}>جاري التحميل...</div>
               ) : filtered.length === 0 ? (
                 <div className="card" style={{ padding: '3rem', textAlign: 'center' }}>
-                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>📭</span>
+                  <img src="https://img.icons8.com/parakeet/256/feedback.png" width={64} height={64} style={{ display: 'block', margin: '0 auto 1rem', opacity: 0.5 }} />
                   <p style={{ color: 'var(--text-tertiary)' }}>لا توجد تذاكر</p>
                 </div>
               ) : filtered.map(ticket => {
@@ -213,12 +217,14 @@ export default function Support() {
       {showNewTicket && (
         <div className="popup-overlay" onClick={() => setShowNewTicket(false)}>
           <div className="card animate-fade-in-up" onClick={e => e.stopPropagation()} style={{ padding: '2.5rem', maxWidth: '550px', width: '90%' }} dir="rtl">
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>✏️ تذكرة جديدة</h2>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <img src="https://img.icons8.com/parakeet/128/edit.png" width={24} height={24} /> تذكرة جديدة
+            </h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>اكتب تفاصيل مشكلتك وسيتم الرد في أقرب وقت</p>
             
             {submitObj.error && (
-               <div style={{ padding: '0.8rem', background: 'rgba(239,68,68,0.1)', color: 'var(--brand-danger)', borderRadius: 'var(--radius-md)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1rem', border: '1px solid rgba(239,68,68,0.2)' }}>
-                  ⚠️ {submitObj.error}
+               <div style={{ padding: '0.8rem', background: 'rgba(239,68,68,0.1)', color: 'var(--brand-danger)', borderRadius: 'var(--radius-md)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1rem', border: '1px solid rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <img src="https://img.icons8.com/parakeet/256/error.png" width={20} height={20} /> {submitObj.error}
                </div>
             )}
 
@@ -231,7 +237,9 @@ export default function Support() {
               </div>
               {(subject.includes('تعويض') || subject.includes('إلغاء') || subject.includes('مشكلة في طلب')) && (
                  <div className="animate-fade-in">
-                   <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--brand-accent)', marginBottom: '0.4rem' }}>رقم الطلب (سيتم التحقق منه تلقائياً! 🕵️‍♂️)</label>
+                   <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--brand-accent)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                     رقم الطلب (سيتم التحقق منه تلقائياً!) <img src="https://img.icons8.com/parakeet/256/search.png" width={16} height={16} />
+                   </label>
                    <input className="input-field" value={orderId} onChange={e => setOrderId(e.target.value)} placeholder="مثال: 1044" dir="ltr" required />
                  </div>
               )}
@@ -240,7 +248,19 @@ export default function Support() {
                 <textarea className="input-field" value={message} onChange={e => setMessage(e.target.value)} required rows={4} placeholder="اكتب تفاصيل المشكلة أو الاستفسار المخصص..." style={{ resize: 'vertical', minHeight: '120px' }} />
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                <button type="submit" disabled={submitObj.loading} className="btn-primary" style={{ flex: 1, padding: '0.85rem' }}>{submitObj.loading ? 'جاري الإرسال...' : '📤 إرسال التذكرة'}</button>
+                <button type="submit" disabled={submitObj.loading} className="btn-primary" style={{ flex: 1, padding: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}>
+                  {submitObj.loading ? (
+                    <>
+                      <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={20} height={20} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                      جاري الإرسال...
+                    </>
+                  ) : (
+                    <>
+                      <img src="https://img.icons8.com/parakeet/256/sent.png" width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} />
+                      إرسال التذكرة
+                    </>
+                  )}
+                </button>
                 <button type="button" className="btn-secondary" style={{ flex: 1, padding: '0.85rem' }} onClick={() => setShowNewTicket(false)}>إلغاء</button>
               </div>
             </form>

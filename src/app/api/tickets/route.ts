@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
     let finalMessage = message;
 
-    // Order Verification Logic! 🕵️‍♂️ (The truth seeker)
+    // Order Verification Logic! (The truth seeker)
     if (orderId && String(orderId).trim() !== '') {
       const numericOrderId = Number(orderId);
       

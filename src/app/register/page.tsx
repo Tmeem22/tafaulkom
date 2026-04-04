@@ -28,18 +28,10 @@ const platformIcons: Record<string, string> = {
 
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [isVerifying, setIsVerifying] = useState(false);
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
     password: '',
     confirmPassword: ''
   });
@@ -80,38 +72,10 @@ export default function Register() {
   };
 
   const fields = [
-    { name: 'username', label: 'اسم المستخدم', type: 'text', icon: '👤', placeholder: 'اسم المستخدم', dir: 'ltr' },
-    { name: 'email', label: 'البريد الإلكتروني', type: 'email', icon: '📧', placeholder: 'name@example.com', dir: 'ltr' },
-    { name: 'firstName', label: 'الاسم الأول', type: 'text', icon: '👤', placeholder: 'محمد', dir: 'rtl', half: true },
-    { name: 'lastName', label: 'الاسم الأخير', type: 'text', icon: '👤', placeholder: 'العتيبي', dir: 'rtl', half: true },
-    { name: 'phone', label: 'الهاتف', type: 'tel', icon: '📱', placeholder: '+966 5XX XXX XXXX', dir: 'ltr' },
-    { name: 'password', label: 'كلمة المرور', type: 'password', icon: '🔒', placeholder: '••••••••••••', dir: 'ltr' },
-    { name: 'confirmPassword', label: 'تأكيد كلمة المرور', type: 'password', icon: '🔐', placeholder: '••••••••••••', dir: 'ltr' },
+    { name: 'email', label: 'البريد الإلكتروني', type: 'email', icon: 'https://img.icons8.com/parakeet/256/envelope.png', placeholder: 'name@example.com', dir: 'ltr' },
+    { name: 'password', label: 'كلمة المرور', type: 'password', icon: 'https://img.icons8.com/parakeet/256/lock.png', placeholder: '••••••••••••', dir: 'ltr' },
+    { name: 'confirmPassword', label: 'تأكيد كلمة المرور', type: 'password', icon: 'https://img.icons8.com/parakeet/256/checked-checkbox.png', placeholder: '••••••••••••', dir: 'ltr' },
   ];
-
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!verificationCode) return;
-    setIsVerifying(true);
-    try {
-      const res = await fetch('/api/auth/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: userEmail, code: verificationCode })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        showToast("تم التفعيل بنجاح! جاري تحويلك لتسجيل الدخول...", "success");
-        router.push('/login?verified=true');
-      } else {
-        showToast(data.error || "رمز التحقق غير صحيح", "error");
-      }
-    } catch(err) {
-      showToast("حدث خطأ في الاتصال بالخادم", "error");
-    } finally {
-      setIsVerifying(false);
-    }
-  };
 
   return (
     <>
@@ -123,63 +87,48 @@ export default function Register() {
             
             {/* Form */}
             <div className="animate-fade-in-up">
-              <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>هل أنت جاهز؟ 🚀</h1>
+              <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                <img src="https://img.icons8.com/parakeet/256/rocket.png" width={40} height={40} />
+                هل أنت جاهز؟
+              </h1>
               <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '0.95rem' }}>
                 افتح حساباً في <strong style={{ color: 'var(--brand-primary)' }}>تفاعلكم</strong> الآن! وابدأ في رحلة نمو حساباتك. تفصلك خطوة واحدة عن أفضل تجربة تسويق عربية.
               </p>
 
-              <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {fields.map((field, i) => {
-                  if (field.half) return null;
-                  return (
-                    <div key={i}>
-                      <div style={{ position: 'relative' }}>
-                        <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem', width: '32px', height: '32px', borderRadius: '8px', background: 'var(--brand-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{field.icon}</span>
-                        <input 
-                          type={field.type} 
-                          name={field.name}
-                          value={(formData as any)[field.name]}
-                          onChange={handleChange}
-                          required
-                          className="input-field" 
-                          placeholder={field.placeholder}
-                          dir={field.dir}
-                          style={{ paddingRight: '3.2rem', background: 'var(--bg-card)', border: '1.5px solid var(--border-color)' }} 
-                        />
-                      </div>
+              <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                {fields.map((field, i) => (
+                  <div key={i}>
+                    <div style={{ position: 'relative' }}>
+                      <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px' }}>
+                        <img src={field.icon} width={20} height={20} />
+                      </span>
+                      <input 
+                        type={field.type} 
+                        name={field.name}
+                        value={(formData as any)[field.name]}
+                        onChange={handleChange}
+                        required
+                        className="input-field" 
+                        placeholder={field.placeholder}
+                        dir={field.dir}
+                        style={{ paddingRight: '3.2rem', background: 'var(--bg-card)', border: '1.5px solid var(--border-color)' }} 
+                      />
                     </div>
-                  );
-                })}
-
-                {/* First/Last name row */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  {fields.filter(f => f.half).map((field, i) => (
-                    <div key={i}>
-                      <div style={{ position: 'relative' }}>
-                        <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem', width: '32px', height: '32px', borderRadius: '8px', background: 'var(--brand-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{field.icon}</span>
-                        <input 
-                          type={field.type} 
-                          name={field.name}
-                          value={(formData as any)[field.name]}
-                          onChange={handleChange}
-                          required
-                          className="input-field" 
-                          placeholder={field.placeholder}
-                          dir={field.dir}
-                          style={{ paddingRight: '3.2rem', background: 'var(--bg-card)', border: '1.5px solid var(--border-color)' }} 
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
 
                 <button 
                   type="submit" 
                   className="btn-dark" 
-                  style={{ width: '100%', padding: '1rem', fontSize: '1.05rem', marginTop: '0.5rem' }}
+                  style={{ width: '100%', padding: '1.2rem', fontSize: '1.1rem', marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', borderRadius: 'var(--radius-lg)' }}
                   disabled={isLoading}
                 >
-                  {isLoading ? '⏳ جاري التحقق والتسجيل...' : 'سجّل الآن في تفاعلكم'}
+                  {isLoading ? (
+                    <>
+                      <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                      جاري التحقق والتسجيل...
+                    </>
+                  ) : 'سجّل الآن في تفاعلكم'}
                 </button>
               </form>
 
@@ -192,7 +141,7 @@ export default function Register() {
             <div className="animate-slide-right" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
                 <div style={{ width: '300px', height: '300px', borderRadius: '50%', background: 'var(--gradient-primary)', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', boxShadow: '0 20px 60px rgba(108,60,225,0.3)' }}>
-                  <span style={{ fontSize: '6rem' }}>📈</span>
+                  <img src="https://img.icons8.com/parakeet/256/chart.png" width={120} height={120} style={{ filter: 'brightness(0) invert(1)' }} />
                 </div>
                 
                 {/* Floating icons */}

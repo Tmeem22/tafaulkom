@@ -19,53 +19,37 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
-    // 1. Regex check
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: 'صيغة البريد الإلكتروني غير صحيحة' }, { status: 400 });
     }
 
-    // 2. Real Domain / MX record check
-    const domain = email.split('@')[1];
-    try {
-      const records = await resolveMx(domain);
-      if (!records || records.length === 0) {
-        return NextResponse.json({ error: 'البريد الإلكتروني المدخل لا يستقبل رسائل (نطاق غير صالح)' }, { status: 400 });
-      }
-    } catch (err) {
-      return NextResponse.json({ error: 'البريد الإلكتروني وهمي أو غير حقيقي' }, { status: 400 });
-    }
+    // 3. User & Username setup
+    const effectiveUsername = username || email.split('@')[0] + '_' + Math.random().toString(36).substring(7);
 
-    // 3. Check if user already exists in Prisma DB
+    // Check if user already exists
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
           { email },
-          { username }
+          { username: effectiveUsername }
         ]
       }
     });
 
     if (existingUser) {
-      return NextResponse.json({ error: 'البريد الإلكتروني أو اسم المستخدم مستخدم مسبقاً' }, { status: 400 });
+      return NextResponse.json({ error: 'البريد الإلكتروني مستخدم مسبقاً' }, { status: 400 });
     }
     
-    // 4. Hash Password & Generate 6-char Alphanumeric Code
+    // 4. Create user
     const hashedPassword = await bcrypt.hash(password, 10);
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let verificationToken = '';
-    for(let i = 0; i < 6; i++) {
-      verificationToken += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    // 5. Create user
     const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase() || 'tymlghby@gmail.com';
     const adminUsername = process.env.ADMIN_USERNAME || '0501645063';
     
-    const role = (email.toLowerCase() === adminEmail || username === adminUsername) ? 'ADMIN' : 'USER';
+    const role = (email.toLowerCase() === adminEmail || effectiveUsername === adminUsername) ? 'ADMIN' : 'USER';
     const newUser = await prisma.user.create({
       data: {
-        username,
+        username: effectiveUsername,
         email,
         password: hashedPassword,
         balance: 0.00,

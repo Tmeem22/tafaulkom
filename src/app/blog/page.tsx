@@ -7,35 +7,35 @@ const posts = [
     slug: 'socialmedia03',
     title: 'معلومات عامة عن تويتر ويوتيوب',
     excerpt: 'قام مؤسسو موقع التويتر الثلاثة إيفان ويليامز، بيز ستون، وجاك دورسي بتأسيس شركة أوديو الأمريكية في عام 2004م. تعرف على تاريخ المنصتين وكيف أصبحتا من أكبر منصات التواصل الاجتماعي...',
-    icon: '🐦',
+    icon: 'https://img.icons8.com/color/256/twitter.png',
     date: '2025-03-15',
   },
   {
     slug: 'socialmedia02',
     title: 'معلومات عامة عن تيك توك وسناب شات',
-    excerpt: 'تطبيق تيك توك هو نتاج عمل طويل وتجارب عديدة في مجال السوشيال ميديا. تعرف على قصة نجاح هذه المنصات وكيف غيّرت عالم المحتوى القصير...',
-    icon: '🎵',
+    excerpt: 'تطبيق تيك توك هو نتاج عمل طويل وتجارب عديدة في مجال السوشيال ميديا. تعرف على قصة نجاح هذه المنصات وكيف غيّرت عالم المحتوى الق قصير...',
+    icon: 'https://img.icons8.com/color/256/tiktok.png',
     date: '2025-02-20',
   },
   {
     slug: 'socialmedia01',
     title: 'معلومات عامة عن إنستغرام وفيسبوك',
     excerpt: 'إنستغرام موقع مجاني لتبادل الصور أُطلق في أكتوبر عام 2010 حيث قام بتأسيسه كيفن سيستروم. اكتشف كيف أصبح من أقوى منصات التواصل الاجتماعي...',
-    icon: '📸',
+    icon: 'https://img.icons8.com/color/256/instagram-new.png',
     date: '2025-01-10',
   },
   {
     slug: 'smm',
     title: 'التسويق الإلكتروني - دليل شامل',
     excerpt: 'نظراً لتطور العالم وتطور أساليب عيشه، أصبح هناك ما يعرف بالتسويق عبر الإنترنت. تعرف على أهم استراتيجيات التسويق الرقمي الحديثة...',
-    icon: '📊',
+    icon: 'https://img.icons8.com/parakeet/256/line-chart.png',
     date: '2024-12-05',
   },
   {
     slug: 'about-us',
     title: 'عن منصة تفاعلكم',
     excerpt: 'بشكل عام موقعنا مختص بكل ما يتعلق بالسوشال ميديا والتسويق الإلكتروني. نهدف لتقديم أفضل الخدمات بأقل الأسعار لعملائنا في العالم العربي...',
-    icon: '💜',
+    icon: 'https://img.icons8.com/parakeet/256/info.png',
     date: '2024-11-01',
   },
 ];
@@ -61,14 +61,14 @@ export default function Blog() {
               {posts.map((post, i) => (
                 <article key={i} className="card" style={{ overflow: 'hidden' }}>
                   <div style={{ height: '180px', background: 'var(--gradient-stats)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ fontSize: '4rem' }}>{post.icon}</span>
+                    <img src={post.icon} width={80} height={80} />
                   </div>
                   <div style={{ padding: '1.5rem' }}>
                     <time style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontWeight: 600 }}>{post.date}</time>
                     <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '0.5rem', marginBottom: '0.75rem', lineHeight: 1.4 }}>{post.title}</h2>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.7, marginBottom: '1.2rem' }}>{post.excerpt}</p>
-                    <span style={{ display: 'inline-block', padding: '0.4rem 1.2rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-color)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--brand-primary)', cursor: 'pointer' }}>
-                      إقرأ المزيد →
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 1.2rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-color)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--brand-primary)', cursor: 'pointer' }}>
+                      إقرأ المزيد <img src="https://img.icons8.com/parakeet/256/left.png" width={14} height={14} />
                     </span>
                   </div>
                 </article>

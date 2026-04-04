@@ -44,7 +44,13 @@ export default function ResetPassword() {
       <main dir="rtl" className="hero-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '90px' }}>
         <div style={{ maxWidth: '440px', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
           <div className="card animate-fade-in-up" style={{ padding: '3rem 2.5rem', textAlign: 'center' }}>
-            <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>{sent ? '✅' : '🔐'}</span>
+            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+              <img 
+                src={sent ? 'https://img.icons8.com/parakeet/256/checkmark.png' : 'https://img.icons8.com/parakeet/256/lock-landscape.png'} 
+                width={80} 
+                height={80} 
+              />
+            </div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
               {sent ? 'تم الإرسال!' : 'استعادة كلمة المرور'}
             </h1>
@@ -65,8 +71,18 @@ export default function ResetPassword() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <button type="submit" disabled={isLoading} className="btn-primary" style={{ width: '100%', padding: '0.9rem' }}>
-                  {isLoading ? '⏳ جاري الإرسال...' : '📧 إرسال رابط الاستعادة'}
+                <button type="submit" disabled={isLoading} className="btn-primary" style={{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
+                  {isLoading ? (
+                    <>
+                      <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={20} height={20} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                      جاري الإرسال...
+                    </>
+                  ) : (
+                    <>
+                      <img src="https://img.icons8.com/parakeet/256/envelope.png" width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} />
+                      إرسال رابط الاستعادة
+                    </>
+                  )}
                 </button>
               </form>
             ) : (
@@ -76,7 +92,9 @@ export default function ResetPassword() {
             )}
 
             <div style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: 'var(--text-tertiary)' }}>
-              <Link href="/login" style={{ color: 'var(--brand-primary)', textDecoration: 'none', fontWeight: 600 }}>← العودة لتسجيل الدخول</Link>
+              <Link href="/login" style={{ color: 'var(--brand-primary)', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                <img src="https://img.icons8.com/parakeet/256/right.png" width={14} height={14} style={{ filter: 'invert(27%) sepia(91%) saturate(2352%) hue-rotate(240deg) brightness(94%) contrast(100%)' }} /> العودة لتسجيل الدخول
+              </Link>
             </div>
           </div>
         </div>

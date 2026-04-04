@@ -5,21 +5,21 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
 const sideLinks = [
-  { label: 'طلب جديد', href: '/dashboard', icon: '🛒' },
-  { label: 'طلباتي', href: '/dashboard/orders', icon: '📋', active: true },
-  { label: 'خدماتنا', href: '/services', icon: '⚡' },
-  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: '💳' },
-  { label: 'الدعم الفني', href: '/dashboard/support', icon: '🎧' },
-  { label: 'API', href: '/api-docs', icon: '🔗' },
+  { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/parakeet/256/shopping-cart.png' },
+  { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/parakeet/256/list.png', active: true },
+  { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/parakeet/256/flash-on.png' },
+  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/parakeet/256/card-exchange.png' },
+  { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/parakeet/256/headset.png' },
+  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/parakeet/256/code.png' },
 ];
 
 type OrderStatus = 'all' | 'completed' | 'pending' | 'processing' | 'cancelled';
 
 const statusConfig = {
-  completed: { label: 'مكتمل', color: 'var(--brand-success)', bg: 'rgba(16,185,129,0.1)', icon: '✓' },
-  processing: { label: 'قيد التنفيذ', color: 'var(--brand-primary)', bg: 'rgba(108,60,225,0.1)', icon: '⟳' },
-  pending: { label: 'معلّق', color: 'var(--brand-accent)', bg: 'rgba(245,158,11,0.1)', icon: '⏳' },
-  cancelled: { label: 'ملغي', color: 'var(--brand-danger)', bg: 'rgba(239,68,68,0.1)', icon: '✕' },
+  completed: { label: 'مكتمل', color: 'var(--brand-success)', bg: 'rgba(16,185,129,0.1)', icon: 'https://img.icons8.com/parakeet/256/checkmark.png' },
+  processing: { label: 'قيد التنفيذ', color: 'var(--brand-primary)', bg: 'rgba(108,60,225,0.1)', icon: 'https://img.icons8.com/parakeet/256/spinner-frame-2.png' },
+  pending: { label: 'معلّق', color: 'var(--brand-accent)', bg: 'rgba(245,158,11,0.1)', icon: 'https://img.icons8.com/parakeet/256/hourglass.png' },
+  cancelled: { label: 'ملغي', color: 'var(--brand-danger)', bg: 'rgba(239,68,68,0.1)', icon: 'https://img.icons8.com/parakeet/256/delete-sign.png' },
 };
 
 export default function Orders() {
@@ -84,13 +84,13 @@ export default function Orders() {
               color: link.active ? 'var(--brand-primary)' : 'var(--text-secondary)',
               transition: 'all 0.2s',
             }}>
-              <span>{link.icon}</span> {link.label}
+              <img src={link.icon} alt={link.label} width={20} height={20} style={{ opacity: link.active ? 1 : 0.7 }} /> {link.label}
             </Link>
           ))}
 
           <div style={{ marginTop: 'auto', padding: '1rem 0', borderTop: '1px solid var(--border-color)' }}>
             <Link href="/" style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-danger)' }}>
-              🚪 تسجيل الخروج
+              <img src="https://img.icons8.com/parakeet/256/exit.png" width={20} height={20} /> تسجيل الخروج
             </Link>
           </div>
         </aside>
@@ -99,20 +99,22 @@ export default function Orders() {
         <div style={{ flex: 1, marginRight: '250px', padding: '2rem' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{ marginBottom: '2rem' }}>
-              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>طلباتي 📋</h1>
+              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                <img src="https://img.icons8.com/parakeet/256/list.png" width={32} height={32} /> طلباتي
+              </h1>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>سجل جميع الطلبات السابقة والحالية</p>
             </div>
 
             {/* Summary Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
               {[
-                { label: 'إجمالي الطلبات', value: orders.length.toString(), icon: '📦', color: 'var(--text-primary)' },
-                { label: 'مكتملة', value: orders.filter(o => o.status === 'completed').length.toString(), icon: '✅', color: 'var(--brand-success)' },
-                { label: 'قيد التنفيذ', value: orders.filter(o => o.status === 'processing').length.toString(), icon: '⚡', color: 'var(--brand-primary)' },
-                { label: 'معلّقة', value: orders.filter(o => o.status === 'pending').length.toString(), icon: '⏳', color: 'var(--brand-accent)' },
+                { label: 'إجمالي الطلبات', value: orders.length.toString(), icon: 'https://img.icons8.com/parakeet/256/package.png', color: 'var(--text-primary)' },
+                { label: 'مكتملة', value: orders.filter(o => o.status === 'completed').length.toString(), icon: 'https://img.icons8.com/parakeet/256/checkmark.png', color: 'var(--brand-success)' },
+                { label: 'قيد التنفيذ', value: orders.filter(o => o.status === 'processing').length.toString(), icon: 'https://img.icons8.com/parakeet/256/flash-on.png', color: 'var(--brand-primary)' },
+                { label: 'معلّقة', value: orders.filter(o => o.status === 'pending').length.toString(), icon: 'https://img.icons8.com/parakeet/256/clock.png', color: 'var(--brand-accent)' },
               ].map((stat, i) => (
                 <div key={i} className="card" style={{ padding: '1.2rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <span style={{ fontSize: '1.8rem' }}>{stat.icon}</span>
+                  <img src={stat.icon} width={40} height={40} />
                   <div>
                     <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>{stat.label}</p>
                     <p style={{ fontSize: '1.5rem', fontWeight: 900, color: stat.color }}>{stat.value}</p>
@@ -124,7 +126,9 @@ export default function Orders() {
             {/* Filters */}
             <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
               <div style={{ position: 'relative', flex: '1', maxWidth: '300px' }}>
-                <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1rem' }}>🔍</span>
+                <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
+                  <img src="https://img.icons8.com/parakeet/256/search.png" width={20} height={20} />
+                </span>
                 <input
                   type="text"
                   className="input-field"
@@ -178,7 +182,7 @@ export default function Orders() {
                     ) : filtered.length === 0 ? (
                       <tr>
                         <td colSpan={7} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-tertiary)' }}>
-                          <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>📭</span>
+                          <img src="https://img.icons8.com/parakeet/256/feedback.png" width={64} height={64} style={{ display: 'block', margin: '0 auto 1rem', opacity: 0.5 }} />
                           لا توجد طلبات تطابق البحث
                         </td>
                       </tr>
@@ -197,8 +201,8 @@ export default function Orders() {
                           <td style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }} dir="ltr">${order.charge.toFixed(4)}</td>
                           <td style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.85rem', color: order.remains > 0 ? 'var(--brand-accent)' : 'var(--text-tertiary)' }}>{order.remains.toLocaleString()}</td>
                           <td style={{ padding: '0.9rem 1rem', textAlign: 'center' }}>
-                            <span style={{ padding: '0.3rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.72rem', fontWeight: 700, background: sc.bg, color: sc.color, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-                              {sc.icon} {sc.label}
+                            <span style={{ padding: '0.3rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.72rem', fontWeight: 700, background: sc.bg, color: sc.color, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+                              <img src={sc.icon} width={14} height={14} className={order.status === 'processing' ? 'animate-spin' : ''} /> {sc.label}
                             </span>
                           </td>
                           <td style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }} dir="ltr">{new Date(order.date).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' })}</td>

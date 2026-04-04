@@ -33,11 +33,11 @@ export default function Footer() {
               تفاعلكم هي المنصة الأسرع والأرخص لجميع خدمات التسويق الإلكتروني وزيادة المتابعين، نخدم عملاءنا من جميع أنحاء العالم العربي.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1.5rem' }}>
-              <a href="mailto:tymlghby@gmail.com" style={{ padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600 }}>
-                📧 tymlghby@gmail.com
+              <a href="mailto:tymlghby@gmail.com" style={{ padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <img src="https://img.icons8.com/parakeet/256/envelope.png" width={16} height={16} /> tymlghby@gmail.com
               </a>
-              <a href="tel:0501645063" style={{ padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600 }} dir="ltr">
-                📞 0501645063
+              <a href="tel:0501645063" style={{ padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }} dir="ltr">
+                <img src="https://img.icons8.com/parakeet/256/smartphone.png" width={16} height={16} /> 0501645063
               </a>
             </div>
           </div>
@@ -88,7 +88,9 @@ export default function Footer() {
             حقوق تميم اللغبي 2026 © جميع الحقوق محفوظة لـ تفاعلكم.
           </p>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>صنع بـ 💜 لعملائنا</span>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              صنع بـ <img src="https://img.icons8.com/parakeet/256/like.png" width={14} height={14} /> لعملائنا
+            </span>
           </div>
         </div>
       </div>

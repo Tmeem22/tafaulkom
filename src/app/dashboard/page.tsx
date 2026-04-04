@@ -5,12 +5,12 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
 const sideLinks = [
-  { label: 'طلب جديد', href: '/dashboard', icon: '🛒', active: true },
-  { label: 'طلباتي', href: '/dashboard/orders', icon: '📋' },
-  { label: 'خدماتنا', href: '/services', icon: '⚡' },
-  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: '💳' },
-  { label: 'الدعم الفني', href: '/dashboard/support', icon: '🎧' },
-  { label: 'API', href: '/api-docs', icon: '🔗' },
+  { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/parakeet/256/shopping-cart.png', active: true },
+  { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/parakeet/256/list.png' },
+  { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/parakeet/256/flash-on.png' },
+  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/parakeet/256/card-exchange.png' },
+  { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/parakeet/256/headset.png' },
+  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/parakeet/256/code.png' },
 ];
 
 const platformIcons: Record<string, string> = {
@@ -84,7 +84,8 @@ export default function Dashboard() {
       try {
         const res = await fetch('/api/user/me');
         const data = await res.json();
-        if (data.balance !== undefined) {
+        if (data.username) {
+          setUser(data);
           setBalance(data.balance);
         }
       } catch (e) {
@@ -93,6 +94,8 @@ export default function Dashboard() {
     };
     fetchUser();
   }, []);
+
+  const [user, setUser] = useState<any>(null);
 
   const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,35 +146,36 @@ export default function Dashboard() {
       <div dir="rtl" style={{ display: 'flex', minHeight: '100vh', paddingTop: '70px', background: 'var(--bg-secondary)' }}>
         {/* Sidebar */}
         <aside style={{ 
-          width: '220px', background: 'var(--bg-card)', borderLeft: '1px solid var(--border-color)', 
-          padding: '1.2rem 0.8rem', display: 'flex', flexDirection: 'column', gap: '0.2rem', 
+          width: '240px', background: 'var(--bg-card)', borderLeft: '1px solid var(--border-color)', 
+          padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', 
           position: 'fixed', top: '70px', bottom: '0', overflowY: 'auto', zIndex: 10
         }}>
           <div style={{ 
-            padding: '1.2rem 1rem', background: 'var(--gradient-primary)', borderRadius: '18px', 
-            marginBottom: '1.5rem', textAlign: 'center', boxShadow: '0 8px 20px rgba(108,60,225,0.2)' 
+            padding: '1.5rem 1.2rem', background: 'var(--gradient-primary)', borderRadius: '24px', 
+            marginBottom: '1.5rem', textAlign: 'center', boxShadow: 'var(--shadow-md)' 
           }}>
-            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.4rem' }}>رصيدك الحالي</p>
-            <p style={{ color: 'white', fontSize: '1.8rem', fontWeight: 950, marginBottom: '0.8rem' }} dir="ltr">${balance !== null ? balance.toFixed(2) : '...'}</p>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '0.5rem' }}>رصيدك الحالي</p>
+            <p style={{ color: 'white', fontSize: '2rem', fontWeight: 950, marginBottom: '0.8rem', textShadow: '0 2px 10px rgba(0,0,0,0.1)' }} dir="ltr">${balance !== null ? balance.toFixed(2) : '...'}</p>
             <Link href="/dashboard/deposit" style={{ 
-              display: 'block', padding: '0.6rem', borderRadius: '12px', background: 'rgba(255,255,255,0.2)', 
-              color: 'white', fontSize: '0.85rem', fontWeight: 800, textDecoration: 'none', transition: 'all 0.2s',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+              padding: '0.75rem', borderRadius: '15px', background: 'rgba(255,255,255,0.2)', 
+              color: 'white', fontSize: '0.85rem', fontWeight: 800, textDecoration: 'none', transition: 'all 0.3s',
               backdropFilter: 'blur(5px)'
             }} className="hover-scale">
-              + شحن رصيد
+              <img src="https://img.icons8.com/parakeet/256/plus.png" width={16} height={16} style={{ filter: 'brightness(0) invert(1)' }} /> شحن رصيدك
             </Link>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {sideLinks.map((link, i) => (
               <Link key={i} href={link.href} style={{
-                padding: '0.8rem 1rem', borderRadius: '12px', textDecoration: 'none',
-                display: 'flex', alignItems: 'center', gap: '0.8rem', fontSize: '0.9rem', fontWeight: 700,
+                padding: '0.85rem 1.2rem', borderRadius: '14px', textDecoration: 'none',
+                display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', fontWeight: 700,
                 background: link.active ? 'rgba(108,60,225,0.08)' : 'transparent',
                 color: link.active ? 'var(--brand-primary)' : 'var(--text-secondary)',
-                transition: 'all 0.2s',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               }}>
-                <span style={{ fontSize: '1.2rem', opacity: link.active ? 1 : 0.7 }}>{link.icon}</span> {link.label}
+                <img src={link.icon} alt={link.label} width={22} height={22} style={{ opacity: link.active ? 1 : 0.7 }} /> {link.label}
               </Link>
             ))}
           </div>
@@ -186,28 +190,31 @@ export default function Dashboard() {
                 width: '100%',
                 background: 'none',
                 border: 'none',
-                padding: '0.8rem 1rem', borderRadius: '12px', textDecoration: 'none', 
-                display: 'flex', alignItems: 'center', gap: '0.8rem', fontSize: '0.9rem', 
-                fontWeight: 700, color: '#ff4d4d', cursor: 'pointer', transition: 'all 0.2s' 
+                padding: '0.85rem 1.2rem', borderRadius: '14px', textDecoration: 'none', 
+                display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', 
+                fontWeight: 700, color: 'var(--brand-danger)', cursor: 'pointer', transition: 'all 0.3s ease' 
               }} className="hover-danger">
-              🚪 تسجيل الخروج
+              <img src="https://img.icons8.com/parakeet/256/exit.png" width={22} height={22} /> تسجيل الخروج
             </button>
           </div>
         </aside>
 
         {/* Main Content */}
-        <div style={{ flex: 1, marginRight: '220px', padding: '2rem 3rem' }}>
+        <div style={{ flex: 1, marginRight: '240px', padding: '2.5rem 3.5rem' }}>
           <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
             
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '1.5rem' }}>
               <div>
-                <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '0.4rem', letterSpacing: '-0.5px' }}>طلب جديد 🛒</h1>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', fontWeight: 500 }}>أهلاً بك في لوحة تحكم <span style={{ color: 'var(--brand-primary)', fontWeight: 700 }}>تفاعلكم</span></p>
+                <h1 style={{ fontSize: '2.2rem', fontWeight: 950, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-0.8px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <img src="https://img.icons8.com/parakeet/256/shopping-cart.png" width={38} height={38} />
+                  إضافة طلب جديد
+                </h1>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 600 }}>أهلاً بك مجدداً يا <span style={{ color: 'var(--brand-primary)', fontWeight: 800 }}>{user?.username || 'ضيفنا'}</span> ⚡</p>
               </div>
               <div style={{ display: 'flex', gap: '1rem' }}>
-                <div style={{ background: 'var(--bg-card)', padding: '0.6rem 1.2rem', borderRadius: '14px', border: '1.5px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>حالة النظام: متصل</span>
+                <div style={{ background: 'var(--bg-card)', padding: '0.75rem 1.4rem', borderRadius: '18px', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '0.8rem', boxShadow: 'var(--shadow-sm)' }}>
+                  <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px rgba(16,185,129,0.5)' }}></div>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)' }}>حالة النظام: فعال 24/7</span>
                 </div>
               </div>
             </div>
@@ -223,7 +230,7 @@ export default function Dashboard() {
                       display: 'flex', alignItems: 'center', gap: '0.8rem', border: '1px solid transparent',
                       borderColor: message.type === 'success' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'
                     }}>
-                      <span style={{ fontSize: '1.2rem' }}>{message.type === 'success' ? '✅' : '❌'}</span> {message.text}
+                      <img src={message.type === 'success' ? 'https://img.icons8.com/parakeet/256/checkmark.png' : 'https://img.icons8.com/parakeet/256/error.png'} width={24} height={24} /> {message.text}
                     </div>
                   )}
                   
@@ -272,11 +279,21 @@ export default function Dashboard() {
                     </div>
 
                     <button disabled={submitting || Number(totalCost) === 0} type="submit" className="btn-primary" style={{ 
-                      width: '100%', padding: '1.1rem', fontSize: '1.1rem', fontWeight: 900, 
+                      width: '100%', padding: '1.2rem', fontSize: '1.1rem', fontWeight: 900, 
                       borderRadius: '16px', boxShadow: '0 8px 25px rgba(108,60,225,0.3)',
-                      transition: 'all 0.3s'
+                      transition: 'all 0.3s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem'
                     }}>
-                      {submitting ? '⏳ جاري معالجة الطلب...' : '✅ تأكيد وتنفيذ الطلب'}
+                      {submitting ? (
+                        <>
+                          <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                          جاري معالجة الطلب...
+                        </>
+                      ) : (
+                        <>
+                          <img src="https://img.icons8.com/parakeet/256/checkmark.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                          تأكيد وتنفيذ الطلب
+                        </>
+                      )}
                     </button>
                   </form>
                 </div>
@@ -285,15 +302,15 @@ export default function Dashboard() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                 {/* Stats */}
                 <div className="card" style={{ padding: '1.8rem', borderRadius: '24px' }}>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                    <span style={{ fontSize: '1.4rem' }}>📊</span> ملخص النشاط
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                    <img src="https://img.icons8.com/parakeet/256/chart.png" width={24} height={24} /> ملخص النشاط
                   </h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {[
                       { label: 'إجمالي المصروفات', value: '$1,250.50', color: 'var(--text-primary)' },
                       { label: 'إجمالي الطلبات', value: '145', color: 'var(--text-primary)' },
                       { label: 'طلبات قيد المراجعة', value: '3', color: 'var(--brand-accent)' },
-                      { label: 'حالة الحساب', value: 'مدقق ✓', color: 'var(--brand-success)' },
+                      { label: 'حالة الحساب', value: 'مدقق', color: 'var(--brand-success)' },
                     ].map((stat, i) => (
                       <div key={i} style={{ 
                         display: 'flex', justifyContent: 'space-between', padding: '0.8rem 1rem', 
@@ -313,16 +330,18 @@ export default function Dashboard() {
                   background: 'linear-gradient(135deg, var(--bg-card) 0%, rgba(108,60,225,0.05) 100%)'
                 }}>
                   <div style={{ position: 'relative', zIndex: 2 }}>
-                    <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--brand-primary)', marginBottom: '0.7rem' }}>🚀 بوابة المطورين</h3>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--brand-primary)', marginBottom: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                      <img src="https://img.icons8.com/parakeet/256/code.png" width={24} height={24} /> بوابة المطورين
+                    </h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
                       هل تمتلك موقع SMM خاص بك؟ اربط خدماتنا بلوحتك عبر الـ API واحصل على أسعار الجملة.
                     </p>
                     <Link href="/api-docs" className="btn-secondary" style={{ 
                       width: '100%', textAlign: 'center', padding: '0.8rem', fontSize: '0.9rem', 
                       borderRadius: '14px', fontWeight: 800, border: '2px solid var(--brand-primary)',
-                      color: 'var(--brand-primary)' 
+                      color: 'var(--brand-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem'
                     }}>
-                      عرض وثائق الـ API 🔗
+                      عرض وثائق الـ API <img src="https://img.icons8.com/parakeet/256/link.png" width={18} height={18} style={{ opacity: 0.8 }} />
                     </Link>
                   </div>
                 </div>

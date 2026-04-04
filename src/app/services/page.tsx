@@ -121,7 +121,14 @@ export default function Services() {
                   </thead>
                   <tbody>
                     {loading ? (
-                       <tr><td colSpan={6} style={{textAlign: 'center', padding: '2rem'}}>جاري جلب الخدمات من المزود... ⏳</td></tr>
+                       <tr>
+                         <td colSpan={6} style={{ textAlign: 'center', padding: '3rem' }}>
+                           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)' }}>
+                             <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={40} height={40} className="animate-spin" />
+                             <span style={{ fontWeight: 700 }}>جاري جلب الخدمات من المزود...</span>
+                           </div>
+                         </td>
+                       </tr>
                     ) : filtered.map((s, i) => (
                       <tr key={s.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }}
                         onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
@@ -136,8 +143,15 @@ export default function Services() {
                         <td style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{s.min.toLocaleString()}</td>
                         <td style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{s.max.toLocaleString()}</td>
                         <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
-                          <span style={{ padding: '0.25rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.75rem', fontWeight: 700, background: s.refill ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)', color: s.refill ? 'var(--brand-success)' : 'var(--brand-danger)' }}>
-                            {s.refill ? '✓ نعم' : '✕ لا'}
+                          <span style={{ 
+                            padding: '0.3rem 0.8rem', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800, 
+                            background: s.refill ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.05)', 
+                            color: s.refill ? '#10b981' : 'var(--text-tertiary)',
+                            display: 'inline-flex', alignItems: 'center', gap: '0.4rem', border: '1px solid transparent',
+                            borderColor: s.refill ? 'rgba(16,185,129,0.2)' : 'var(--border-color)'
+                          }}>
+                            <img src={s.refill ? 'https://img.icons8.com/parakeet/256/checkmark.png' : 'https://img.icons8.com/parakeet/256/delete-sign.png'} width={14} height={14} />
+                            {s.refill ? 'نعم' : 'لا'}
                           </span>
                         </td>
                       </tr>
@@ -148,8 +162,9 @@ export default function Services() {
             </div>
 
             <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-              <Link href="/register" className="btn-primary" style={{ padding: '1rem 3rem', fontSize: '1rem' }}>
-                سجّل الآن وابدأ الطلبات 🚀
+              <Link href="/register" className="btn-primary" style={{ padding: '1.2rem 4rem', fontSize: '1.1rem', borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', gap: '0.8rem' }}>
+                <img src="https://img.icons8.com/parakeet/256/rocket.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                ابدأ رحلتك الآن
               </Link>
             </div>
           </div>

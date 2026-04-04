@@ -49,33 +49,47 @@ export default function Login() {
               <Link href="/" style={{ display: 'inline-block', marginBottom: '1rem' }}>
                 <img src="/logo.png" alt="Logo" style={{ height: '70px', width: 'auto', objectFit: 'contain' }} />
               </Link>
-              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>أهلاً بعودتك! 👋</h1>
+              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>أهلاً بعودتك!</h1>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>سجّل الدخول للمتابعة إلى لوحة التحكم</p>
             </div>
 
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>اسم المستخدم أو البريد الإلكتروني</label>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>البريد الإلكتروني</label>
                 <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem' }}>👤</span>
-                  <input type="text" required value={login} onChange={e => setLogin(e.target.value)} className="input-field" placeholder="اسم المستخدم" style={{ paddingRight: '2.5rem' }} />
+                  <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
+                    <img src="https://img.icons8.com/parakeet/256/envelope.png" width={22} height={22} />
+                  </span>
+                  <input type="text" required value={login} onChange={e => setLogin(e.target.value)} className="input-field" placeholder="example@mail.com" style={{ paddingRight: '2.8rem' }} />
                 </div>
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>كلمة المرور</label>
                 <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem' }}>🔒</span>
-                  <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="input-field" placeholder="••••••••••" dir="ltr" style={{ paddingRight: '2.5rem' }} />
+                  <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
+                    <img src="https://img.icons8.com/parakeet/256/lock.png" width={22} height={22} />
+                  </span>
+                  <input type="password" required value={password} onChange={e => setPassword(e.target.value)} className="input-field" placeholder="••••••••••" dir="ltr" style={{ paddingRight: '2.8rem' }} />
                 </div>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link href="/forgot-username" style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', textDecoration: 'none', fontWeight: 600 }}>نسيت اسم المستخدم؟</Link>
+                <Link href="/forgot-username" style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', textDecoration: 'none', fontWeight: 600 }}>استعادة الحساب</Link>
                 <Link href="/reset-password" style={{ fontSize: '0.85rem', color: 'var(--brand-primary)', textDecoration: 'none', fontWeight: 600 }}>نسيت كلمة المرور؟</Link>
               </div>
 
-              <button type="submit" disabled={isLoading} className="btn-primary" style={{ width: '100%', padding: '0.9rem', fontSize: '1rem' }}>
-                {isLoading ? '⏳ جاري التحقق...' : '🔑 تسجيل الدخول'}
+              <button type="submit" disabled={isLoading} className="btn-primary" style={{ width: '100%', padding: '0.9rem', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}>
+                {isLoading ? (
+                  <>
+                    <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={22} height={22} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                    جاري التحقق...
+                  </>
+                ) : (
+                  <>
+                    <img src="https://img.icons8.com/parakeet/256/key.png" width={22} height={22} style={{ filter: 'brightness(0) invert(1)' }} />
+                    تسجيل الدخول
+                  </>
+                )}
               </button>
             </form>
 
