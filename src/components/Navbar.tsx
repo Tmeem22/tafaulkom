@@ -48,12 +48,13 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
           
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+          <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
             <img 
               src="/logo.png" 
               alt="تفاعلكم" 
               style={{ height: '60px', width: 'auto', objectFit: 'contain' }} 
             />
+            <span style={{ fontSize: '0.7rem', background: 'var(--brand-primary)', color: 'white', padding: '2px 8px', borderRadius: '20px', fontWeight: 800 }}>V3-321-READY</span>
           </Link>
 
           {/* Desktop Nav */}
