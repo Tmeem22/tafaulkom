@@ -49,7 +49,32 @@ const platformIcons: Record<string, { icon: string, color: string, keywords: str
   'telegram': { 
     icon: 'https://img.icons8.com/color/96/telegram-app.png', 
     color: '#0088cc', 
-    keywords: ['تيليجرام', 'تيليجرام', 'telegram'] 
+    keywords: ['تيليجرام', 'telegram'] 
+  },
+  'whatsapp': { 
+    icon: 'https://img.icons8.com/color/96/whatsapp.png', 
+    color: '#25d366', 
+    keywords: ['whatsapp', 'واتساب', 'واتس'] 
+  },
+  'kick': { 
+    icon: 'https://img.icons8.com/color/96/kick.png', 
+    color: '#53fc18', 
+    keywords: ['كيك', 'kick'] 
+  },
+  'jaco': { 
+    icon: 'https://img.icons8.com/color/96/vigo-video.png', 
+    color: '#ff0050', 
+    keywords: ['جاكو', 'jaco'] 
+  },
+  'pinterest': { 
+    icon: 'https://img.icons8.com/color/96/pinterest.png', 
+    color: '#bd081c', 
+    keywords: ['بنتريست', 'pinterest'] 
+  },
+  'threads': { 
+    icon: 'https://img.icons8.com/color/96/threads.png', 
+    color: '#000000', 
+    keywords: ['ثريدز', 'threads'] 
   },
   'others': { 
     icon: 'https://img.icons8.com/color/96/services.png', 
@@ -57,6 +82,7 @@ const platformIcons: Record<string, { icon: string, color: string, keywords: str
     keywords: [] 
   }
 };
+
 
 const getIcon = (name: string) => {
   const lowerName = name.toLowerCase();

@@ -15,6 +15,11 @@ const platformIcons: Record<string, string> = {
   snapchat: 'https://img.icons8.com/fluency/256/snapchat.png',
   telegram: 'https://img.icons8.com/fluency/256/telegram-app.png',
   spotify: 'https://img.icons8.com/fluency/256/spotify.png',
+  whatsapp: 'https://img.icons8.com/color/256/whatsapp.png',
+  kick: 'https://img.icons8.com/color/256/kick.png',
+  jaco: 'https://img.icons8.com/color/256/vigo-video.png',
+  threads: 'https://img.icons8.com/color/256/threads.png',
+  pinterest: 'https://img.icons8.com/color/256/pinterest.png',
 };
 
 const categories = [
@@ -26,8 +31,14 @@ const categories = [
   { name: 'Facebook', key: 'facebook', icon: platformIcons.facebook },
   { name: 'Snapchat', key: 'snapchat', icon: platformIcons.snapchat },
   { name: 'Telegram', key: 'telegram', icon: platformIcons.telegram },
+  { name: 'WhatsApp', key: 'whatsapp', icon: platformIcons.whatsapp },
+  { name: 'Jaco', key: 'jaco', icon: platformIcons.jaco },
+  { name: 'Kick', key: 'kick', icon: platformIcons.kick },
   { name: 'Spotify', key: 'spotify', icon: platformIcons.spotify },
+  { name: 'Threads', key: 'threads', icon: platformIcons.threads },
+  { name: 'Pinterest', key: 'pinterest', icon: platformIcons.pinterest },
 ];
+
 
 export default function Services() {
   const [activeCategory, setActiveCategory] = useState('all');
