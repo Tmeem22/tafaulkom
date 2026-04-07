@@ -69,30 +69,27 @@ export default function Terms() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" style={{ paddingTop: '90px', minHeight: '100vh' }}>
-        <section style={{ padding: '3rem 1.5rem' }}>
-          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <main dir="rtl" className="pt-[90px] min-h-screen">
+        <section className="py-12 px-6">
+          <div className="max-w-[900px] mx-auto">
+            <div className="text-center mb-12">
               <span className="section-badge">قانوني</span>
-              <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '1rem', color: 'var(--text-primary)' }}>
+              <h1 className="text-[2.5rem] font-[800] mt-4 text-[var(--text-primary)]">
                 الشروط <span className="gradient-text">والأحكام</span>
               </h1>
             </div>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '2rem' }}>
+            <div className="flex gap-2 justify-center flex-wrap mb-8">
               {tabs.map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  style={{
-                    padding: '0.5rem 1.5rem', borderRadius: 'var(--radius-full)',
-                    border: `1.5px solid ${activeTab === tab.key ? 'var(--brand-primary)' : 'var(--border-color)'}`,
-                    background: activeTab === tab.key ? 'var(--gradient-cta)' : 'var(--bg-card)',
-                    color: activeTab === tab.key ? 'white' : 'var(--text-secondary)',
-                    fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s',
-                    fontFamily: 'inherit'
-                  }}
+                  className={`px-6 py-2 rounded-[var(--radius-full)] border-[1.5px] border-solid transition-all duration-200 font-[700] text-[0.85rem] cursor-pointer font-inherit ${
+                    activeTab === tab.key 
+                    ? 'border-[var(--brand-primary)] bg-[var(--gradient-cta)] text-white' 
+                    : 'border-[var(--border-color)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:border-[var(--brand-primary)]/50'
+                  }`}
                 >
                   {tab.label}
                 </button>
@@ -100,13 +97,13 @@ export default function Terms() {
             </div>
 
             {/* Content */}
-            <div className="card" style={{ padding: '2.5rem' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem' }}>
+            <div className="card p-10">
+              <h2 className="text-[1.5rem] font-[700] text-[var(--text-primary)] mb-6">
                 {content[activeTab].title}
               </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="flex flex-col gap-4">
                 {content[activeTab].body.map((paragraph, i) => (
-                  <p key={i} style={{ color: 'var(--text-secondary)', lineHeight: 1.9, fontSize: '0.95rem' }}>
+                  <p key={i} className="text-[var(--text-secondary)] leading-[1.9] text-[0.95rem]">
                     {paragraph}
                   </p>
                 ))}

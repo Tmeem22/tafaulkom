@@ -69,36 +69,33 @@ export default function Services() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" style={{ paddingTop: '90px', minHeight: '100vh' }}>
-        <section style={{ padding: '3rem 1.5rem' }}>
-          <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <main dir="rtl" className="pt-[90px] min-h-screen">
+        <section className="py-12 px-6">
+          <div className="max-w-[1280px] mx-auto">
+            <div className="text-center mb-12">
               <span className="section-badge">خدماتنا</span>
-              <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '1rem', color: 'var(--text-primary)' }}>
+              <h1 className="text-[2.5rem] font-extrabold mt-4 text-[var(--text-primary)]">
                 جميع <span className="gradient-text">الخدمات المتاحة</span>
               </h1>
-              <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '1rem auto 0' }}>
+              <p className="text-[var(--text-secondary)] max-w-[600px] mx-auto mt-4">
                 اكتشف أكثر من 10,000 خدمة لجميع منصات التواصل الاجتماعي بأقل الأسعار.
               </p>
             </div>
 
             {/* Category Filter */}
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3rem' }}>
+            <div className="flex gap-2 justify-center flex-wrap mb-12">
               {categories.map(cat => (
                 <button
                   key={cat.key}
                   onClick={() => setActiveCategory(cat.key)}
-                  style={{
-                    padding: '0.6rem 1.4rem', borderRadius: 'var(--radius-full)',
-                    border: `1.5px solid ${activeCategory === cat.key ? 'var(--brand-primary)' : 'var(--border-color)'}`,
-                    background: activeCategory === cat.key ? 'var(--gradient-cta)' : 'var(--bg-card)',
-                    color: activeCategory === cat.key ? 'white' : 'var(--text-secondary)',
-                    fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s',
-                    fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: '0.6rem'
-                  }}
+                  className={`flex items-center gap-2.5 px-6 py-2.5 rounded-full font-bold text-[0.85rem] cursor-pointer transition-all border-[1.5px] ${
+                    activeCategory === cat.key 
+                      ? 'bg-[var(--gradient-cta)] text-white border-[var(--brand-primary)]' 
+                      : 'bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-color)] hover:border-[var(--brand-primary)]'
+                  }`}
                 >
                   {cat.icon && (
-                    <img src={cat.icon} alt={cat.name} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+                    <img src={cat.icon} alt={cat.name} className="w-5 h-5 object-contain" />
                   )}
                   {cat.name}
                 </button>
@@ -106,53 +103,58 @@ export default function Services() {
             </div>
 
             {/* Services Table */}
-            <div className="card" style={{ overflow: 'hidden' }}>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div className="card overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
                   <thead>
-                    <tr style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-                      <th style={{ padding: '1rem 1.5rem', textAlign: 'right', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>الرقم</th>
-                      <th style={{ padding: '1rem 1.5rem', textAlign: 'right', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>الخدمة</th>
-                      <th style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>السعر / 1K</th>
-                      <th style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>الحد الأدنى</th>
-                      <th style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>الحد الأقصى</th>
-                      <th style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>تعويض</th>
+                    <tr className="bg-[var(--bg-secondary)] border-b border-[var(--border-color)]">
+                      <th className="p-4 px-6 text-right text-[0.8rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">الرقم</th>
+                      <th className="p-4 px-6 text-right text-[0.8rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">الخدمة</th>
+                      <th className="p-4 px-6 text-center text-[0.8rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">السعر / 1K</th>
+                      <th className="p-4 px-6 text-center text-[0.8rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">الحد الأدنى</th>
+                      <th className="p-4 px-6 text-center text-[0.8rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">الحد الأقصى</th>
+                      <th className="p-4 px-6 text-center text-[0.8rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">تعويض</th>
+                      <th className="p-4 px-6 text-center text-[0.8rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">إجراء</th>
                     </tr>
                   </thead>
                   <tbody>
                     {loading ? (
-                       <tr>
-                         <td colSpan={6} style={{ textAlign: 'center', padding: '3rem' }}>
-                           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)' }}>
-                             <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={40} height={40} className="animate-spin" />
-                             <span style={{ fontWeight: 700 }}>جاري جلب الخدمات من المزود...</span>
-                           </div>
-                         </td>
-                       </tr>
+                      <tr>
+                        <td colSpan={7} className="text-center p-12">
+                          <div className="flex flex-col items-center gap-4 text-[var(--text-secondary)]">
+                            <img src="https://img.icons8.com/fluency/256/hourglass.png" width={40} height={40} className="animate-spin" alt="تحميل" />
+                            <span className="font-bold">جاري جلب الخدمات...</span>
+                          </div>
+                        </td>
+                      </tr>
                     ) : filtered.map((s, i) => (
-                      <tr key={s.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                        <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', color: 'var(--text-tertiary)', fontWeight: 600 }}>{s.id}</td>
-                        <td style={{ padding: '1rem 1.5rem' }}>
-                          <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary)' }} dir="ltr">{s.name}</span>
+                      <tr key={s.id} className="border-b border-[var(--border-color)] transition-colors hover:bg-[var(--bg-secondary)]/50">
+                        <td className="p-4 px-6 text-[0.85rem] text-[var(--text-tertiary)] font-semibold">{s.id}</td>
+                        <td className="p-4 px-6">
+                          <span className="text-[0.9rem] font-semibold text-[var(--text-primary)]" dir="ltr">{s.name}</span>
                         </td>
-                        <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
-                          <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--brand-primary)' }} dir="ltr">${s.rate.toFixed(2)}</span>
+                        <td className="p-4 px-6 text-center">
+                          <span className="text-[0.9rem] font-extrabold text-[var(--brand-primary)]" dir="ltr">${s.rate.toFixed(2)}</span>
                         </td>
-                        <td style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{s.min.toLocaleString()}</td>
-                        <td style={{ padding: '1rem 1.5rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{s.max.toLocaleString()}</td>
-                        <td style={{ padding: '1rem 1.5rem', textAlign: 'center' }}>
-                          <span style={{ 
-                            padding: '0.3rem 0.8rem', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800, 
-                            background: s.refill ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.05)', 
-                            color: s.refill ? '#10b981' : 'var(--text-tertiary)',
-                            display: 'inline-flex', alignItems: 'center', gap: '0.4rem', border: '1px solid transparent',
-                            borderColor: s.refill ? 'rgba(16,185,129,0.2)' : 'var(--border-color)'
-                          }}>
-                            <img src={s.refill ? 'https://img.icons8.com/parakeet/256/checkmark.png' : 'https://img.icons8.com/parakeet/256/delete-sign.png'} width={14} height={14} />
+                        <td className="p-4 px-6 text-center text-[0.85rem] text-[var(--text-secondary)]">{s.min.toLocaleString()}</td>
+                        <td className="p-4 px-6 text-center text-[0.85rem] text-[var(--text-secondary)]">{s.max.toLocaleString()}</td>
+                        <td className="p-4 px-6 text-center">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[0.75rem] font-extrabold border ${
+                            s.refill 
+                              ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
+                              : 'bg-red-500/5 text-[var(--text-tertiary)] border-[var(--border-color)]'
+                          }`}>
+                            <img src={s.refill ? 'https://img.icons8.com/fluency/256/checkmark.png' : 'https://img.icons8.com/fluency/256/delete-sign.png'} width={14} height={14} alt={s.refill ? 'نعم' : 'لا'} />
                             {s.refill ? 'نعم' : 'لا'}
                           </span>
+                        </td>
+                        <td className="p-4 px-6 text-center">
+                          <Link 
+                            href={`/dashboard?serviceId=${s.id}`}
+                            className="btn-primary py-1.5 px-4 text-[0.75rem] rounded-lg shadow-none"
+                          >
+                            اطلب الآن
+                          </Link>
                         </td>
                       </tr>
                     ))}
@@ -161,9 +163,9 @@ export default function Services() {
               </div>
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-              <Link href="/register" className="btn-primary" style={{ padding: '1.2rem 4rem', fontSize: '1.1rem', borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', gap: '0.8rem' }}>
-                <img src="https://img.icons8.com/parakeet/256/rocket.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+            <div className="text-center mt-12">
+              <Link href="/register" className="btn-primary py-5 px-16 text-[1.1rem] rounded-full inline-flex items-center gap-3 shadow-[var(--shadow-lg)] transition-transform hover:scale-105 active:scale-95">
+                <img src="https://img.icons8.com/fluency/256/rocket.png" width={24} height={24} className="brightness-0 invert" alt="صاروخ" />
                 ابدأ رحلتك الآن
               </Link>
             </div>

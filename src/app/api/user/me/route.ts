@@ -19,7 +19,8 @@ export async function GET() {
       username: user.username,
       balance: user.balance || 0.00,
       currency: 'USD',
-      role: user.role
+      role: user.role,
+      isProfitViewer: user.isProfitViewer
     });
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

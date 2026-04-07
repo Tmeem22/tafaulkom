@@ -44,3 +44,10 @@ export async function getUserFromSession() {
     return null;
   }
 }
+
+export async function verifyAuth(req?: Request) {
+  const session = await getSession();
+  if (!session) return null;
+  return session; // returns { userId, role }
+}
+

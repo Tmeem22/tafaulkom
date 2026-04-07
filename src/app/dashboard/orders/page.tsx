@@ -5,21 +5,21 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
 const sideLinks = [
-  { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/parakeet/256/shopping-cart.png' },
-  { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/parakeet/256/list.png', active: true },
-  { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/parakeet/256/flash-on.png' },
-  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/parakeet/256/card-exchange.png' },
-  { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/parakeet/256/headset.png' },
-  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/parakeet/256/code.png' },
+  { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
+  { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/fluency/256/list.png', active: true },
+  { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/fluency/256/flash-on.png' },
+  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/fluency/256/card-exchange.png' },
+  { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/fluency/256/headset.png' },
+  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
 ];
 
 type OrderStatus = 'all' | 'completed' | 'pending' | 'processing' | 'cancelled';
 
 const statusConfig = {
-  completed: { label: 'مكتمل', color: 'var(--brand-success)', bg: 'rgba(16,185,129,0.1)', icon: 'https://img.icons8.com/parakeet/256/checkmark.png' },
-  processing: { label: 'قيد التنفيذ', color: 'var(--brand-primary)', bg: 'rgba(108,60,225,0.1)', icon: 'https://img.icons8.com/parakeet/256/spinner-frame-2.png' },
-  pending: { label: 'معلّق', color: 'var(--brand-accent)', bg: 'rgba(245,158,11,0.1)', icon: 'https://img.icons8.com/parakeet/256/hourglass.png' },
-  cancelled: { label: 'ملغي', color: 'var(--brand-danger)', bg: 'rgba(239,68,68,0.1)', icon: 'https://img.icons8.com/parakeet/256/delete-sign.png' },
+  completed: { label: 'مكتمل', color: 'var(--brand-success)', bg: 'rgba(16,185,129,0.1)', icon: 'https://img.icons8.com/fluency/256/checkmark.png' },
+  processing: { label: 'قيد التنفيذ', color: 'var(--brand-primary)', bg: 'rgba(108,60,225,0.1)', icon: 'https://img.icons8.com/fluency/256/spinner-frame-2.png' },
+  pending: { label: 'معلّق', color: 'var(--brand-accent)', bg: 'rgba(245,158,11,0.1)', icon: 'https://img.icons8.com/fluency/256/hourglass.png' },
+  cancelled: { label: 'ملغي', color: 'var(--brand-danger)', bg: 'rgba(239,68,68,0.1)', icon: 'https://img.icons8.com/fluency/256/delete-sign.png' },
 };
 
 export default function Orders() {
@@ -28,33 +28,39 @@ export default function Orders() {
   const [orders, setOrders] = useState<any[]>([]);
   const [balance, setBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Rating Modal State
+  const [ratingOrder, setRatingOrder] = useState<any>(null);
+  const [selectedStars, setSelectedStars] = useState(5);
+  const [reviewText, setReviewText] = useState('');
+  const [submittingRating, setSubmittingRating] = useState(false);
 
   useEffect(() => {
-    const fetchOrdersAndUser = async () => {
-      try {
-        const [ordersRes, userRes] = await Promise.all([
-          fetch('/api/orders'),
-          fetch('/api/user/me')
-        ]);
-        
-        if (ordersRes.ok) {
-          const ordersData = await ordersRes.json();
-          setOrders(ordersData);
-        }
-        
-        if (userRes.ok) {
-          const userData = await userRes.json();
-          if (userData.balance !== undefined) setBalance(userData.balance);
-        }
-      } catch (err) {
-        console.error("Failed to load data", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
     fetchOrdersAndUser();
   }, []);
+
+  const fetchOrdersAndUser = async () => {
+    try {
+      const [ordersRes, userRes] = await Promise.all([
+        fetch('/api/orders'),
+        fetch('/api/user/me')
+      ]);
+      
+      if (ordersRes.ok) {
+        const ordersData = await ordersRes.json();
+        setOrders(ordersData);
+      }
+      
+      if (userRes.ok) {
+        const userData = await userRes.json();
+        if (userData.balance !== undefined) setBalance(userData.balance);
+      }
+    } catch (err) {
+      console.error("Failed to load data", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filtered = orders.filter(o => {
     if (filter !== 'all' && o.status !== filter) return false;
@@ -62,150 +68,224 @@ export default function Orders() {
     return true;
   });
 
+  const counts = {
+    all: orders.length,
+    completed: orders.filter(o => o.status === 'completed').length,
+    processing: orders.filter(o => o.status === 'processing').length,
+    pending: orders.filter(o => o.status === 'pending').length,
+    cancelled: orders.filter(o => o.status === 'cancelled').length,
+  };
+
+  const handleAction = async (orderId: number, action: 'refill' | 'cancel') => {
+    alert(`${action === 'refill' ? 'طلب تعويض' : 'طلب إلغاء'} للطلب #${orderId}`);
+  };
+
+  const submitRating = async () => {
+    if (!ratingOrder) return;
+    setSubmittingRating(true);
+    try {
+      const res = await fetch('/api/orders/rate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: ratingOrder.id,
+          rating: selectedStars,
+          review: reviewText
+        })
+      });
+      if (res.ok) {
+        alert('تم إرسال تقييمك بنجاح! شكراً لك.');
+        setRatingOrder(null);
+        setSelectedStars(5);
+        setReviewText('');
+        fetchOrdersAndUser(); // Refresh list
+      }
+    } catch (err) {
+      alert('فشل في إرسال التقييم. يرجى المحاولة لاحقاً.');
+    } finally {
+      setSubmittingRating(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
-      <div dir="rtl" style={{ display: 'flex', minHeight: '100vh', paddingTop: '70px' }}>
+      <div dir="rtl" className="flex min-h-screen pt-[70px] bg-[var(--bg-secondary)]">
         {/* Sidebar */}
-        <aside style={{ width: '250px', background: 'var(--bg-card)', borderLeft: '1px solid var(--border-color)', padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'fixed', top: '70px', bottom: '0', overflowY: 'auto' }}>
-          <div style={{ padding: '1rem', background: 'var(--gradient-primary)', borderRadius: 'var(--radius-lg)', marginBottom: '1rem', textAlign: 'center' }}>
-            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.75rem', fontWeight: 600 }}>الرصيد الحالي</p>
-            <p style={{ color: 'white', fontSize: '1.8rem', fontWeight: 900 }} dir="ltr">${balance !== null ? balance.toFixed(2) : '...'}</p>
-            <Link href="/dashboard/deposit" style={{ display: 'inline-block', marginTop: '0.5rem', padding: '0.4rem 1rem', borderRadius: 'var(--radius-full)', background: 'rgba(255,255,255,0.2)', color: 'white', fontSize: '0.8rem', fontWeight: 700, textDecoration: 'none' }}>
-              + شحن رصيد
+        <aside className="w-[240px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 px-4 flex flex-col gap-1 fixed top-[70px] bottom-0 overflow-y-auto z-10 hidden lg:flex">
+          <div className="p-6 px-5 bg-[var(--gradient-primary)] rounded-[24px] mb-6 text-center shadow-[var(--shadow-md)]">
+            <p className="text-white/85 text-[0.75rem] font-bold uppercase tracking-wider mb-2">رصيدك الحالي</p>
+            <p className="text-white text-[2rem] font-black mb-3 drop-shadow-md" dir="ltr">${balance !== null ? balance.toFixed(2) : '...'}</p>
+            <Link href="/dashboard/deposit" className="flex items-center justify-center gap-2 p-3 rounded-[15px] bg-white/20 text-white text-[0.85rem] font-extrabold no-underline transition-all hover:scale-[1.02] backdrop-blur-sm">
+              <img src="https://img.icons8.com/fluency/256/plus.png" width={16} height={16} className="brightness-0 invert" alt="شحن رصيد" /> شحن رصيدك
             </Link>
           </div>
 
-          {sideLinks.map((link, i) => (
-            <Link key={i} href={link.href} style={{
-              padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none',
-              display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', fontWeight: 600,
-              background: link.active ? 'var(--bg-secondary)' : 'transparent',
-              color: link.active ? 'var(--brand-primary)' : 'var(--text-secondary)',
-              transition: 'all 0.2s',
-            }}>
-              <img src={link.icon} alt={link.label} width={20} height={20} style={{ opacity: link.active ? 1 : 0.7 }} /> {link.label}
-            </Link>
-          ))}
+          <div className="flex flex-col gap-2">
+            {sideLinks.map((link, i) => (
+              <Link key={i} href={link.href} className={`p-3.5 px-5 rounded-[14px] no-underline flex items-center gap-4 text-[0.9rem] font-bold transition-all duration-300 ${
+                link.active ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]' : 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]'
+              }`}>
+                <img src={link.icon} alt={link.label} width={22} height={22} className={link.active ? 'opacity-100' : 'opacity-70'} /> {link.label}
+              </Link>
+            ))}
+          </div>
 
-          <div style={{ marginTop: 'auto', padding: '1rem 0', borderTop: '1px solid var(--border-color)' }}>
-            <Link href="/" style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-danger)' }}>
-              <img src="https://img.icons8.com/parakeet/256/exit.png" width={20} height={20} /> تسجيل الخروج
-            </Link>
+          <div className="mt-auto py-4 border-t border-[var(--border-color)]">
+            <button 
+              onClick={async () => {
+                const res = await fetch('/api/auth/logout', { method: 'POST' });
+                if (res.ok) window.location.href = '/';
+              }}
+              className="w-full bg-transparent border-none p-3.5 px-5 rounded-[14px] no-underline flex items-center gap-4 text-[0.9rem] font-bold text-[var(--brand-danger)] cursor-pointer transition-all hover:bg-red-500/10"
+            >
+              <img src="https://img.icons8.com/fluency/256/exit.png" width={22} height={22} alt="تسجيل الخروج" /> تسجيل الخروج
+            </button>
           </div>
         </aside>
 
         {/* Main Content */}
-        <div style={{ flex: 1, marginRight: '250px', padding: '2rem' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <div style={{ marginBottom: '2rem' }}>
-              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <img src="https://img.icons8.com/parakeet/256/list.png" width={32} height={32} /> طلباتي
+        <div className="flex-1 lg:mr-[240px] p-10 px-4 md:px-14">
+          <div className="max-w-[1200px] mx-auto">
+            <div className="mb-10 text-center md:text-right">
+              <h1 className="text-[2.2rem] font-black text-[var(--text-primary)] mb-2 tracking-tight flex items-center justify-center md:justify-start gap-4">
+                <img src="https://img.icons8.com/fluency/256/list.png" width={38} height={38} alt="طلباتي" /> طلباتي
               </h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>سجل جميع الطلبات السابقة والحالية</p>
+              <p className="text-[var(--text-secondary)] text-[0.95rem] font-semibold">سجل جميع الطلبات السابقة والحالية وحالاتها</p>
             </div>
 
-            {/* Summary Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-              {[
-                { label: 'إجمالي الطلبات', value: orders.length.toString(), icon: 'https://img.icons8.com/parakeet/256/package.png', color: 'var(--text-primary)' },
-                { label: 'مكتملة', value: orders.filter(o => o.status === 'completed').length.toString(), icon: 'https://img.icons8.com/parakeet/256/checkmark.png', color: 'var(--brand-success)' },
-                { label: 'قيد التنفيذ', value: orders.filter(o => o.status === 'processing').length.toString(), icon: 'https://img.icons8.com/parakeet/256/flash-on.png', color: 'var(--brand-primary)' },
-                { label: 'معلّقة', value: orders.filter(o => o.status === 'pending').length.toString(), icon: 'https://img.icons8.com/parakeet/256/clock.png', color: 'var(--brand-accent)' },
-              ].map((stat, i) => (
-                <div key={i} className="card" style={{ padding: '1.2rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <img src={stat.icon} width={40} height={40} />
-                  <div>
-                    <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>{stat.label}</p>
-                    <p style={{ fontSize: '1.5rem', fontWeight: 900, color: stat.color }}>{stat.value}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Filters */}
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-              <div style={{ position: 'relative', flex: '1', maxWidth: '300px' }}>
-                <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
-                  <img src="https://img.icons8.com/parakeet/256/search.png" width={20} height={20} />
-                </span>
+            {/* Filters and Search */}
+            <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between">
+              <div className="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto no-scrollbar">
+                {(['all', 'completed', 'processing', 'pending', 'cancelled'] as OrderStatus[]).map(status => (
+                  <button
+                    key={status}
+                    onClick={() => setFilter(status)}
+                    className={`whitespace-nowrap px-5 py-2.5 rounded-[14px] text-[0.85rem] font-extrabold transition-all border-2 ${
+                      filter === status 
+                        ? 'bg-[var(--brand-primary)] border-[var(--brand-primary)] text-white shadow-[0_5px_15px_rgba(108,60,225,0.3)]' 
+                        : 'bg-[var(--bg-card)] border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--brand-primary)]/30'
+                    }`}
+                  >
+                    {status === 'all' ? 'الكل' : statusConfig[status].label}
+                    <span className={`mr-2 px-2 py-0.5 rounded-full text-[0.7rem] ${filter === status ? 'bg-white/20 text-white' : 'bg-[var(--bg-secondary)] text-[var(--text-tertiary)]'}`}>
+                      {counts[status]}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              
+              <div className="relative w-full md:w-[320px]">
+                <img src="https://img.icons8.com/fluency/256/search.png" width={18} height={18} className="absolute right-4 top-1/2 -translate-y-1/2 opacity-50" alt="بحث" />
                 <input
                   type="text"
-                  className="input-field"
+                  className="input-field pr-12 h-[48px] rounded-[14px] text-[0.9rem] font-semibold"
                   placeholder="ابحث برقم الطلب..."
                   value={searchId}
                   onChange={e => setSearchId(e.target.value)}
-                  style={{ paddingRight: '2.5rem' }}
                   dir="ltr"
                 />
               </div>
-              {(['all', 'completed', 'processing', 'pending', 'cancelled'] as OrderStatus[]).map(status => (
-                <button
-                  key={status}
-                  onClick={() => setFilter(status)}
-                  style={{
-                    padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)',
-                    border: `1.5px solid ${filter === status ? 'var(--brand-primary)' : 'var(--border-color)'}`,
-                    background: filter === status ? 'var(--gradient-cta)' : 'var(--bg-card)',
-                    color: filter === status ? 'white' : 'var(--text-secondary)',
-                    fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer', transition: 'all 0.2s',
-                    fontFamily: 'inherit'
-                  }}
-                >
-                  {status === 'all' ? 'الكل' : statusConfig[status].label}
-                </button>
-              ))}
             </div>
 
             {/* Orders Table */}
-            <div className="card" style={{ overflow: 'hidden' }}>
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div className="card rounded-[24px] overflow-hidden shadow-[var(--shadow-md)]">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
                   <thead>
-                    <tr style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-                      <th style={{ padding: '0.9rem 1rem', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>رقم الطلب</th>
-                      <th style={{ padding: '0.9rem 1rem', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>الخدمة</th>
-                      <th style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>الكمية</th>
-                      <th style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>التكلفة</th>
-                      <th style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>المتبقي</th>
-                      <th style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>الحالة</th>
-                      <th style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>التاريخ</th>
+                    <tr className="bg-[var(--bg-secondary)] border-b border-[var(--border-color)]">
+                      <th className="p-5 text-right text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الطلب</th>
+                      <th className="p-5 text-right text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الخدمة</th>
+                      <th className="p-5 text-right text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الرابط</th>
+                      <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الكمية</th>
+                      <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">التكلفة</th>
+                      <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الحالة</th>
+                      <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الإجراءات</th>
+                      <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">التاريخ</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-[var(--border-color)]">
                     {loading ? (
                       <tr>
-                        <td colSpan={7} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-tertiary)' }}>
-                          جاري تحميل الطلبات...
+                        <td colSpan={8} className="p-20 text-center">
+                          <img src="https://img.icons8.com/fluency/256/hourglass.png" width={48} height={48} className="animate-spin mx-auto mb-4 opacity-50" alt="تحميل" />
+                          <p className="text-[var(--text-tertiary)] font-bold">جاري جلب طلباتك المسجلة...</p>
                         </td>
                       </tr>
                     ) : filtered.length === 0 ? (
                       <tr>
-                        <td colSpan={7} style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-tertiary)' }}>
-                          <img src="https://img.icons8.com/parakeet/256/feedback.png" width={64} height={64} style={{ display: 'block', margin: '0 auto 1rem', opacity: 0.5 }} />
-                          لا توجد طلبات تطابق البحث
+                        <td colSpan={8} className="p-20 text-center">
+                          <img src="https://img.icons8.com/fluency/256/nothing-found.png" width={64} height={64} className="mx-auto mb-4 opacity-30" alt="لا يوجد" />
+                          <p className="text-[var(--text-tertiary)] font-bold">لا توجد طلبات تطابق معايير البحث</p>
                         </td>
                       </tr>
                     ) : filtered.map(order => {
                       const sc = statusConfig[order.status as keyof typeof statusConfig] || statusConfig['pending'];
                       return (
-                        <tr key={order.id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }}
-                          onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-card-hover)')}
-                          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                          <td style={{ padding: '0.9rem 1rem', fontSize: '0.85rem', fontWeight: 700, color: 'var(--brand-primary)' }}>#{order.id}</td>
-                          <td style={{ padding: '0.9rem 1rem' }}>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)', display: 'block' }} dir="ltr">{order.service}</span>
-                            <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', direction: 'ltr', display: 'block', marginTop: '2px' }}>{order.link}</span>
+                        <tr key={order.id} className="transition-all hover:bg-[var(--bg-secondary)]/50">
+                          <td className="p-5 text-[0.85rem] font-black text-[var(--brand-primary)]">#{order.id}</td>
+                          <td className="p-5">
+                            <span className="text-[0.85rem] font-bold text-[var(--text-primary)] block max-w-[200px] truncate" title={order.service}>{order.service}</span>
                           </td>
-                          <td style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{order.quantity.toLocaleString()}</td>
-                          <td style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }} dir="ltr">${order.charge.toFixed(4)}</td>
-                          <td style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.85rem', color: order.remains > 0 ? 'var(--brand-accent)' : 'var(--text-tertiary)' }}>{order.remains.toLocaleString()}</td>
-                          <td style={{ padding: '0.9rem 1rem', textAlign: 'center' }}>
-                            <span style={{ padding: '0.3rem 0.75rem', borderRadius: 'var(--radius-full)', fontSize: '0.72rem', fontWeight: 700, background: sc.bg, color: sc.color, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-                              <img src={sc.icon} width={14} height={14} className={order.status === 'processing' ? 'animate-spin' : ''} /> {sc.label}
+                          <td className="p-5">
+                            <a href={order.link} target="_blank" rel="noopener noreferrer" className="text-[0.8rem] text-[var(--brand-primary)] font-bold no-underline hover:underline block max-w-[150px] truncate" dir="ltr">
+                              {order.link}
+                            </a>
+                          </td>
+                          <td className="p-5 text-center text-[0.85rem] font-bold text-[var(--text-secondary)]">{order.quantity.toLocaleString()}</td>
+                          <td className="p-5 text-center text-[0.85rem] font-black text-[var(--text-primary)]" dir="ltr">${order.charge.toFixed(4)}</td>
+                          <td className="p-5 text-center">
+                            <span className={`px-3 py-1.5 rounded-full text-[0.7rem] font-black flex items-center justify-center gap-2 mx-auto w-fit ${
+                              order.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500' :
+                              order.status === 'processing' ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]' :
+                              order.status === 'pending' ? 'bg-amber-500/10 text-amber-500' :
+                              'bg-red-500/10 text-red-500'
+                            }`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${order.status === 'processing' ? 'animate-pulse' : ''} ${
+                                order.status === 'completed' ? 'bg-emerald-500' :
+                                order.status === 'processing' ? 'bg-[var(--brand-primary)]' :
+                                order.status === 'pending' ? 'bg-amber-500' :
+                                'bg-red-500'
+                              }`}></span>
+                              {sc.label}
                             </span>
                           </td>
-                          <td style={{ padding: '0.9rem 1rem', textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-tertiary)', whiteSpace: 'nowrap' }} dir="ltr">{new Date(order.date).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' })}</td>
+                          <td className="p-5 text-center">
+                            <div className="flex justify-center gap-2">
+                              {/* Rate Button */}
+                              {order.status === 'completed' && !order.rating && (
+                                <button 
+                                  onClick={() => setRatingOrder(order)} 
+                                  className="p-2 rounded-[10px] bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white transition-all border-none cursor-pointer" 
+                                  title="قيم الطلب"
+                                >
+                                  <img src="https://img.icons8.com/fluency/256/star.png" width={16} height={16} alt="Rate" />
+                                </button>
+                              )}
+                              
+                              {order.status === 'completed' && order.rating && (
+                                <span className="flex gap-0.5" title={`تقييمك: ${order.rating} نجوم`}>
+                                  {[1,2,3,4,5].map(s => (
+                                    <img key={s} src="https://img.icons8.com/fluency/256/star.png" width={10} height={10} className={s > order.rating ? 'grayscale opacity-30' : ''} alt="star" />
+                                  ))}
+                                </span>
+                              )}
+
+                              {order.status === 'completed' && order.refill && (
+                                <button onClick={() => handleAction(order.id, 'refill')} className="p-2 rounded-[10px] bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all border-none cursor-pointer" title="طلب تعويض">
+                                  <img src="https://img.icons8.com/fluency/256/rotate.png" width={16} height={16} alt="Refill" />
+                                </button>
+                              )}
+                              {(order.status === 'pending' || order.status === 'processing') && (
+                                <button onClick={() => handleAction(order.id, 'cancel')} className="p-2 rounded-[10px] bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border-none cursor-pointer" title="إلغاء الطلب">
+                                  <img src="https://img.icons8.com/fluency/256/delete-sign.png" width={16} height={16} alt="Cancel" />
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-5 text-center text-[0.75rem] font-bold text-[var(--text-tertiary)] whitespace-nowrap" dir="ltr">
+                            {new Date(order.createdAt).toLocaleDateString('ar-EG')}
+                          </td>
                         </tr>
                       );
                     })}
@@ -213,19 +293,74 @@ export default function Orders() {
                 </table>
               </div>
             </div>
-
-            {/* Pagination hint */}
-            <div style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-tertiary)', fontSize: '0.85rem' }}>
-              عرض {filtered.length} من {orders.length} طلب
-            </div>
           </div>
         </div>
+
+        {/* Rating Modal */}
+        {ratingOrder && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
+            <div className="bg-[var(--bg-card)] w-full max-w-[480px] rounded-[32px] border border-[var(--border-color)] overflow-hidden shadow-[var(--shadow-lg)] animate-scale-up">
+              <div className="p-8 pb-4 flex justify-between items-center">
+                <h3 className="text-[1.5rem] font-black text-[var(--text-primary)] tracking-tight">ما هو رأيك في الخدمة؟</h3>
+                <button onClick={() => setRatingOrder(null)} className="w-10 h-10 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center border-none cursor-pointer hover:bg-red-500/10 group">
+                  <img src="https://img.icons8.com/fluency/256/delete-sign.png" width={20} height={20} className="group-hover:rotate-90 transition-all" alt="إغلاق" />
+                </button>
+              </div>
+              <div className="p-8 pt-0 text-center">
+                <p className="text-[0.95rem] text-[var(--text-secondary)] mb-8 font-medium italic">#{ratingOrder.id} - {ratingOrder.service}</p>
+                
+                <div className="flex justify-center gap-3 mb-10">
+                  {[1,2,3,4,5].map(star => (
+                    <button 
+                      key={star} 
+                      onClick={() => setSelectedStars(star)}
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all cursor-pointer border-none ${
+                        star <= selectedStars ? 'bg-amber-500/20 scale-110 shadow-lg' : 'bg-[var(--bg-secondary)] opacity-40 hover:opacity-100'
+                      }`}
+                    >
+                      <img 
+                        src="https://img.icons8.com/fluency/256/star.png" 
+                        width={star <= selectedStars ? 36 : 28} 
+                        height={star <= selectedStars ? 36 : 28} 
+                        className={star <= selectedStars ? '' : 'grayscale'}
+                        alt="star" 
+                      />
+                    </button>
+                  ))}
+                </div>
+
+                <div className="text-right mb-8">
+                  <label className="block text-[0.85rem] font-black text-[var(--text-secondary)] mb-3 mr-1">اكتب تعليقك (اختياري)</label>
+                  <textarea 
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
+                    className="input-field w-full h-[120px] p-5 rounded-[20px] resize-none text-[0.95rem] font-bold"
+                    placeholder="رأيك يهمنا ويساعد الآخرين..."
+                  ></textarea>
+                </div>
+
+                <button 
+                  onClick={submitRating}
+                  disabled={submittingRating}
+                  className="w-full py-5 bg-[var(--brand-primary)] text-white font-black text-[1.1rem] rounded-[22px] border-none shadow-[0_10px_25px_rgba(108,60,225,0.4)] transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+                >
+                  {submittingRating ? (
+                    <img src="https://img.icons8.com/fluency/256/spinner-frame-2.png" width={24} height={24} className="animate-spin brightness-0 invert" alt="loading" />
+                  ) : 'إرسال التقييم الحين'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <style jsx global>{`
-        @media (max-width: 768px) {
+        @keyframes scale-up { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
+        
+        @media (max-width: 1024px) {
           aside { display: none !important; }
-          div[style*="marginRight: '250px'"] { margin-right: 0 !important; }
+          .lg\\:mr-\\[240px\\] { margin-right: 0 !important; }
         }
       `}</style>
     </>

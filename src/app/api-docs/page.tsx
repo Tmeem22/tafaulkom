@@ -175,7 +175,7 @@ export default function APIDocs() {
             <div className="card" style={{ padding: '2rem', marginBottom: '3rem', background: 'var(--gradient-stats)', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'absolute', top: '0', left: '0', right: '0', height: '4px', background: 'var(--gradient-primary)' }} />
               <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <img src="https://img.icons8.com/parakeet/256/key.png" width={24} height={24} /> إنشاء مفتاح API
+                <img src="https://img.icons8.com/fluency/256/key.png" width={24} height={24} /> إنشاء مفتاح API
               </h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.7 }}>
                 هذا المفتاح بمثابة كلمة المرور لربط موقعك بموقعنا. إذا كنت تملك لوحة SMM خاصة كموزع (Reseller)، انسخ المفتاح وضعه في إعدادات المزودين في موقعك.
@@ -183,10 +183,10 @@ export default function APIDocs() {
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <input type="text" readOnly value={loading ? 'جاري التحميل...' : maskedKey} className="input-field" style={{ flex: '1', minWidth: '250px', fontFamily: 'monospace', color: 'var(--brand-success)' }} dir="ltr" />
                 <button className="btn-secondary" onClick={handleCopy} disabled={!apiKey} style={{ background: 'var(--bg-card)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <img src="https://img.icons8.com/parakeet/256/copy.png" width={18} height={18} /> نسخ الرمز الحقيقي
+                  <img src="https://img.icons8.com/fluency/256/copy.png" width={18} height={18} /> نسخ الرمز الحقيقي
                 </button>
                 <button className="btn-primary" onClick={handleRegenerate} disabled={!apiKey} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <img src="https://img.icons8.com/parakeet/256/synchronize.png" width={18} height={18} style={{ filter: 'brightness(0) invert(1)' }} /> توليد مفتاح جديد
+                  <img src="https://img.icons8.com/fluency/256/synchronize.png" width={18} height={18} style={{ filter: 'brightness(0) invert(1)' }} /> توليد مفتاح جديد
                 </button>
               </div>
             </div>

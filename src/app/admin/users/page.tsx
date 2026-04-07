@@ -69,7 +69,7 @@ export default function AdminUsers() {
     <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-          <img src="https://img.icons8.com/parakeet/256/group-of-projects.png" width={40} height={40} /> إدارة المستخدمين
+          <img src="https://img.icons8.com/fluency/256/group-of-projects.png" width={40} height={40} /> إدارة المستخدمين
         </h1>
         <p style={{ color: 'var(--text-secondary)' }}>التحكم الكامل في حسابات العملاء، أرصدتهم، وصلاحياتهم.</p>
       </div>
@@ -112,14 +112,14 @@ export default function AdminUsers() {
                   </td>
                   <td style={{ padding: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     <button className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', background: 'var(--brand-success)', gap: '0.4rem' }} onClick={() => handleAction(user.id, 'add_balance')}>
-                      <img src="https://img.icons8.com/parakeet/256/plus.png" width={14} height={14} style={{ filter: 'brightness(0) invert(1)' }} /> إضافة رصيد
+                      <img src="https://img.icons8.com/fluency/256/plus.png" width={14} height={14} style={{ filter: 'brightness(0) invert(1)' }} /> إضافة رصيد
                     </button>
                     <button className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', gap: '0.4rem' }} onClick={() => handleAction(user.id, 'set_balance')}>
-                      <img src="https://img.icons8.com/parakeet/256/edit.png" width={14} height={14} /> تعديل
+                      <img src="https://img.icons8.com/fluency/256/edit.png" width={14} height={14} /> تعديل
                     </button>
                     {user.role !== 'ADMIN' && (
                       <button className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', color: 'var(--brand-danger)', borderColor: 'var(--brand-danger)', gap: '0.4rem' }} onClick={() => handleAction(user.id, 'change_role')}>
-                        <img src="https://img.icons8.com/parakeet/256/crown.png" width={14} height={14} /> ترقية
+                        <img src="https://img.icons8.com/fluency/256/crown.png" width={14} height={14} /> ترقية
                       </button>
                     )}
                   </td>

@@ -7,25 +7,6 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-const platformIcons: Record<string, string> = {
-  Instagram: 'https://img.icons8.com/fluency/256/instagram-new.png',
-  TikTok: 'https://img.icons8.com/fluency/256/tiktok.png',
-  YouTube: 'https://img.icons8.com/fluency/256/youtube-play.png',
-  Twitter: 'https://img.icons8.com/fluency/256/twitter.png',
-  Facebook: 'https://img.icons8.com/fluency/256/facebook-new.png',
-  Snapchat: 'https://img.icons8.com/fluency/256/snapchat.png',
-  Telegram: 'https://img.icons8.com/fluency/256/telegram-app.png',
-  LinkedIn: 'https://img.icons8.com/fluency/256/linkedin.png',
-  Spotify: 'https://img.icons8.com/fluency/256/spotify.png',
-  Discord: 'https://img.icons8.com/fluency/256/discord-logo.png',
-  Twitch: 'https://img.icons8.com/fluency/256/twitch.png',
-  Pinterest: 'https://img.icons8.com/fluency/256/pinterest.png',
-  Reddit: 'https://img.icons8.com/fluency/256/reddit.png',
-  Google: 'https://img.icons8.com/fluency/256/google-logo.png',
-  SoundCloud: 'https://img.icons8.com/fluency/256/soundcloud.png',
-  Threads: 'https://img.icons8.com/fluency/256/threads.png',
-};
-
 export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -72,35 +53,43 @@ export default function Register() {
   };
 
   const fields = [
-    { name: 'email', label: 'البريد الإلكتروني', type: 'text', icon: 'https://img.icons8.com/parakeet/256/envelope.png', placeholder: 'name@example.com', dir: 'ltr' },
-    { name: 'password', label: 'كلمة المرور', type: 'password', icon: 'https://img.icons8.com/parakeet/256/lock.png', placeholder: '••••••••••••', dir: 'ltr' },
-    { name: 'confirmPassword', label: 'تأكيد كلمة المرور', type: 'password', icon: 'https://img.icons8.com/parakeet/256/checked-checkbox.png', placeholder: '••••••••••••', dir: 'ltr' },
+    { name: 'email', label: 'البريد الإلكتروني', type: 'text', icon: 'https://img.icons8.com/fluency/256/mail.png', placeholder: 'name@example.com', dir: 'ltr' },
+    { name: 'password', label: 'كلمة المرور', type: 'password', icon: 'https://img.icons8.com/fluency/256/lock.png', placeholder: '••••••••••••', dir: 'ltr' },
+    { name: 'confirmPassword', label: 'تأكيد كلمة المرور', type: 'password', icon: 'https://img.icons8.com/fluency/256/checked-checkbox.png', placeholder: '••••••••••••', dir: 'ltr' },
+  ];
+
+  const floatingIcons = [
+    { icon: 'instagram-new', class: 'icon-1' },
+    { icon: 'tiktok', class: 'icon-2' },
+    { icon: 'youtube-play', class: 'icon-3' },
+    { icon: 'facebook-new', class: 'icon-4' },
+    { icon: 'twitter', class: 'icon-5' },
+    { icon: 'snapchat', class: 'icon-6' },
   ];
 
   return (
     <>
       <Navbar />
-      <main dir="rtl" className="hero-bg" style={{ minHeight: '100vh', paddingTop: '90px' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.5rem', position: 'relative', zIndex: 1 }}>
+      <main dir="rtl" className="hero-bg min-h-screen pt-[90px]">
+        <div className="max-w-[1280px] mx-auto px-6 py-12 relative z-[1]">
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }} className="hero-grid">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
-            {/* Form */}
             <div className="animate-fade-in-up">
-              <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <img src="https://img.icons8.com/parakeet/256/rocket.png" width={40} height={40} />
+              <h1 className="text-[2rem] font-extrabold text-[var(--text-primary)] mb-2 flex items-center gap-3">
+                <img src="https://img.icons8.com/fluency/256/rocket.png" width={40} height={40} alt="أيقونة انطلاق" />
                 هل أنت جاهز؟
               </h1>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '0.95rem' }}>
-                افتح حساباً في <strong style={{ color: 'var(--brand-primary)' }}>تفاعلكم</strong> الآن! وابدأ في رحلة نمو حساباتك. تفصلك خطوة واحدة عن أفضل تجربة تسويق عربية.
+              <p className="text-[var(--text-secondary)] mb-8 text-[0.95rem]">
+                افتح حساباً في <strong className="text-[var(--brand-primary)]">تفاعلكم</strong> الآن! وابدأ في رحلة نمو حساباتك. تفصلك خطوة واحدة عن أفضل تجربة تسويق عربية.
               </p>
 
-              <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+              <form onSubmit={handleRegister} className="flex flex-col gap-5">
                 {fields.map((field, i) => (
                   <div key={i}>
-                    <div style={{ position: 'relative' }}>
-                      <span style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '32px' }}>
-                        <img src={field.icon} width={20} height={20} />
+                    <div className="relative">
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-8">
+                        <img src={field.icon} width={20} height={20} alt={field.label} />
                       </span>
                       <input 
                         type={field.type} 
@@ -108,10 +97,10 @@ export default function Register() {
                         value={(formData as any)[field.name]}
                         onChange={handleChange}
                         required
-                        className="input-field" 
+                        className="input-field pr-[3.2rem] bg-[var(--bg-card)] border-[1.5px] border-[var(--border-color)] h-[56px]" 
                         placeholder={field.placeholder}
                         dir={field.dir}
-                        style={{ paddingRight: '3.2rem', background: 'var(--bg-card)', border: '1.5px solid var(--border-color)' }} 
+                        aria-label={field.label}
                       />
                     </div>
                   </div>
@@ -119,54 +108,47 @@ export default function Register() {
 
                 <button 
                   type="submit" 
-                  className="btn-dark" 
-                  style={{ width: '100%', padding: '1.2rem', fontSize: '1.1rem', marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', borderRadius: 'var(--radius-lg)' }}
+                  className="btn-dark w-full py-4 text-[1.1rem] mt-4 flex items-center justify-center gap-3 rounded-[var(--radius-lg)] font-bold transition-transform active:scale-95"
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     <>
-                      <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                      <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin brightness-0 invert" alt="جاري التحميل" />
                       جاري التحقق والتسجيل...
                     </>
                   ) : 'سجّل الآن في تفاعلكم'}
                 </button>
               </form>
 
-              <div style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-tertiary)', fontSize: '0.9rem' }}>
-                هل لديك حساب؟ <Link href="/login" style={{ color: 'var(--brand-primary)', fontWeight: 700, textDecoration: 'none' }}>تسجيل الدخول</Link>
+              <div className="text-center mt-6 text-[var(--text-tertiary)] text-[0.9rem]">
+                هل لديك حساب؟ <Link href="/login" className="text-[var(--brand-primary)] font-bold no-underline hover:opacity-80">تسجيل الدخول</Link>
               </div>
             </div>
 
-            {/* Right Graphics */}
-            <div className="animate-slide-right" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
-                <div style={{ width: '300px', height: '300px', borderRadius: '50%', background: 'var(--gradient-primary)', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', boxShadow: '0 20px 60px rgba(108,60,225,0.3)' }}>
-                  <img src="https://img.icons8.com/parakeet/256/chart.png" width={120} height={120} style={{ filter: 'brightness(0) invert(1)' }} />
+            <div className="animate-slide-right flex justify-center items-center">
+              <div className="relative w-full max-w-[440px]">
+                <div className="rounded-[var(--radius-xl)] overflow-hidden shadow-[var(--shadow-lg)] border-[1.5px] border-[var(--border-color)] bg-[var(--bg-card)] animate-pulse-glow">
+                  <img src="/hero.png" alt="SMM Growth Illustration" className="w-full h-auto block" />
                 </div>
                 
-                {/* Floating icons */}
-                {[
-                  { url: platformIcons.Instagram, top: '10%', left: '-10%', delay: '0s' },
-                  { url: platformIcons.TikTok, top: '5%', right: '-5%', delay: '0.5s' },
-                  { url: platformIcons.YouTube, top: '20%', left: '-15%', delay: '1s' },
-                  { url: platformIcons.Facebook, bottom: '5%', right: '-10%', delay: '1.5s' },
-                  { url: platformIcons.Twitter, top: '40%', left: '-20%', delay: '2s' },
-                  { url: platformIcons.Snapchat, top: '35%', right: '-15%', delay: '2.5s' },
-                ].map((item, i) => (
-                  <div key={i} className="animate-float" style={{ 
-                    position: 'absolute', top: item.top, left: item.left, right: item.right, bottom: item.bottom,
-                    animationDelay: item.delay, width: '58px', height: '58px', borderRadius: '18px', 
-                    background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)',
-                    border: '1.5px solid var(--border-color)', display: 'flex', alignItems: 'center', 
-                    justifyContent: 'center', boxShadow: 'var(--shadow-lg)' 
-                  }}>
-                    <img src={item.url} alt="App" width={32} height={32} style={{ objectFit: 'contain' }} />
+                {floatingIcons.map((item, i) => (
+                  <div key={i} className={`animate-float absolute w-[60px] h-[60px] rounded-[18px] bg-white/5 backdrop-blur-[12xl] border-[1.5px] border-[var(--border-color)] flex items-center justify-center shadow-[var(--shadow-lg)] z-10 ${item.class}`}>
+                    <img src={`https://img.icons8.com/color/96/${item.icon}.png`} alt={`${item.icon} icon`} width={32} height={32} className="object-contain" />
                   </div>
                 ))}
               </div>
             </div>
           </div>
         </div>
+
+        <style jsx>{`
+          .icon-1 { top: 10%; left: -10%; animation-delay: 0s; }
+          .icon-2 { top: 5%; right: -5%; animation-delay: 0.5s; }
+          .icon-3 { top: 22%; left: -18%; animation-delay: 1s; }
+          .icon-4 { bottom: 5%; right: -12%; animation-delay: 1.5s; }
+          .icon-5 { top: 40%; left: -22%; animation-delay: 2s; }
+          .icon-6 { top: 35%; right: -18%; animation-delay: 2.5s; }
+        `}</style>
       </main>
       <Footer />
     </>

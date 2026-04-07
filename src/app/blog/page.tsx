@@ -28,14 +28,14 @@ const posts = [
     slug: 'smm',
     title: 'التسويق الإلكتروني - دليل شامل',
     excerpt: 'نظراً لتطور العالم وتطور أساليب عيشه، أصبح هناك ما يعرف بالتسويق عبر الإنترنت. تعرف على أهم استراتيجيات التسويق الرقمي الحديثة...',
-    icon: 'https://img.icons8.com/parakeet/256/line-chart.png',
+    icon: 'https://img.icons8.com/fluency/256/line-chart.png',
     date: '2024-12-05',
   },
   {
     slug: 'about-us',
     title: 'عن منصة تفاعلكم',
     excerpt: 'بشكل عام موقعنا مختص بكل ما يتعلق بالسوشال ميديا والتسويق الإلكتروني. نهدف لتقديم أفضل الخدمات بأقل الأسعار لعملائنا في العالم العربي...',
-    icon: 'https://img.icons8.com/parakeet/256/info.png',
+    icon: 'https://img.icons8.com/fluency/256/info.png',
     date: '2024-11-01',
   },
 ];
@@ -67,9 +67,11 @@ export default function Blog() {
                     <time style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontWeight: 600 }}>{post.date}</time>
                     <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '0.5rem', marginBottom: '0.75rem', lineHeight: 1.4 }}>{post.title}</h2>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.7, marginBottom: '1.2rem' }}>{post.excerpt}</p>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 1.2rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-color)', fontSize: '0.8rem', fontWeight: 600, color: 'var(--brand-primary)', cursor: 'pointer' }}>
-                      إقرأ المزيد <img src="https://img.icons8.com/parakeet/256/left.png" width={14} height={14} />
-                    </span>
+                    <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.5rem 1.4rem', borderRadius: 'var(--radius-full)', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--brand-primary)', cursor: 'pointer', transition: 'all 0.2s' }}>
+                        إقرأ المزيد <img src="https://img.icons8.com/fluency/256/chevron-left.png" width={14} height={14} />
+                      </span>
+                    </Link>
                   </div>
                 </article>
               ))}

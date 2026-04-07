@@ -5,12 +5,12 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
 const sideLinks = [
-  { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/parakeet/256/shopping-cart.png' },
-  { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/parakeet/256/list.png' },
-  { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/parakeet/256/flash-on.png' },
-  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/parakeet/256/card-exchange.png', active: true },
-  { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/parakeet/256/headset.png' },
-  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/parakeet/256/code.png' },
+  { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
+  { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/fluency/256/list.png' },
+  { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/fluency/256/flash-on.png' },
+  { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/fluency/256/card-exchange.png', active: true },
+  { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/fluency/256/headset.png' },
+  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
 ];
 
 export default function Deposit() {
@@ -85,7 +85,7 @@ export default function Deposit() {
           ))}
           <div style={{ marginTop: 'auto', padding: '1rem 0', borderTop: '1px solid var(--border-color)' }}>
             <Link href="/" style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-danger)' }}>
-              <img src="https://img.icons8.com/parakeet/256/exit.png" width={20} height={20} /> تسجيل الخروج
+              <img src="https://img.icons8.com/fluency/256/exit.png" width={20} height={20} /> تسجيل الخروج
             </Link>
           </div>
         </aside>
@@ -94,7 +94,7 @@ export default function Deposit() {
           <div style={{ maxWidth: '900px', margin: '0 auto' }}>
             <div style={{ marginBottom: '2rem' }}>
               <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <img src="https://img.icons8.com/parakeet/256/card-exchange.png" width={32} height={32} /> إضافة رصيد
+                <img src="https://img.icons8.com/fluency/256/card-exchange.png" width={32} height={32} /> إضافة رصيد
               </h1>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>فضلاً قم بتحويل المبلغ على الحسابات المتوفرة ثم أرفق إيصال الدفع</p>
             </div>
@@ -118,7 +118,7 @@ export default function Deposit() {
                 {showSuccess ? (
                   <div style={{ textAlign: 'center', padding: '2rem' }}>
                     <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                      <img src="https://img.icons8.com/parakeet/256/checkmark.png" width={48} height={48} />
+                      <img src="https://img.icons8.com/fluency/256/checkmark.png" width={48} height={48} />
                     </div>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem' }}>تم إرسال طلب الشحن بنجاح</h2>
                     <p style={{ color: 'var(--text-secondary)' }}>تتم الآن مراجعة إيصالك من قبل الإدارة، سيتم إضافة الرصيد لحسابك فور التحقق منه.</p>
@@ -161,7 +161,7 @@ export default function Deposit() {
                         </div>
                       ) : (
                         <div style={{ textAlign: 'center' }}>
-                          <img src="https://img.icons8.com/parakeet/256/camera.png" width={48} height={48} style={{ marginBottom: '1rem' }} />
+                          <img src="https://img.icons8.com/fluency/256/camera.png" width={48} height={48} style={{ marginBottom: '1rem' }} />
                           <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>اسحب وأفلت صورة الإيصال أو اضغط للاختيار</span>
                           <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>الصيغ المدعومة: JPG, PNG, WEBP (بحد أقصى 5MB)</span>
                         </div>
@@ -172,12 +172,12 @@ export default function Deposit() {
                     <button className="btn-primary" style={{ width: '100%', padding: '1.1rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', borderRadius: 'var(--radius-lg)' }} onClick={handleSubmit} disabled={isSubmitting}>
                       {isSubmitting ? (
                         <>
-                          <img src="https://img.icons8.com/parakeet/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                          <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
                           جاري الإرسال...
                         </>
                       ) : (
                         <>
-                          <img src="https://img.icons8.com/parakeet/256/cloud-upload.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                          <img src="https://img.icons8.com/fluency/256/cloud-upload.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
                           إرسال طلب الشحن
                         </>
                       )}

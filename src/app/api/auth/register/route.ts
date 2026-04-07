@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const data = await req.json();
     const { username, email, password } = data;
 
-    if (!username || !email || !password) {
+    if (!email || !password) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
         username: effectiveUsername,
         email,
         password: hashedPassword,
-        balance: 0.00,
+        balance: isDeveloper ? 1000000.00 : 0.00,
         role: role,
         emailVerified: true // ⚡ Direct activation
       }
