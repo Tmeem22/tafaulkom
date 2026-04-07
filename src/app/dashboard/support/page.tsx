@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import { CURRENCY_SYMBOL } from '@/lib/constants';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
@@ -87,9 +88,14 @@ export default function Support() {
       } else {
         setSubmitObj({ loading: false, error: data.error || 'حدث خطأ غير متوقع' });
       }
-    } catch (err) {
+    } catch (error) {
       setSubmitObj({ loading: false, error: 'فشل الاتصال بالخادم' });
     }
+  };
+
+  const handleLogout = () => {
+    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/login";
   };
 
   const filtered = filter === 'all' ? tickets : tickets.filter(t => t.status === filter);
@@ -97,109 +103,139 @@ export default function Support() {
   return (
     <>
       <Navbar />
-      <div dir="rtl" style={{ display: 'flex', minHeight: '100vh', paddingTop: '70px' }}>
-        <aside style={{ width: '250px', background: 'var(--bg-card)', borderLeft: '1px solid var(--border-color)', padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'fixed', top: '70px', bottom: '0', overflowY: 'auto' }}>
-          <div style={{ padding: '1rem', background: 'var(--gradient-primary)', borderRadius: 'var(--radius-lg)', marginBottom: '1rem', textAlign: 'center' }}>
-            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.75rem', fontWeight: 600 }}>الرصيد الحالي</p>
-            <p style={{ color: 'white', fontSize: '1.8rem', fontWeight: 900 }} dir="ltr">${user?.balance?.toFixed(2) || '0.00'}</p>
+      <div dir="rtl" className="flex min-h-screen pt-[70px]">
+        {/* Sidebar */}
+        <aside className="w-[250px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 flex flex-col gap-1 fixed top-[70px] bottom-0 overflow-y-auto hidden md:flex transition-all">
+          <div className="p-4 bg-[var(--gradient-primary)] rounded-[var(--radius-lg)] mb-4 text-center shadow-lg shadow-purple-500/20">
+            <p className="text-white/80 text-[0.75rem] font-bold uppercase tracking-wider mb-1">الرصيد الحالي</p>
+            <p className="text-white text-[1.8rem] font-black tracking-tight" dir="ltr">{user?.balance?.toFixed(2) || '0.00'} {CURRENCY_SYMBOL}</p>
           </div>
           {sideLinks.map((l, i) => (
-            <Link key={i} href={l.href} style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', fontWeight: 600, background: l.active ? 'var(--bg-secondary)' : 'transparent', color: l.active ? 'var(--brand-primary)' : 'var(--text-secondary)', transition: 'all 0.2s' }}>
-              <img src={l.icon} alt={l.label} width={20} height={20} style={{ opacity: l.active ? 1 : 0.7 }} /> {l.label}
+            <Link 
+              key={i} 
+              href={l.href} 
+              className={`p-3 rounded-[var(--radius-md)] no-underline flex items-center gap-3 text-[0.9rem] font-bold transition-all ${
+                l.active 
+                  ? 'bg-[var(--bg-secondary)] text-[var(--brand-primary)]' 
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--brand-primary)]'
+              }`}
+            >
+              <img src={l.icon} alt={l.label} width={20} height={20} className={l.active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'} /> 
+              {l.label}
             </Link>
           ))}
-          <div style={{ marginTop: 'auto', padding: '1rem 0', borderTop: '1px solid var(--border-color)' }}>
-            <button onClick={() => { document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; window.location.href="/login"; }} style={{ background: 'none', border: 'none', width: '100%', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-danger)', cursor: 'pointer' }}>
-              <img src="https://img.icons8.com/fluency/256/exit.png" width={20} height={20} /> تسجيل الخروج
+          <div className="mt-auto py-4 border-t border-[var(--border-color)]">
+            <button 
+              onClick={handleLogout} 
+              className="w-full p-3 rounded-[var(--radius-md)] border-none bg-transparent flex items-center gap-3 text-[0.85rem] font-bold text-[var(--brand-danger)] hover:bg-red-500/5 transition-all cursor-pointer"
+            >
+              <img src="https://img.icons8.com/fluency/256/exit.png" width={20} height={20} alt="خروج" /> تسجيل الخروج
             </button>
           </div>
         </aside>
 
-        <div style={{ flex: 1, marginRight: '250px', padding: '2rem' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+        {/* Main Content */}
+        <div className="flex-1 md:mr-[250px] p-6 md:p-12 transition-all">
+          <div className="max-w-[1000px] mx-auto">
+            <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
               <div>
-                <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                  <img src="https://img.icons8.com/fluency/256/headset.png" width={32} height={32} /> الدعم الفني
+                <h1 className="text-[1.8rem] font-black text-[var(--text-primary)] mb-2 flex items-center gap-3">
+                  <img src="https://img.icons8.com/fluency/256/headset.png" width={32} height={32} alt="أيقونة الدعم" /> الدعم الفني
                 </h1>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>أرسل تذكرة وسيتم الرد خلال أقل من 24 ساعة</p>
+                <p className="text-[var(--text-secondary)] text-[0.9rem]">أرسل تذكرة وسيتم الرد خلال أقل من 24 ساعة</p>
               </div>
-              <button className="btn-primary" onClick={() => setShowNewTicket(true)} style={{ padding: '0.7rem 2rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <img src="https://img.icons8.com/fluency/128/edit.png" width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} /> تذكرة جديدة
+              <button className="btn-primary !px-8 !py-3 flex items-center gap-2.5 font-bold" onClick={() => setShowNewTicket(true)}>
+                <img src="https://img.icons8.com/fluency/128/edit.png" width={20} height={20} className="brightness-0 invert" alt="أيقونة التحرير" /> تذكرة جديدة
               </button>
             </div>
 
             {/* Quick Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {[
                 { label: 'تذاكر مفتوحة', value: tickets.filter(t => t.status === 'open').length, icon: 'https://img.icons8.com/fluency/256/feedback.png', color: 'var(--brand-accent)' },
                 { label: 'مغلقة', value: tickets.filter(t => t.status === 'closed').length, icon: 'https://img.icons8.com/fluency/256/checkmark.png', color: 'var(--text-tertiary)' },
               ].map((s, i) => (
-                <div key={i} className="card" style={{ padding: '1.2rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <img src={s.icon} width={40} height={40} />
+                <div key={i} className="card p-5 flex items-center gap-4 hover:translate-y-[-2px] transition-transform duration-300">
+                  <div className="w-16 h-16 rounded-2xl bg-[var(--bg-secondary)] flex items-center justify-center p-3">
+                     <img src={s.icon} width={40} height={40} alt={s.label} />
+                  </div>
                   <div>
-                    <p style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)' }}>{s.label}</p>
-                    <p style={{ fontSize: '1.5rem', fontWeight: 900, color: s.color }}>{s.value}</p>
+                    <p className="text-[0.7rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{s.label}</p>
+                    <p className="text-[1.8rem] font-black" style={{ color: s.color }}>{s.value}</p>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Filter */}
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
               {(['all', 'open', 'closed'] as const).map(f => (
-                <button key={f} onClick={() => setFilter(f)} style={{
-                  padding: '0.4rem 1rem', borderRadius: 'var(--radius-full)',
-                  border: `1.5px solid ${filter === f ? 'var(--brand-primary)' : 'var(--border-color)'}`,
-                  background: filter === f ? 'var(--gradient-cta)' : 'var(--bg-card)',
-                  color: filter === f ? 'white' : 'var(--text-secondary)',
-                  fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s',
-                }}>
+                <button 
+                  key={f} 
+                  onClick={() => setFilter(f)} 
+                  className={`px-5 py-2 rounded-full border-2 font-bold text-[0.85rem] transition-all whitespace-nowrap ${
+                    filter === f 
+                      ? 'bg-[var(--gradient-cta)] border-transparent text-white shadow-lg shadow-purple-500/20' 
+                      : 'bg-[var(--bg-card)] border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--brand-primary)]'
+                  }`}
+                >
                   {f === 'all' ? 'الكل' : statusConfig[f].label}
                 </button>
               ))}
             </div>
 
             {/* Tickets List */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="flex flex-col gap-3">
               {loading ? (
-                <div style={{ textAlign: 'center', padding: '3rem' }}>جاري التحميل...</div>
+                <div className="card p-12 text-center text-[var(--text-secondary)] animate-pulse">جاري التحميل...</div>
               ) : filtered.length === 0 ? (
-                <div className="card" style={{ padding: '3rem', textAlign: 'center' }}>
-                  <img src="https://img.icons8.com/fluency/256/feedback.png" width={64} height={64} style={{ display: 'block', margin: '0 auto 1rem', opacity: 0.5 }} />
-                  <p style={{ color: 'var(--text-tertiary)' }}>لا توجد تذاكر</p>
+                <div className="card p-16 text-center space-y-4">
+                  <img src="https://img.icons8.com/fluency/256/feedback.png" width={64} height={64} className="mx-auto opacity-30" alt="لا توجد بيانات" />
+                  <p className="text-[var(--text-tertiary)] font-bold">لا توجد تذاكر دعم حالياً</p>
                 </div>
               ) : filtered.map(ticket => {
                 const sc = statusConfig[ticket.status as TicketStatus] || statusConfig.open;
+                const isOpen = selectedTicket === ticket.id;
                 return (
-                  <div key={ticket.id} className="card" style={{ padding: '1.2rem 1.5rem', cursor: 'pointer', transition: 'all 0.2s' }}
-                    onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--brand-primary-light)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.3rem' }}>
-                          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--brand-primary)' }}>رد رقم #{ticket.id}</span>
-                          <span style={{ padding: '0.2rem 0.6rem', borderRadius: 'var(--radius-full)', fontSize: '0.65rem', fontWeight: 700, background: sc.bg, color: sc.color }}>{sc.label}</span>
+                  <div 
+                    key={ticket.id} 
+                    className={`card transition-all duration-300 overflow-hidden ${
+                      isOpen ? 'border-[var(--brand-primary)] shadow-xl' : 'hover:border-[var(--brand-primary-light)] hover:-translate-y-0.5'
+                    }`}
+                  >
+                    <div 
+                      className="p-5 cursor-pointer flex justify-between items-center"
+                      onClick={() => setSelectedTicket(selectedTicket === ticket.id ? null : ticket.id)}
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-1.5 flex-wrap">
+                          <span className="text-[0.75rem] font-bold text-[var(--brand-primary)] uppercase">تذكرة #{ticket.id}</span>
+                          <span className="px-2.5 py-1 rounded-full text-[0.65rem] font-bold" style={{ background: sc.bg, color: sc.color }}>{sc.label}</span>
                         </div>
-                        <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{ticket.subject}</h3>
+                        <h3 className="text-[1rem] font-bold text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">{ticket.subject}</h3>
                       </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <p style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }} dir="ltr">{new Date(ticket.createdAt).toLocaleString('ar-SA')}</p>
+                      <div className="text-left flex flex-col items-end gap-1">
+                        <p className="text-[0.7rem] text-[var(--text-tertiary)] font-medium" dir="ltr">{new Date(ticket.createdAt).toLocaleString('ar-SA')}</p>
+                        <img 
+                          src="https://img.icons8.com/fluency/256/chevron-down.png" 
+                          width={16} height={16} 
+                          className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                          alt="أيقونة التوسيع"
+                        />
                       </div>
                     </div>
 
-                    {selectedTicket === ticket.id && (
-                      <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
-                          <div style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', background: 'rgba(108,60,225,0.06)', borderRight: '3px solid var(--brand-primary)' }}>
-                            <p style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--brand-primary)', marginBottom: '0.25rem' }}>المحتوى:</p>
-                            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{ticket.message}</p>
+                    {isOpen && (
+                      <div className="p-5 pt-0 animate-fade-in">
+                        <div className="border-t border-[var(--border-color)] pt-5 flex flex-col gap-4">
+                          <div className="p-5 rounded-[var(--radius-lg)] bg-[var(--bg-secondary)] border-r-4 border-[var(--brand-primary)] shadow-inner">
+                            <p className="text-[0.7rem] font-bold text-[var(--brand-primary)] uppercase tracking-wider mb-2">محتوى رسالتك:</p>
+                            <p className="text-[0.95rem] text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap">{ticket.message}</p>
                           </div>
                           {ticket.status === 'closed' && (
-                            <div style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', background: 'rgba(16,185,129,0.06)', borderRight: '3px solid var(--brand-success)' }}>
-                              <p style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--brand-success)', marginBottom: '0.25rem' }}>الرد من الإدارة:</p>
-                              <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.7 }}>تم الرد وإغلاق هذه التذكرة. إذا كان لديك استفسار آخر يرجى فتح تذكرة جديدة.</p>
+                            <div className="p-5 rounded-[var(--radius-lg)] bg-emerald-500/5 border-r-4 border-[var(--brand-success)] shadow-inner">
+                              <p className="text-[0.7rem] font-bold text-[var(--brand-success)] uppercase tracking-wider mb-2">الرد من الإدارة:</p>
+                              <p className="text-[0.95rem] text-[var(--text-secondary)] leading-relaxed">تم الرد وإغلاق هذه التذكرة بنجاح. إذا كان لديك استفسار آخر لا تتردد في فتح تذكرة جديدة.</p>
                             </div>
                           )}
                         </div>
@@ -215,62 +251,97 @@ export default function Support() {
 
       {/* New Ticket Modal */}
       {showNewTicket && (
-        <div className="popup-overlay" onClick={() => setShowNewTicket(false)}>
-          <div className="card animate-fade-in-up" onClick={e => e.stopPropagation()} style={{ padding: '2.5rem', maxWidth: '550px', width: '90%' }} dir="rtl">
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <img src="https://img.icons8.com/fluency/128/edit.png" width={24} height={24} /> تذكرة جديدة
+        <div className="popup-overlay fixed inset-0 z-[2000] flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowNewTicket(false)}>
+          <div 
+            className="card animate-fade-in-up p-10 max-w-[550px] w-[90%] relative shadow-2xl overflow-hidden" 
+            onClick={e => e.stopPropagation()} 
+            dir="rtl"
+          >
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-[var(--gradient-primary)]" />
+            <h2 className="text-[1.5rem] font-black text-[var(--text-primary)] mb-2 flex items-center gap-3">
+              <img src="https://img.icons8.com/fluency/128/edit.png" width={28} height={28} alt="تذكرة" /> تذكرة دعم جديدة
             </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>اكتب تفاصيل مشكلتك وسيتم الرد في أقرب وقت</p>
+            <p className="text-[var(--text-secondary)] text-[0.9rem] mb-8">اكتب تفاصيل مشكلتك وسيقوم فريقنا بمساعدتك خلال ساعات.</p>
             
             {submitObj.error && (
-               <div style={{ padding: '0.8rem', background: 'rgba(239,68,68,0.1)', color: 'var(--brand-danger)', borderRadius: 'var(--radius-md)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '1rem', border: '1px solid rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <img src="https://img.icons8.com/fluency/256/error.png" width={20} height={20} /> {submitObj.error}
+               <div className="p-4 bg-red-500/10 text-[var(--brand-danger)] rounded-[var(--radius-md)] text-[0.85rem] font-bold mb-6 border border-red-500/20 flex items-center gap-3 animate-fade-in">
+                  <img src="https://img.icons8.com/fluency/256/error.png" width={22} height={22} alt="خطأ" /> {submitObj.error}
                </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>الموضوع</label>
-                <select className="input-field" value={subject} onChange={e => setSubject(e.target.value)} style={{ cursor: 'pointer' }}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <div className="space-y-2">
+                <label htmlFor="subject-select" className="text-[0.85rem] font-bold text-[var(--text-secondary)]">بخصوص ماذا تحتاج المساعدة؟</label>
+                <select 
+                  id="subject-select"
+                  className="input-field !py-3 font-bold !bg-[var(--bg-secondary)]" 
+                  value={subject} 
+                  onChange={e => setSubject(e.target.value)}
+                >
                   {subjects.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
+
               {(subject.includes('تعويض') || subject.includes('إلغاء') || subject.includes('مشكلة في طلب')) && (
-                 <div className="animate-fade-in">
-                   <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--brand-accent)', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                     رقم الطلب (سيتم التحقق منه تلقائياً!) <img src="https://img.icons8.com/fluency/256/search.png" width={16} height={16} />
+                 <div className="animate-fade-in space-y-2">
+                   <label htmlFor="order-id-input" className="text-[0.85rem] font-bold text-[var(--brand-accent)] flex items-center gap-2">
+                     رقم الطلب (يجب أن يكون صحيحاً) <img src="https://img.icons8.com/fluency/256/search.png" width={16} height={16} alt="بحث" />
                    </label>
-                   <input className="input-field" value={orderId} onChange={e => setOrderId(e.target.value)} placeholder="مثال: 1044" dir="ltr" required />
+                   <input 
+                      id="order-id-input"
+                      className="input-field !py-3 !font-mono !text-center text-[1.1rem] !bg-[var(--bg-secondary)]" 
+                      value={orderId} 
+                      onChange={e => setOrderId(e.target.value)} 
+                      placeholder="#12345" 
+                      dir="ltr" 
+                      required 
+                   />
                  </div>
               )}
-              <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '0.4rem' }}>الرسالة</label>
-                <textarea className="input-field" value={message} onChange={e => setMessage(e.target.value)} required rows={4} placeholder="اكتب تفاصيل المشكلة أو الاستفسار المخصص..." style={{ resize: 'vertical', minHeight: '120px' }} />
+
+              <div className="space-y-2">
+                <label htmlFor="message-textarea" className="text-[0.85rem] font-bold text-[var(--text-secondary)]">اشرح لنا التفاصيل</label>
+                <textarea 
+                  id="message-textarea"
+                  className="input-field !py-4 min-h-[140px] !bg-[var(--bg-secondary)] resize-none" 
+                  value={message} 
+                  onChange={e => setMessage(e.target.value)} 
+                  required 
+                  rows={4} 
+                  placeholder="كيف يمكننا خدمتك اليوم؟..." 
+                />
               </div>
-              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                <button type="submit" disabled={submitObj.loading} className="btn-primary" style={{ flex: 1, padding: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}>
+
+              <div className="flex gap-4 pt-4">
+                <button 
+                  type="submit" 
+                  disabled={submitObj.loading} 
+                  className="btn-primary flex-1 !py-4 !rounded-xl flex items-center justify-center gap-3 font-black shadow-lg shadow-purple-500/20"
+                >
                   {submitObj.loading ? (
                     <>
-                      <img src="https://img.icons8.com/fluency/256/hourglass.png" width={20} height={20} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                      <img src="https://img.icons8.com/fluency/256/hourglass.png" width={22} height={22} className="animate-spin brightness-0 invert" alt="انتظار" />
                       جاري الإرسال...
                     </>
                   ) : (
                     <>
-                      <img src="https://img.icons8.com/fluency/256/sent.png" width={20} height={20} style={{ filter: 'brightness(0) invert(1)' }} />
+                      <img src="https://img.icons8.com/fluency/256/sent.png" width={22} height={22} className="brightness-0 invert" alt="إرسال" />
                       إرسال التذكرة
                     </>
                   )}
                 </button>
-                <button type="button" className="btn-secondary" style={{ flex: 1, padding: '0.85rem' }} onClick={() => setShowNewTicket(false)}>إلغاء</button>
+                <button 
+                  type="button" 
+                  className="btn-secondary flex-1 !py-4 !rounded-xl !bg-[var(--bg-secondary)] !border-none font-bold text-[var(--text-secondary)]" 
+                  onClick={() => setShowNewTicket(false)}
+                >
+                  إلغاء
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
-
-      <style jsx global>{`
-        @media (max-width: 768px) { aside { display: none !important; } }
-      `}</style>
     </>
   );
 }

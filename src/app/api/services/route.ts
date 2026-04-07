@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { USD_TO_SAR_RATE, DEFAULT_PROFIT_MARGIN } from '@/lib/constants';
 
 export async function GET() {
   try {
@@ -8,14 +9,15 @@ export async function GET() {
       orderBy: { id: 'asc' }
     });
     
-    // Default profit margin for services without a custom rate override
-    const DEFAULT_PROFIT_MARGIN = 1.50; // +50%
-    
     const formattedServices = services.map(service => {
-      // If a customRate exists, use it. Otherwise, apply the default markup to the originalRate.
+      // Convert original cost (USD) from provider to SAR cost
+      const costInSar = service.originalRate * USD_TO_SAR_RATE;
+      
+      // If a customRate exists (now treated as SAR), use it. 
+      // Otherwise, apply the default markup to the SAR cost.
       const finalRate = service.customRate 
         ? service.customRate 
-        : service.originalRate * DEFAULT_PROFIT_MARGIN;
+        : costInSar * DEFAULT_PROFIT_MARGIN;
       
       return {
         service: service.id.toString(),

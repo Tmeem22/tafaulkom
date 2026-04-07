@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import { CURRENCY_SYMBOL } from '@/lib/constants';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
@@ -115,7 +116,7 @@ export default function Orders() {
         <aside className="w-[240px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 px-4 flex flex-col gap-1 fixed top-[70px] bottom-0 overflow-y-auto z-10 hidden lg:flex">
           <div className="p-6 px-5 bg-[var(--gradient-primary)] rounded-[24px] mb-6 text-center shadow-[var(--shadow-md)]">
             <p className="text-white/85 text-[0.75rem] font-bold uppercase tracking-wider mb-2">رصيدك الحالي</p>
-            <p className="text-white text-[2rem] font-black mb-3 drop-shadow-md" dir="ltr">${balance !== null ? balance.toFixed(2) : '...'}</p>
+            <p className="text-white text-[2rem] font-black mb-3 drop-shadow-md" dir="ltr">{balance !== null ? balance.toFixed(2) : '...'} {CURRENCY_SYMBOL}</p>
             <Link href="/dashboard/deposit" className="flex items-center justify-center gap-2 p-3 rounded-[15px] bg-white/20 text-white text-[0.85rem] font-extrabold no-underline transition-all hover:scale-[1.02] backdrop-blur-sm">
               <img src="https://img.icons8.com/fluency/256/plus.png" width={16} height={16} className="brightness-0 invert" alt="شحن رصيد" /> شحن رصيدك
             </Link>
@@ -233,7 +234,7 @@ export default function Orders() {
                             </a>
                           </td>
                           <td className="p-5 text-center text-[0.85rem] font-bold text-[var(--text-secondary)]">{order.quantity.toLocaleString()}</td>
-                          <td className="p-5 text-center text-[0.85rem] font-black text-[var(--text-primary)]" dir="ltr">${order.charge.toFixed(4)}</td>
+                          <td className="p-5 text-center text-[0.85rem] font-black text-[var(--text-primary)]" dir="ltr">{order.charge.toFixed(4)} {CURRENCY_SYMBOL}</td>
                           <td className="p-5 text-center">
                             <span className={`px-3 py-1.5 rounded-full text-[0.7rem] font-black flex items-center justify-center gap-2 mx-auto w-fit ${
                               order.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500' :

@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { showToast } from '@/hooks/useNotification';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 
 const endpoints = [
   {
@@ -142,87 +141,94 @@ export default function APIDocs() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" style={{ paddingTop: '90px', minHeight: '100vh' }}>
-        <section style={{ padding: '3rem 1.5rem' }}>
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <main dir="rtl" className="pt-[90px] min-h-screen">
+        <section className="py-12 px-6">
+          <div className="max-w-[1000px] mx-auto">
+            <div className="text-center mb-12">
               <span className="section-badge">للمطورين</span>
-              <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '1rem', color: 'var(--text-primary)' }}>
+              <h1 className="text-[2.5rem] font-extrabold mt-4 text-[var(--text-primary)]">
                 واجهة <span className="gradient-text">API</span> للمطورين
               </h1>
-              <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '1rem auto 0' }}>
+              <p className="text-[var(--text-secondary)] max-w-[600px] mx-auto mt-4 leading-relaxed">
                 اربط خدماتنا بموقعك الخاص (SMM Panel) وابدأ بتنفيذ الطلبات آلياً.
               </p>
             </div>
 
             {/* API Info Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '3rem' }}>
-              <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>طريقة HTTP</p>
-                <p style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--brand-primary)' }}>POST</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+              <div className="card p-6 text-center">
+                <p className="text-[0.8rem] text-[var(--text-secondary)] font-semibold mb-1">طريقة HTTP</p>
+                <p className="text-[1.2rem] font-extrabold text-[var(--brand-primary)]">POST</p>
               </div>
-              <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>API URL</p>
-                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }} dir="ltr">https://tafaulkom.app/api/v2</p>
+              <div className="card p-6 text-center">
+                <p className="text-[0.8rem] text-[var(--text-secondary)] font-semibold mb-1">API URL</p>
+                <p className="text-[0.85rem] font-bold text-[var(--text-primary)]" dir="ltr">https://tafaulkom.app/api/v2</p>
               </div>
-              <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>صيغة الاستجابة</p>
-                <p style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--brand-success)' }}>JSON</p>
+              <div className="card p-6 text-center">
+                <p className="text-[0.8rem] text-[var(--text-secondary)] font-semibold mb-1">صيغة الاستجابة</p>
+                <p className="text-[1.2rem] font-extrabold text-[var(--brand-success)]">JSON</p>
               </div>
             </div>
 
             {/* API Key Section */}
-            <div className="card" style={{ padding: '2rem', marginBottom: '3rem', background: 'var(--gradient-stats)', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', top: '0', left: '0', right: '0', height: '4px', background: 'var(--gradient-primary)' }} />
-              <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <img src="https://img.icons8.com/fluency/256/key.png" width={24} height={24} /> إنشاء مفتاح API
+            <div className="card p-8 mb-12 bg-[var(--gradient-stats)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-[var(--gradient-primary)]" />
+              <h2 className="text-[1.3rem] font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2.5">
+                <img src="https://img.icons8.com/fluency/256/key.png" width={24} height={24} alt="أيقونة المفتاح" /> إنشاء مفتاح API
               </h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: 1.7 }}>
+              <p className="text-[var(--text-secondary)] text-[0.9rem] mb-6 leading-relaxed">
                 هذا المفتاح بمثابة كلمة المرور لربط موقعك بموقعنا. إذا كنت تملك لوحة SMM خاصة كموزع (Reseller)، انسخ المفتاح وضعه في إعدادات المزودين في موقعك.
               </p>
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <input type="text" readOnly value={loading ? 'جاري التحميل...' : maskedKey} className="input-field" style={{ flex: '1', minWidth: '250px', fontFamily: 'monospace', color: 'var(--brand-success)' }} dir="ltr" />
-                <button className="btn-secondary" onClick={handleCopy} disabled={!apiKey} style={{ background: 'var(--bg-card)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <img src="https://img.icons8.com/fluency/256/copy.png" width={18} height={18} /> نسخ الرمز الحقيقي
+              <div className="flex gap-3 flex-wrap">
+                <input 
+                  type="text" 
+                  readOnly 
+                  value={loading ? 'جاري التحميل...' : maskedKey} 
+                  className="input-field flex-1 min-w-[250px] !font-mono text-[var(--brand-success)]" 
+                  aria-label="رابط الـ API الخاص بك"
+                  dir="ltr" 
+                />
+                <button className="btn-secondary !bg-[var(--bg-card)] flex items-center gap-2 !px-6" onClick={handleCopy} disabled={!apiKey}>
+                  <img src="https://img.icons8.com/fluency/256/copy.png" width={18} height={18} alt="أيقونة النسخ" /> نسخ الرمز الحقيقي
                 </button>
-                <button className="btn-primary" onClick={handleRegenerate} disabled={!apiKey} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <img src="https://img.icons8.com/fluency/256/synchronize.png" width={18} height={18} style={{ filter: 'brightness(0) invert(1)' }} /> توليد مفتاح جديد
+                <button className="btn-primary flex items-center gap-2 !px-6" onClick={handleRegenerate} disabled={!apiKey}>
+                  <img src="https://img.icons8.com/fluency/256/synchronize.png" width={18} height={18} className="brightness-0 invert" alt="أيقونة التحديث" /> توليد مفتاح جديد
                 </button>
               </div>
             </div>
 
             {/* Endpoints */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div className="flex flex-col gap-8">
               {endpoints.map((ep, i) => (
-                <div key={i} className="card" style={{ overflow: 'hidden' }}>
-                  <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid var(--border-color)' }}>
-                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>{ep.title}</h3>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{ep.desc}</p>
+                <div key={i} className="card overflow-hidden">
+                  <div className="p-6 md:p-8 border-b border-[var(--border-color)]">
+                    <h3 className="text-[1.1rem] font-bold text-[var(--text-primary)] mb-1">{ep.title}</h3>
+                    <p className="text-[0.85rem] text-[var(--text-secondary)]">{ep.desc}</p>
                   </div>
                   {ep.params.length > 0 && (
-                    <div style={{ padding: '1rem 2rem', borderBottom: '1px solid var(--border-color)' }}>
-                      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <div className="p-6 md:p-8 border-b border-[var(--border-color)] overflow-x-auto">
+                      <table className="w-full border-collapse min-w-[500px]">
                         <thead>
                           <tr>
-                            <th style={{ padding: '0.5rem 0', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>المعامل</th>
-                            <th style={{ padding: '0.5rem 0', textAlign: 'right', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>الوصف</th>
+                            <th className="py-2 text-right text-[0.75rem] font-bold text-[var(--text-tertiary)] uppercase whitespace-nowrap">المعامل</th>
+                            <th className="py-2 text-right text-[0.75rem] font-bold text-[var(--text-tertiary)] uppercase whitespace-nowrap">الوصف</th>
                           </tr>
                         </thead>
                         <tbody>
                           {ep.params.map((p, j) => (
                             <tr key={j}>
-                              <td style={{ padding: '0.4rem 0', fontSize: '0.85rem' }}><code style={{ background: 'var(--bg-secondary)', padding: '0.15rem 0.5rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 600, color: 'var(--brand-primary)' }}>{p.name}</code></td>
-                              <td style={{ padding: '0.4rem 0', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{p.desc}</td>
+                              <td className="py-2 text-[0.85rem]"><code className="bg-[var(--bg-secondary)] px-2 py-0.5 rounded-[4px] text-[0.8rem] font-bold text-[var(--brand-primary)]">{p.name}</code></td>
+                              <td className="py-2 text-[0.85rem] text-[var(--text-secondary)]">{p.desc}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
                   )}
-                  <div style={{ padding: '1rem 2rem' }}>
-                    <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>مثال على الاستجابة</p>
-                    <pre style={{ background: 'var(--bg-secondary)', padding: '1rem', borderRadius: 'var(--radius-md)', overflow: 'auto', direction: 'ltr', textAlign: 'left' }}>
-                      <code style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: 'var(--text-primary)' }}>{ep.response}</code>
+                  <div className="p-6 md:p-8">
+                    <p className="text-[0.75rem] font-bold text-[var(--text-tertiary)] uppercase mb-2">مثال على الاستجابة</p>
+                    <pre className="bg-[var(--bg-secondary)] p-4 rounded-[var(--radius-md)] overflow-auto direction-ltr text-left">
+                      <code className="text-[0.8rem] font-mono text-[var(--text-primary)]">{ep.response}</code>
                     </pre>
                   </div>
                 </div>
@@ -230,13 +236,13 @@ export default function APIDocs() {
             </div>
 
             {/* PHP Example */}
-            <div className="card" style={{ marginTop: '2rem', overflow: 'hidden' }}>
-              <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid var(--border-color)' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>مثال كود PHP</h3>
+            <div className="card mt-8 overflow-hidden">
+              <div className="p-6 md:p-8 border-b border-[var(--border-color)]">
+                <h3 className="text-[1.1rem] font-bold text-[var(--text-primary)]">مثال كود PHP</h3>
               </div>
-              <div style={{ padding: '1rem 2rem' }}>
-                <pre style={{ background: 'var(--bg-secondary)', padding: '1.5rem', borderRadius: 'var(--radius-md)', overflow: 'auto', direction: 'ltr', textAlign: 'left' }}>
-                  <code style={{ fontSize: '0.8rem', fontFamily: 'monospace', color: 'var(--text-primary)' }}>{`<?php
+              <div className="p-6 md:p-8">
+                <pre className="bg-[var(--bg-secondary)] p-6 rounded-[var(--radius-md)] overflow-auto direction-ltr text-left">
+                  <code className="text-[0.8rem] font-mono text-[var(--text-primary)]">{`<?php
 $api_url = 'https://tafaulkom.app/api/v2';
 $api_key = 'YOUR_API_KEY';
 

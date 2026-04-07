@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { showToast } from '@/hooks/useNotification';
+import { CURRENCY_SYMBOL } from '@/lib/constants';
 
 export default function AdminDeposits() {
   const [deposits, setDeposits] = useState<any[]>([]);
@@ -42,47 +43,47 @@ export default function AdminDeposits() {
       } else {
         showToast("حدث خطأ أثناء التحديث", "error");
       }
-    } catch (e) {
+    } catch (error) {
       showToast("فشل الاتصال بالخادم", "error");
     }
   };
 
   if (loading) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50vh' }}>جاري التحميل...</div>;
+    return <div className="flex items-center justify-center h-[50vh]">جاري التحميل...</div>;
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-          <img src="https://img.icons8.com/fluency/256/money.png" width={40} height={40} /> الإيداعات المالية
+    <div className="max-w-[1200px] mx-auto w-full">
+      <div className="mb-8">
+        <h1 className="text-[2rem] font-extrabold text-[var(--text-primary)] flex items-center gap-3">
+          <img src="https://img.icons8.com/fluency/256/money.png" width={40} height={40} alt="أيقونة الأموال" /> الإيداعات المالية
         </h1>
-        <p style={{ color: 'var(--text-secondary)' }}>مراجعة عمليات تحويل الأموال وتأكيدها بناءً على الإيصالات المرفقة</p>
+        <p className="text-[var(--text-secondary)]">مراجعة عمليات تحويل الأموال وتأكيدها بناءً على الإيصالات المرفقة</p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div className="flex flex-col gap-6">
         {deposits.length === 0 ? (
-          <div className="card" style={{ padding: '3rem', textAlign: 'center' }}>
-            <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
-              <img src="https://img.icons8.com/fluency/256/mailbox-closed-flag-down.png" width={64} height={64} style={{ opacity: 0.5 }} />
+          <div className="card p-12 text-center">
+            <div className="mb-4 flex justify-center">
+              <img src="https://img.icons8.com/fluency/256/mailbox-closed-flag-down.png" width={64} height={64} className="opacity-50" alt="لا توجد طلبات" />
             </div>
-            <h3 style={{ color: 'var(--text-primary)' }}>لا توجد طلبات إيداع حالياً</h3>
+            <h3 className="text-[var(--text-primary)]">لا توجد طلبات إيداع حالياً</h3>
           </div>
         ) : (
           deposits.map(d => (
-            <div key={d.id} className="card" style={{ padding: '1.5rem', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '1.5rem', alignItems: 'center' }}>
+            <div key={d.id} className="card p-6 grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 items-center">
               
               {/* Receipt Image */}
-              <div style={{ width: '150px', height: '150px', borderRadius: 'var(--radius-md)', background: 'var(--bg-secondary)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)' }}>
-                <img src={d.receiptImage} alt="Receipt" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+              <div className="w-[150px] h-[150px] rounded-[var(--radius-md)] bg-[var(--bg-secondary)] overflow-hidden flex items-center justify-center border border-[var(--border-color)]">
+                <img src={d.receiptImage} alt={`إيصال رقم ${d.id}`} className="max-w-full max-h-full object-contain" />
               </div>
 
               {/* Details */}
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>طلب إيداع #{d.id}</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', gap: '0.4rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                <h3 className="text-[1.2rem] font-bold text-[var(--text-primary)] mb-2">طلب إيداع #{d.id}</h3>
+                <div className="grid grid-cols-[auto_auto] gap-1 text-[0.9rem] text-[var(--text-secondary)]">
                   <span><strong>المبلغ:</strong></span>
-                  <span style={{ color: 'var(--brand-primary)', fontWeight: 800 }} dir="ltr">${d.amount.toFixed(2)}</span>
+                  <span className="text-[var(--brand-primary)] font-extrabold" dir="ltr">{d.amount.toFixed(2)} {CURRENCY_SYMBOL}</span>
                   
                   <span><strong>الطريقة:</strong></span>
                   <span>{d.method}</span>
@@ -94,32 +95,32 @@ export default function AdminDeposits() {
                   <span dir="ltr">{new Date(d.createdAt).toLocaleString('ar-SA')}</span>
                   
                   <span><strong>الحالة:</strong></span>
-                  <span>
-                    {d.status === 'pending' && <span style={{ color: 'var(--brand-accent)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.3rem 0.7rem', borderRadius: 'var(--radius-full)', background: 'rgba(245,158,11,0.1)', fontSize: '0.75rem' }}><img src="https://img.icons8.com/fluency/256/hourglass.png" width={14} height={14} /> قيد المراجعة</span>}
-                    {d.status === 'completed' && <span style={{ color: 'var(--brand-success)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.3rem 0.7rem', borderRadius: 'var(--radius-full)', background: 'rgba(16,185,129,0.1)', fontSize: '0.75rem' }}><img src="https://img.icons8.com/fluency/256/checkmark.png" width={14} height={14} /> تمت الموافقة</span>}
-                    {d.status === 'rejected' && <span style={{ color: 'var(--brand-danger)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.3rem 0.7rem', borderRadius: 'var(--radius-full)', background: 'rgba(239,68,68,0.1)', fontSize: '0.75rem' }}><img src="https://img.icons8.com/fluency/256/delete-sign.png" width={14} height={14} /> مرفوض</span>}
+                  <span className="flex">
+                    {d.status === 'pending' && <span className="text-amber-500 font-bold inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-[0.75rem]"><img src="https://img.icons8.com/fluency/256/hourglass.png" width={14} height={14} alt="انتظار" /> قيد المراجعة</span>}
+                    {d.status === 'completed' && <span className="text-emerald-500 font-bold inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-[0.75rem]"><img src="https://img.icons8.com/fluency/256/checkmark.png" width={14} height={14} alt="تم" /> تمت الموافقة</span>}
+                    {d.status === 'rejected' && <span className="text-red-500 font-bold inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 text-[0.75rem]"><img src="https://img.icons8.com/fluency/256/delete-sign.png" width={14} height={14} alt="مرفوض" /> مرفوض</span>}
                   </span>
                 </div>
               </div>
 
               {/* Actions */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', minWidth: '160px' }}>
+              <div className="flex flex-col gap-2.5 min-w-[160px]">
                 {d.status === 'pending' ? (
                   <>
-                    <button className="btn-primary" style={{ background: 'var(--brand-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem' }} onClick={() => handleAction(d.id, 'approve')}>
-                      <img src="https://img.icons8.com/fluency/256/checkmark.png" width={16} height={16} style={{ filter: 'brightness(0) invert(1)' }} /> موافقة
+                    <button className="btn-primary !bg-[var(--brand-success)] !shadow-none flex items-center justify-center gap-2 p-3 text-[0.9rem]" onClick={() => handleAction(d.id, 'approve')}>
+                      <img src="https://img.icons8.com/fluency/256/checkmark.png" width={16} height={16} className="brightness-0 invert" alt="موافقة" /> موافقة
                     </button>
-                    <button className="btn-secondary" style={{ color: 'var(--brand-danger)', borderColor: 'var(--brand-danger)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem' }} onClick={() => handleAction(d.id, 'reject')}>
-                      <img src="https://img.icons8.com/fluency/256/delete-sign.png" width={16} height={16} /> رفض
+                    <button className="btn-secondary !text-[var(--brand-danger)] !border-[var(--brand-danger)] flex items-center justify-center gap-2 p-3 text-[0.9rem]" onClick={() => handleAction(d.id, 'reject')}>
+                      <img src="https://img.icons8.com/fluency/256/delete-sign.png" width={16} height={16} alt="رفض" /> رفض
                     </button>
                   </>
                 ) : (
-                  <button className="btn-secondary" disabled style={{ opacity: 0.6, cursor: 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.75rem' }}>
-                    <img src="https://img.icons8.com/fluency/256/checked-lock.png" width={16} height={16} /> مغلق
+                  <button className="btn-secondary opacity-60 cursor-not-allowed flex items-center justify-center gap-2 p-3 text-[0.9rem]" disabled>
+                    <img src="https://img.icons8.com/fluency/256/checked-lock.png" width={16} height={16} alt="مقفل" /> مغلق
                   </button>
                 )}
-                <a href={d.receiptImage} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ fontSize: '0.8rem', padding: '0.6rem', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                  <img src="https://img.icons8.com/fluency/256/search.png" width={16} height={16} /> فحص الإيصال
+                <a href={d.receiptImage} target="_blank" rel="noopener noreferrer" className="btn-secondary text-[0.8rem] p-2.5 text-center flex items-center justify-center gap-2 no-underline">
+                  <img src="https://img.icons8.com/fluency/256/search.png" width={16} height={16} alt="فحص" /> فحص الإيصال
                 </a>
               </div>
 

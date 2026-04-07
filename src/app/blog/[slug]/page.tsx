@@ -86,31 +86,30 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
   return (
     <>
       <Navbar />
-      <main dir="rtl" style={{ paddingTop: '100px', minHeight: '100vh', background: 'var(--bg-primary)' }}>
-        <article style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+      <main dir="rtl" className="pt-[100px] min-h-screen bg-[var(--bg-primary)]">
+        <article className="max-w-[800px] mx-auto py-12 px-6">
           
-          <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--brand-primary)', textDecoration: 'none', fontWeight: 700, marginBottom: '2rem', fontSize: '0.9rem' }}>
-            <img src="https://img.icons8.com/fluency/256/right.png" width={16} height={16} /> العودة للمدونة
+          <Link href="/blog" className="inline-flex items-center gap-2 text-[var(--brand-primary)] no-underline font-bold mb-8 text-[0.9rem] hover:opacity-80 transition-opacity">
+            <img src="https://img.icons8.com/fluency/256/right.png" width={16} height={16} alt="سهم العودة" /> العودة للمدونة
           </Link>
 
-          <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
-             <div style={{ width: '120px', height: '120px', background: 'var(--bg-card)', borderRadius: '30px', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem', boxShadow: 'var(--shadow-lg)' }}>
-               <img src={post.icon} width={64} height={64} />
+          <header className="mb-12 text-center">
+             <div className="w-[120px] h-[120px] bg-[var(--bg-card)] rounded-[30px] border border-[var(--border-color)] flex items-center justify-center mx-auto mb-8 shadow-[var(--shadow-lg)]">
+               <img src={post.icon} width={64} height={64} alt={post.title} />
              </div>
-             <time style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', fontWeight: 600 }}>{post.date}</time>
-             <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 900, color: 'var(--text-primary)', marginTop: '1rem', lineHeight: 1.2 }}>{post.title}</h1>
+             <time className="text-[0.85rem] text-[var(--text-tertiary)] font-semibold">{post.date}</time>
+             <h1 className="text-[clamp(1.8rem,4vw,2.8rem)] font-black text-[var(--text-primary)] mt-4 leading-tight">{post.title}</h1>
           </header>
 
           <div 
-            className="blog-content"
-            style={{ color: 'var(--text-secondary)', lineHeight: 2, fontSize: '1.1rem' }}
+            className="blog-content text-[var(--text-secondary)] leading-[2] text-[1.10rem]"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
-          <div style={{ marginTop: '4rem', padding: '3rem', borderRadius: 'var(--radius-xl)', background: 'var(--gradient-primary)', color: 'white', textAlign: 'center' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem' }}>هل أنت مستعد لنمو حساباتك؟</h3>
-            <p style={{ opacity: 0.9, marginBottom: '2rem' }}>ابدأ اليوم مع منصة تفاعلكم واحصل على نتائج حقيقية فورية.</p>
-            <Link href="/register" style={{ background: 'white', color: 'var(--brand-primary)', padding: '1rem 2.5rem', borderRadius: 'var(--radius-full)', fontWeight: 800, textDecoration: 'none', display: 'inline-block' }}>
+          <div className="mt-16 p-12 rounded-[var(--radius-xl)] bg-[var(--gradient-primary)] text-white text-center shadow-xl">
+            <h3 className="text-[1.5rem] font-extrabold mb-4">هل أنت مستعد لنمو حساباتك؟</h3>
+            <p className="opacity-90 mb-8 leading-relaxed">ابدأ اليوم مع منصة تفاعلكم واحصل على نتائج حقيقية فورية.</p>
+            <Link href="/register" className="bg-white text-[var(--brand-primary)] px-10 py-4 rounded-full font-extrabold no-underline inline-block hover:scale-105 hover:shadow-lg transition-all">
                سجّل الآن في تفاعلكم
             </Link>
           </div>

@@ -29,39 +29,41 @@ export default function HowItWorks() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" style={{ paddingTop: '90px', minHeight: '100vh' }}>
-        <section style={{ padding: '3rem 1.5rem' }}>
-          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <span className="section-badge">كيفية الاستخدام</span>
-              <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '1rem', color: 'var(--text-primary)' }}>
-                كيف تعمل <span className="gradient-text">منصتنا</span>
+      <main dir="rtl" className="pt-[90px] min-h-screen">
+        <section className="py-12 px-6">
+          <div className="max-w-[900px] mx-auto">
+            <div className="text-center mb-12">
+              <span className="section-badge tracking-widest uppercase">كيفية الاستخدام</span>
+              <h1 className="text-[2.5rem] font-black mt-4 text-[var(--text-primary)] leading-tight">
+                كيف تعمل <span className="gradient-text tracking-tight">منصتنا</span>
               </h1>
-              <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '1rem auto 0', lineHeight: 1.7 }}>
+              <p className="text-[var(--text-secondary)] max-w-[600px] mx-auto mt-4 leading-[1.8] text-[1.05rem]">
                 هذه الصفحة ستوضح آلية استخدام الموقع بشكل سهل وخطوة بخطوة.
               </p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div className="flex flex-col gap-8">
               {steps.map((step, i) => (
-                <div key={i} className="card" style={{ padding: '2rem 2.5rem', display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
-                  <div style={{ minWidth: '55px', height: '55px', borderRadius: '16px', background: 'var(--gradient-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 900, fontSize: '1.1rem', flexShrink: 0 }}>
+                <div key={i} className="card p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start group hover:translate-y-[-4px] transition-all duration-300">
+                  <div className="w-[55px] h-[55px] rounded-2xl bg-[var(--gradient-primary)] flex items-center justify-center text-white font-black text-[1.2rem] flex-shrink-0 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">
                     {step.num}
                   </div>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.5rem' }}>
-                      <img src={step.icon} alt={step.title} width={32} height={32} />
-                      <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)' }}>{step.title}</h2>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 bg-[var(--bg-secondary)] rounded-xl flex items-center justify-center p-2 group-hover:bg-[var(--brand-primary)]/10 transition-colors">
+                         <img src={step.icon} alt={step.title} width={32} height={32} />
+                      </div>
+                      <h2 className="text-[1.3rem] font-black text-[var(--text-primary)]">{step.title}</h2>
                     </div>
-                    <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: '0.95rem' }}>{step.desc}</p>
+                    <p className="text-[var(--text-secondary)] leading-[1.8] text-[0.95rem] font-medium">{step.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-              <Link href="/register" className="btn-primary" style={{ padding: '1.2rem 4rem', fontSize: '1.1rem', borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', gap: '0.8rem' }}>
-                <img src="https://img.icons8.com/fluency/256/rocket.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+            <div className="text-center mt-12">
+              <Link href="/register" className="btn-primary !px-12 !py-4 rounded-full !text-[1.1rem] !font-black inline-flex items-center gap-3 shadow-xl shadow-purple-500/25 hover:scale-105 transition-transform no-underline">
+                <img src="https://img.icons8.com/fluency/256/rocket.png" width={24} height={24} className="brightness-0 invert" alt="صاروخ" />
                 ابدأ الآن مجاناً
               </Link>
             </div>

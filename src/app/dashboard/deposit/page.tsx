@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import { CURRENCY_SYMBOL } from '@/lib/constants';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
@@ -72,39 +73,53 @@ export default function Deposit() {
   return (
     <>
       <Navbar />
-      <div dir="rtl" style={{ display: 'flex', minHeight: '100vh', paddingTop: '70px' }}>
-        <aside style={{ width: '250px', background: 'var(--bg-card)', borderLeft: '1px solid var(--border-color)', padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', position: 'fixed', top: '70px', bottom: '0', overflowY: 'auto' }}>
-          <div style={{ padding: '1rem', background: 'var(--gradient-primary)', borderRadius: 'var(--radius-lg)', marginBottom: '1rem', textAlign: 'center' }}>
-            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.75rem', fontWeight: 600 }}>الرصيد الحالي</p>
-            <p style={{ color: 'white', fontSize: '1.8rem', fontWeight: 900 }} dir="ltr">$0.00</p>
+      <div dir="rtl" className="flex min-h-screen pt-[70px]">
+        {/* Sidebar */}
+        <aside className="w-[250px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 flex flex-col gap-1 fixed top-[70px] bottom-0 overflow-y-auto hidden md:flex transition-all">
+          <div className="p-4 bg-[var(--gradient-primary)] rounded-[var(--radius-lg)] mb-4 text-center shadow-lg shadow-purple-500/20">
+            <p className="text-white/80 text-[0.75rem] font-bold uppercase tracking-wider mb-1">الرصيد الحالي</p>
+            <p className="text-white text-[1.8rem] font-black tracking-tight" dir="ltr">0.00 {CURRENCY_SYMBOL}</p>
           </div>
           {sideLinks.map((l, i) => (
-            <Link key={i} href={l.href} style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', fontWeight: 600, background: l.active ? 'var(--bg-secondary)' : 'transparent', color: l.active ? 'var(--brand-primary)' : 'var(--text-secondary)', transition: 'all 0.2s' }}>
-              <img src={l.icon} alt={l.label} width={20} height={20} style={{ opacity: l.active ? 1 : 0.7 }} /> {l.label}
+            <Link 
+              key={i} 
+              href={l.href} 
+              className={`p-3 rounded-[var(--radius-md)] no-underline flex items-center gap-3 text-[0.9rem] font-bold transition-all ${
+                l.active 
+                  ? 'bg-[var(--bg-secondary)] text-[var(--brand-primary)]' 
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--brand-primary)]'
+              }`}
+            >
+              <img src={l.icon} alt={l.label} width={20} height={20} className={l.active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'} /> 
+              {l.label}
             </Link>
           ))}
-          <div style={{ marginTop: 'auto', padding: '1rem 0', borderTop: '1px solid var(--border-color)' }}>
-            <Link href="/" style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--brand-danger)' }}>
-              <img src="https://img.icons8.com/fluency/256/exit.png" width={20} height={20} /> تسجيل الخروج
+          <div className="mt-auto py-4 border-t border-[var(--border-color)]">
+            <Link href="/" className="p-3 rounded-[var(--radius-md)] no-underline flex items-center gap-3 text-[0.85rem] font-bold text-[var(--brand-danger)] hover:bg-red-500/5 transition-all">
+              <img src="https://img.icons8.com/fluency/256/exit.png" width={20} height={20} alt="خروج" /> تسجيل الخروج
             </Link>
           </div>
         </aside>
 
-        <div style={{ flex: 1, marginRight: '250px', padding: '2rem' }}>
-          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            <div style={{ marginBottom: '2rem' }}>
-              <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <img src="https://img.icons8.com/fluency/256/card-exchange.png" width={32} height={32} /> إضافة رصيد
+        {/* Main Content */}
+        <div className="flex-1 md:mr-[250px] p-6 md:p-12 transition-all">
+          <div className="max-w-[900px] mx-auto">
+            <div className="mb-8">
+              <h1 className="text-[1.8rem] font-black text-[var(--text-primary)] mb-2 flex items-center gap-3">
+                <img src="https://img.icons8.com/fluency/256/card-exchange.png" width={32} height={32} alt="أيقونة الشحن" /> إضافة رصيد
               </h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>فضلاً قم بتحويل المبلغ على الحسابات المتوفرة ثم أرفق إيصال الدفع</p>
+              <p className="text-[var(--text-secondary)] text-[0.9rem]">فضلاً قم بتحويل المبلغ على الحسابات المتوفرة ثم أرفق إيصال الدفع</p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="flex flex-col gap-6">
               
               {/* Bank Details Warning */}
-              <div className="card" style={{ padding: '1.5rem', borderColor: 'var(--brand-primary)' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--brand-primary)', marginBottom: '0.5rem' }}>معلومات التحويل</h3>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.7 }}>
+              <div className="card p-6 border-2 border-[var(--brand-primary)] animate-fade-in relative overflow-hidden">
+                 <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--brand-primary)]/5 rounded-full -mr-12 -mt-12 pointer-events-none" />
+                <h3 className="text-[1rem] font-bold text-[var(--brand-primary)] mb-3 relative flex items-center gap-2">
+                   <img src="https://img.icons8.com/fluency/256/info.png" width={18} height={18} alt="معلومات" /> معلومات التحويل
+                </h3>
+                <p className="text-[var(--text-secondary)] text-[0.85rem] leading-[1.8] relative">
                   الرجاء تحويل المبلغ إلى الحساب البنكي التالي:<br/><br/>
                   <strong>اسم المستفيد:</strong> مؤسسة تسويق فيرال<br/>
                   <strong>رقم الحساب:</strong> 12345678901234<br/>
@@ -114,70 +129,85 @@ export default function Deposit() {
               </div>
 
               {/* Deposit Form */}
-              <div className="card" style={{ padding: '2rem' }}>
+              <div className="card p-8 shadow-xl">
                 {showSuccess ? (
-                  <div style={{ textAlign: 'center', padding: '2rem' }}>
-                    <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                      <img src="https://img.icons8.com/fluency/256/checkmark.png" width={48} height={48} />
+                  <div className="text-center p-8 space-y-6 animate-fade-in-up">
+                    <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto shadow-inner">
+                      <img src="https://img.icons8.com/fluency/256/checkmark.png" width={48} height={48} alt="نجاح" />
                     </div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem' }}>تم إرسال طلب الشحن بنجاح</h2>
-                    <p style={{ color: 'var(--text-secondary)' }}>تتم الآن مراجعة إيصالك من قبل الإدارة، سيتم إضافة الرصيد لحسابك فور التحقق منه.</p>
-                    <button className="btn-secondary" style={{ marginTop: '2rem' }} onClick={() => setShowSuccess(false)}>إرسال طلب آخر</button>
+                    <div>
+                      <h2 className="text-[1.5rem] font-black text-[var(--text-primary)] mb-3">تم إرسال طلب الشحن بنجاح</h2>
+                      <p className="text-[var(--text-secondary)] max-w-md mx-auto">تتم الآن مراجعة إيصالك من قبل الإدارة، سيتم إضافة الرصيد لحسابك فور التحقق منه.</p>
+                    </div>
+                    <button className="btn-secondary !px-10 !py-3 !rounded-full !font-bold" onClick={() => setShowSuccess(false)}>إرسال طلب آخر</button>
                   </div>
                 ) : (
                   <>
-                    <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>1. مبلغ الحوالة المودع (بـ $)</h2>
-                    <div style={{ position: 'relative', marginBottom: '1rem' }}>
-                      <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.2rem', fontWeight: 800, color: 'var(--brand-primary)' }}>$</span>
-                      <input type="number" className="input-field" placeholder="0.00" value={amount} onChange={e => setAmount(e.target.value)} dir="ltr" style={{ paddingLeft: '2.5rem', fontSize: '1.3rem', fontWeight: 700, textAlign: 'center' }} />
+                    <h2 className="text-[1.1rem] font-bold text-[var(--text-primary)] mb-4">1. مبلغ الحوالة المودع (بـ {CURRENCY_SYMBOL})</h2>
+                    <div className="relative mb-4">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[1.2rem] font-black text-[var(--brand-primary)]">{CURRENCY_SYMBOL}</span>
+                      <input 
+                        type="number" 
+                        className="input-field !pl-10 !text-[1.3rem] !font-black !text-center" 
+                        placeholder="0.00" 
+                        value={amount} 
+                        onChange={e => setAmount(e.target.value)} 
+                        aria-label="مبلغ الإيداع"
+                        dir="ltr" 
+                      />
                     </div>
-                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+                    <div className="flex gap-2 flex-wrap mb-8">
                       {quickAmounts.map(qa => (
-                        <button key={qa} onClick={() => setAmount(qa.toString())} style={{
-                          padding: '0.4rem 1rem', borderRadius: 'var(--radius-full)',
-                          border: `1.5px solid ${amount === qa.toString() ? 'var(--brand-primary)' : 'var(--border-color)'}`,
-                          background: amount === qa.toString() ? 'var(--gradient-cta)' : 'transparent',
-                          color: amount === qa.toString() ? 'white' : 'var(--text-secondary)',
-                          fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'inherit',
-                        }}>
-                          ${qa}
+                        <button 
+                          key={qa} 
+                          onClick={() => setAmount(qa.toString())} 
+                          className={`px-4 py-2 rounded-full border-2 font-bold text-[0.85rem] transition-all duration-300 ${
+                            amount === qa.toString() 
+                              ? 'bg-[var(--gradient-cta)] border-transparent text-white shadow-lg shadow-purple-500/20' 
+                              : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--brand-primary)]'
+                          }`}
+                        >
+                          {qa} {CURRENCY_SYMBOL}
                         </button>
                       ))}
                     </div>
 
-                    <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>2. إرفاق إيصال التحويل</h2>
-                    <label style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                      padding: '2.5rem', border: '2px dashed var(--border-color)', borderRadius: 'var(--radius-lg)',
-                      background: 'var(--bg-secondary)', cursor: 'pointer', marginBottom: '2rem', transition: 'all 0.2s',
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--brand-primary)'}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
-                    >
-                      {image ? (
-                        <div style={{ textAlign: 'center' }}>
-                          <img src={image} alt="Receipt" style={{ maxHeight: '150px', borderRadius: 'var(--radius-md)', marginBottom: '1rem' }} />
-                          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>تم إرفاق الصورة، اضغط هنا لتغييرها.</p>
-                        </div>
-                      ) : (
-                        <div style={{ textAlign: 'center' }}>
-                          <img src="https://img.icons8.com/fluency/256/camera.png" width={48} height={48} style={{ marginBottom: '1rem' }} />
-                          <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', display: 'block', marginBottom: '0.5rem' }}>اسحب وأفلت صورة الإيصال أو اضغط للاختيار</span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>الصيغ المدعومة: JPG, PNG, WEBP (بحد أقصى 5MB)</span>
-                        </div>
-                      )}
-                      <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
-                    </label>
+                    <h2 className="text-[1.1rem] font-bold text-[var(--text-primary)] mb-4">2. إرفاق إيصال التحويل</h2>
+                    <div className="group">
+                      <label className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-[var(--border-color)] rounded-[var(--radius-lg)] bg-[var(--bg-secondary)] cursor-pointer mb-8 transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)]/5">
+                        {image ? (
+                          <div className="text-center animate-fade-in">
+                            <img src={image} alt="Receipt Preview" className="max-h-[180px] rounded-[var(--radius-md)] mb-4 shadow-lg ring-4 ring-white" />
+                            <p className="text-[0.85rem] font-bold text-[var(--brand-primary)]">تم إرفاق الصورة، اضغط لتغييرها</p>
+                          </div>
+                        ) : (
+                          <div className="text-center space-y-4">
+                            <div className="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                               <img src="https://img.icons8.com/fluency/256/camera.png" width={40} height={40} alt="كاميرا" />
+                            </div>
+                            <div>
+                               <span className="text-[1rem] font-bold text-[var(--text-primary)] block mb-1">اسحب وأفلت صورة الإيصال أو اضغط للاختيار</span>
+                               <span className="text-[0.75rem] text-[var(--text-tertiary)] uppercase tracking-wide">الصيغ المدعومة: JPG, PNG, WEBP (بحد أقصى 5MB)</span>
+                            </div>
+                          </div>
+                        )}
+                        <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                      </label>
+                    </div>
 
-                    <button className="btn-primary" style={{ width: '100%', padding: '1.1rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem', borderRadius: 'var(--radius-lg)' }} onClick={handleSubmit} disabled={isSubmitting}>
+                    <button 
+                      className="btn-primary w-full !py-4 !text-[1.1rem] !rounded-[var(--radius-lg)] !font-black flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.01] transition-transform shadow-lg shadow-purple-500/20" 
+                      onClick={handleSubmit} 
+                      disabled={isSubmitting}
+                    >
                       {isSubmitting ? (
                         <>
-                          <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                          <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin brightness-0 invert" alt="جاري التحميل" />
                           جاري الإرسال...
                         </>
                       ) : (
                         <>
-                          <img src="https://img.icons8.com/fluency/256/cloud-upload.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                          <img src="https://img.icons8.com/fluency/256/cloud-upload.png" width={24} height={24} className="brightness-0 invert" alt="رفع" />
                           إرسال طلب الشحن
                         </>
                       )}
@@ -190,10 +220,6 @@ export default function Deposit() {
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        @media (max-width: 768px) { aside { display: none !important; } }
-      `}</style>
     </>
   );
 }

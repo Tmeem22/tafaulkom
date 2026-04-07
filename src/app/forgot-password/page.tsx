@@ -10,12 +10,10 @@ export default function ForgotPassword() {
   const [sent, setSent] = useState(false);
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
     
     try {
       const res = await fetch('/api/auth/reset-password', {
@@ -31,7 +29,7 @@ export default function ForgotPassword() {
         const data = await res.json();
         showToast(data.error || "فشل إرسال رابط الاستعادة", "error");
       }
-    } catch (err) {
+    } catch (error) {
       showToast("حدث خطأ في الاتصال بالسيرفر", "error");
     } finally {
       setIsLoading(false);
@@ -41,51 +39,77 @@ export default function ForgotPassword() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" className="hero-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '90px' }}>
-        <div style={{ maxWidth: '440px', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
-          <div className="card animate-fade-in-up" style={{ padding: '3rem 2.5rem', textAlign: 'center' }}>
-            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
-              <img 
-                src={sent ? 'https://img.icons8.com/fluency/256/checkmark.png' : 'https://img.icons8.com/fluency/256/lock-landscape.png'} 
-                width={80} 
-                height={80} 
-              />
+      <main dir="rtl" className="hero-bg min-h-screen flex items-center justify-center pt-[90px] relative overflow-hidden">
+        <div className="max-w-[440px] w-full px-6 relative z-10 py-12">
+          <div className="card animate-fade-in-up p-10 md:p-12 text-center shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-[var(--gradient-primary)]" />
+            <div className="mb-6 flex justify-center">
+              <div className={`w-20 h-20 rounded-2xl flex items-center justify-center shadow-inner ${sent ? 'bg-emerald-500/10' : 'bg-[var(--bg-secondary)]'}`}>
+                <img 
+                  src={sent ? 'https://img.icons8.com/fluency/256/checkmark.png' : 'https://img.icons8.com/fluency/256/lock-landscape.png'} 
+                  width={64} 
+                  height={64} 
+                  alt={sent ? "تم الإرسال" : "قفل"}
+                />
+              </div>
             </div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-              {sent ? 'تم الإرسال!' : 'استعادة كلمة المرور'}
+            <h1 className="text-[1.5rem] font-black text-[var(--text-primary)] mb-2">
+              {sent ? 'تم الإرسال بنجاح!' : 'نسيت كلمة المرور؟'}
             </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '2rem' }}>
-              {sent ? 'تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد.' : 'أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور.'}
+            <p className="text-[var(--text-secondary)] text-[0.9rem] mb-8 leading-relaxed">
+              {sent 
+                ? 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني. يرجى التحقق من صندوق الوارد (Spam أيضاً).' 
+                : 'أدخل بريدك الإلكتروني المسجل وسنرسل لك رابطاً آمناً لإعادة تعيين كلمة المرور الخاصة بك.'}
             </p>
 
-            {error && <div style={{ color: '#ff4d4d', fontSize: '0.85rem', marginBottom: '1rem', background: 'rgba(255,77,77,0.1)', padding: '0.5rem', borderRadius: '8px' }}>{error}</div>}
-
             {!sent ? (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                <input 
-                  type="email" 
-                  className="input-field" 
-                  placeholder="أدخل بريدك الإلكتروني" 
-                  dir="ltr" 
-                  required 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <button type="submit" disabled={isLoading} className="btn-primary" style={{ width: '100%', padding: '1.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
-                  {isLoading ? 'جاري الإرسال...' : 'إرسال رابط الاستعادة'}
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                <div className="space-y-2">
+                  <input 
+                    type="email" 
+                    className="input-field !text-center !py-4 font-bold" 
+                    placeholder="example@email.com" 
+                    dir="ltr" 
+                    required 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    aria-label="البريد الإلكتروني"
+                  />
+                </div>
+                <button 
+                  type="submit" 
+                  disabled={isLoading} 
+                  className="btn-primary w-full !py-4 !rounded-xl !font-black flex items-center justify-center gap-3 shadow-lg shadow-purple-500/20 active:scale-95 transition-transform"
+                >
+                  {isLoading ? (
+                    <>
+                      <img src="https://img.icons8.com/fluency/256/hourglass.png" width={20} height={20} className="animate-spin brightness-0 invert" alt="جاري التحميل" />
+                      جاري الإرسال...
+                    </>
+                  ) : (
+                    <>
+                      <img src="https://img.icons8.com/fluency/256/sent.png" width={20} height={20} className="brightness-0 invert" alt="إرسال" />
+                      إرسال رابط الاستعادة
+                    </>
+                  )}
                 </button>
               </form>
             ) : (
-              <Link href="/login" className="btn-primary" style={{ width: '100%', padding: '0.9rem', display: 'block', textAlign: 'center' }}>
-                العودة لتسجيل الدخول
-              </Link>
+              <div className="space-y-4">
+                <Link href="/login" className="btn-primary w-full !py-4 !rounded-xl !font-black no-underline block shadow-lg shadow-purple-500/20">
+                  العودة لتسجيل الدخول
+                </Link>
+                <p className="text-[0.8rem] text-[var(--text-tertiary)]">لم يصلك الرمز؟ <button onClick={() => setSent(false)} className="bg-transparent border-none text-[var(--brand-primary)] font-bold cursor-pointer p-0">حاول مرة أخرى</button></p>
+              </div>
             )}
 
-            <div style={{ marginTop: '1.5rem', fontSize: '0.85rem', color: 'var(--text-tertiary)' }}>
-              <Link href="/login" style={{ color: 'var(--brand-primary)', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-                العودة لتسجيل الدخول
-              </Link>
-            </div>
+            {!sent && (
+              <div className="mt-8 pt-6 border-t border-[var(--border-color)]">
+                <Link href="/login" className="text-[var(--brand-primary)] no-underline font-bold text-[0.85rem] inline-flex items-center gap-2 hover:opacity-80 transition-opacity">
+                   <img src="https://img.icons8.com/fluency/256/right.png" width={16} height={16} alt="سهم" /> العودة لتسجيل الدخول
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </main>

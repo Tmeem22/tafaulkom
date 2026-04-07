@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { showToast } from '@/hooks/useNotification';
+import { CURRENCY_SYMBOL, USD_TO_SAR_RATE } from '@/lib/constants';
 
 export default function AdminServices() {
   const [services, setServices] = useState<any[]>([]);
@@ -97,8 +98,8 @@ export default function AdminServices() {
             <tr className="bg-[var(--bg-secondary)] border-b border-[var(--border-color)]">
               <th className="p-4 text-right">ID</th>
               <th className="p-4 text-right">الخدمة</th>
-              <th className="p-4 text-center">سعر المزود (1K)</th>
-              <th className="p-4 text-center">سعرك المخصص</th>
+              <th className="p-4 text-center">تكلفة المزود ({CURRENCY_SYMBOL})</th>
+              <th className="p-4 text-center">سعرك المخصص ({CURRENCY_SYMBOL})</th>
               <th className="p-4 text-center">الحالة</th>
               <th className="p-4 text-center">الإجراءات</th>
             </tr>
@@ -115,7 +116,7 @@ export default function AdminServices() {
                   <div className="text-[0.9rem] font-bold text-[var(--text-primary)]">{s.name}</div>
                   <div className="text-[0.75rem] text-[var(--text-tertiary)]">{s.category}</div>
                 </td>
-                <td className="p-4 text-center text-[var(--text-secondary)]">${s.originalRate.toFixed(4)}</td>
+                <td className="p-4 text-center text-[var(--text-secondary)]">{(s.originalRate * USD_TO_SAR_RATE).toFixed(4)} {CURRENCY_SYMBOL}</td>
                 <td className="p-4 text-center">
                   {editingId === s.id ? (
                     <div className="flex gap-2 justify-center">
@@ -132,7 +133,7 @@ export default function AdminServices() {
                     </div>
                   ) : (
                     <div className={`font-extrabold ${s.customRate ? 'text-[var(--brand-primary)]' : 'text-[var(--text-secondary)]'}`}>
-                      {s.customRate ? `$${s.customRate.toFixed(4)}` : 'تلقائي (+50%)'}
+                      {s.customRate ? `${s.customRate.toFixed(4)} ${CURRENCY_SYMBOL}` : 'تلقائي (+50%)'}
                     </div>
                   )}
                 </td>

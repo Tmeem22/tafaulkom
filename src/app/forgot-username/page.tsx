@@ -30,7 +30,7 @@ export default function ForgotUsername() {
       } else {
         showToast(data.error || 'فشل إرسال الطلب', 'error');
       }
-    } catch (e) {
+    } catch (error) {
       showToast('فشل الاتصال بخادم تفاعلكم', 'error');
     } finally {
       setIsLoading(false);
@@ -40,75 +40,70 @@ export default function ForgotUsername() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" className="hero-bg" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '90px' }}>
-        <div style={{ maxWidth: '480px', width: '100%', padding: '0 1.5rem', position: 'relative', zIndex: 1 }}>
-          <div className="card animate-fade-in-up" style={{ padding: '3.5rem 2.5rem', borderRadius: '30px', boxShadow: '0 20px 60px rgba(0,0,0,0.1)' }}>
-            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-              <div style={{ width: '80px', height: '80px', background: 'rgba(108,60,225,0.1)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                <img src="https://img.icons8.com/fluency/256/search.png" width={48} height={48} />
+      <main dir="rtl" className="hero-bg min-h-screen flex items-center justify-center pt-[90px] relative overflow-hidden">
+        <div className="max-w-[480px] w-full px-6 relative z-10 py-12">
+          <div className="card animate-fade-in-up p-10 md:p-14 rounded-[30px] shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-[var(--gradient-primary)]" />
+            <div className="text-center mb-10">
+              <div className="w-20 h-20 bg-[var(--brand-primary)]/10 rounded-[24px] flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <img src="https://img.icons8.com/fluency/256/search.png" width={48} height={48} alt="أيقونة البحث" />
               </div>
-              <h1 style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>استعادة الحساب</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6 }}>أدخل بريدك الإلكتروني وسنقوم بإرسال بيانات الدخول الخاصة بك.</p>
+              <h1 className="text-[2rem] font-black text-[var(--text-primary)] mb-3 tracking-tight">استعادة الحساب</h1>
+              <p className="text-[var(--text-secondary)] text-[1rem] leading-relaxed">أدخل بريدك الإلكتروني وسنقوم بإرسال بيانات الدخول الخاصة بك.</p>
             </div>
 
             {message.text && (
-              <div style={{ 
-                padding: '1rem 1.2rem', borderRadius: '16px', marginBottom: '2rem', fontSize: '0.95rem', 
-                fontWeight: 600, background: message.type === 'success' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)', 
-                color: message.type === 'success' ? '#10b981' : '#ef4444', 
-                display: 'flex', alignItems: 'center', gap: '0.8rem', border: '1px solid transparent',
-                borderColor: message.type === 'success' ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'
-              }}>
-                <img src={message.type === 'success' ? 'https://img.icons8.com/fluency/256/checkmark.png' : 'https://img.icons8.com/fluency/256/error.png'} width={20} height={20} /> {message.text}
+              <div className={`p-4 rounded-2xl mb-8 text-[0.95rem] font-bold flex items-center gap-3 border transition-all ${
+                message.type === 'success' 
+                  ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' 
+                  : 'bg-red-500/10 text-red-500 border-red-500/20'
+              }`}>
+                <img src={message.type === 'success' ? 'https://img.icons8.com/fluency/256/checkmark.png' : 'https://img.icons8.com/fluency/256/error.png'} width={22} height={22} alt="أيقونة الحالة" /> {message.text}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-secondary)', marginBottom: '0.6rem' }}>البريد الإلكتروني</label>
-                <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src="https://img.icons8.com/fluency/256/envelope.png" width={20} height={20} />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <div className="space-y-2">
+                <label htmlFor="email-input" className="block text-[0.85rem] font-black text-[var(--text-secondary)] mr-1">البريد الإلكتروني</label>
+                <div className="relative group">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center opacity-70 group-focus-within:opacity-100 transition-opacity">
+                    <img src="https://img.icons8.com/fluency/256/envelope.png" width={20} height={20} alt="أيقونة البريد" />
                   </span>
                   <input 
+                    id="email-input"
                     type="email" 
                     required 
                     value={email} 
                     onChange={e => setEmail(e.target.value)} 
-                    className="input-field" 
+                    className="input-field !pr-12 !h-[56px] !rounded-2xl !font-bold" 
                     placeholder="example@mail.com" 
                     dir="ltr"
-                    style={{ paddingRight: '2.8rem', height: '54px', borderRadius: '16px' }} 
                   />
                 </div>
               </div>
 
-              <button type="submit" disabled={isLoading} className="btn-primary" style={{ 
-                width: '100%', padding: '1.1rem', fontSize: '1.1rem', fontWeight: 900, 
-                borderRadius: '16px', boxShadow: '0 8px 25px rgba(108,60,225,0.3)',
-                transition: 'all 0.3s'
-              }}>
+              <button 
+                type="submit" 
+                disabled={isLoading} 
+                className="btn-primary w-full !py-4 !text-[1.1rem] !font-black !rounded-2xl shadow-xl shadow-purple-500/25 active:scale-[0.98] transition-transform"
+              >
                 {isLoading ? (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
-                    <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin" style={{ filter: 'brightness(0) invert(1)' }} />
+                  <div className="flex items-center justify-center gap-3">
+                    <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin brightness-0 invert" alt="جاري التحميل" />
                     جاري البحث...
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}>
-                    <img src="https://img.icons8.com/fluency/256/search.png" width={24} height={24} style={{ filter: 'brightness(0) invert(1)' }} />
+                  <div className="flex items-center justify-center gap-3">
+                    <img src="https://img.icons8.com/fluency/256/search.png" width={24} height={24} className="brightness-0 invert" alt="بحث" />
                     إرسال بيانات الدخول
                   </div>
                 )}
               </button>
             </form>
 
-            <div style={{ textAlign: 'center', marginTop: '2.5rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem' }}>
-              <Link href="/login" style={{ 
-                display: 'inline-flex', alignItems: 'center', gap: '0.5rem', 
-                color: 'var(--brand-primary)', fontWeight: 700, textDecoration: 'none',
-                fontSize: '0.95rem'
-              }}>
-                <img src="https://img.icons8.com/fluency/256/left.png" width={20} height={20} /> العودة لصفحة الدخول
+            <div className="text-center mt-10 pt-6 border-t border-[var(--border-color)]">
+              <Link href="/login" className="inline-flex items-center gap-2 text-[var(--brand-primary)] font-black no-underline text-[0.95rem] hover:opacity-80 transition-opacity">
+                <img src="https://img.icons8.com/fluency/256/left.png" width={20} height={20} alt="سهم العودة" /> العودة لصفحة الدخول
               </Link>
             </div>
           </div>

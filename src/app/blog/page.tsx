@@ -44,32 +44,32 @@ export default function Blog() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" style={{ paddingTop: '90px', minHeight: '100vh' }}>
-        <section style={{ padding: '3rem 1.5rem' }}>
-          <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <main dir="rtl" className="pt-[90px] min-h-screen">
+        <section className="py-12 px-6">
+          <div className="max-w-[1100px] mx-auto">
+            <div className="text-center mb-12">
               <span className="section-badge">المدونة</span>
-              <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '1rem', color: 'var(--text-primary)' }}>
+              <h1 className="text-[2.5rem] font-extrabold mt-4 text-[var(--text-primary)]">
                 مدونة <span className="gradient-text">تفاعلكم</span>
               </h1>
-              <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '1rem auto 0' }}>
+              <p className="text-[var(--text-secondary)] max-w-[600px] mx-auto mt-4 leading-relaxed">
                 اقرأ آخر المقالات والأخبار حول التسويق عبر وسائل التواصل الاجتماعي.
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {posts.map((post, i) => (
-                <article key={i} className="card" style={{ overflow: 'hidden' }}>
-                  <div style={{ height: '180px', background: 'var(--gradient-stats)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src={post.icon} width={80} height={80} />
+                <article key={i} className="card overflow-hidden group flex flex-col">
+                  <div className="h-[180px] bg-[var(--gradient-stats)] flex items-center justify-center">
+                    <img src={post.icon} width={80} height={80} alt={post.title} className="group-hover:scale-110 transition-transform duration-500" />
                   </div>
-                  <div style={{ padding: '1.5rem' }}>
-                    <time style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', fontWeight: 600 }}>{post.date}</time>
-                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '0.5rem', marginBottom: '0.75rem', lineHeight: 1.4 }}>{post.title}</h2>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.7, marginBottom: '1.2rem' }}>{post.excerpt}</p>
-                    <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.5rem 1.4rem', borderRadius: 'var(--radius-full)', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontSize: '0.8rem', fontWeight: 700, color: 'var(--brand-primary)', cursor: 'pointer', transition: 'all 0.2s' }}>
-                        إقرأ المزيد <img src="https://img.icons8.com/fluency/256/chevron-left.png" width={14} height={14} />
+                  <div className="p-6 flex flex-col flex-1">
+                    <time className="text-[0.75rem] text-[var(--text-tertiary)] font-bold">{post.date}</time>
+                    <h2 className="text-[1.2rem] font-bold text-[var(--text-primary)] mt-2 mb-3 leading-tight">{post.title}</h2>
+                    <p className="text-[var(--text-secondary)] text-[0.88rem] mb-5 leading-relaxed flex-1">{post.excerpt}</p>
+                    <Link href={`/blog/${post.slug}`} className="no-underline">
+                      <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[0.8rem] font-bold text-[var(--brand-primary)] hover:bg-[var(--brand-primary)] hover:text-white transition-all cursor-pointer">
+                        إقرأ المزيد <img src="https://img.icons8.com/fluency/256/chevron-left.png" width={14} height={14} alt="السهم" className="group-hover:-translate-x-1 transition-transform" />
                       </span>
                     </Link>
                   </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { showToast } from '@/hooks/useNotification';
+import { CURRENCY_SYMBOL } from '@/lib/constants';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState<any[]>([]);
@@ -30,7 +31,7 @@ export default function AdminUsers() {
     let newRole;
 
     if (action === 'add_balance') {
-      const input = window.prompt("أدخل المبلغ المراد إضافته לרصيد العميل:");
+      const input = window.prompt("أدخل المبلغ المراد إضافته لرصيد العميل:");
       if (!input || isNaN(Number(input))) return;
       amount = Number(input);
     } else if (action === 'set_balance') {
@@ -56,70 +57,67 @@ export default function AdminUsers() {
       } else {
         showToast("حدث خطأ أثناء التنفيذ", "error");
       }
-    } catch (e) {
+    } catch (error) {
       showToast("فشل الاتصال بالخادم", "error");
     }
   };
 
   if (loading) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50vh' }}>جاري التحميل...</div>;
+    return <div className="flex items-center justify-center h-[50vh]">جاري التحميل...</div>;
   }
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-          <img src="https://img.icons8.com/fluency/256/group-of-projects.png" width={40} height={40} /> إدارة المستخدمين
+    <div className="max-w-[1200px] mx-auto w-full">
+      <div className="mb-8">
+        <h1 className="text-[2rem] font-extrabold text-[var(--text-primary)] flex items-center gap-3">
+          <img src="https://img.icons8.com/fluency/256/group-of-projects.png" width={40} height={40} alt="أيقونة إدارة المستخدمين" /> إدارة المستخدمين
         </h1>
-        <p style={{ color: 'var(--text-secondary)' }}>التحكم الكامل في حسابات العملاء، أرصدتهم، وصلاحياتهم.</p>
+        <p className="text-[var(--text-secondary)]">التحكم الكامل في حسابات العملاء، أرصدتهم، وصلاحياتهم.</p>
       </div>
 
-      <div className="card" style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'right' }}>
+      <div className="card overflow-x-auto">
+        <table className="w-full border-collapse text-right min-w-[800px]">
           <thead>
-            <tr style={{ borderBottom: '2px solid var(--border-color)', background: 'var(--bg-secondary)' }}>
-              <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>المعرف</th>
-              <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>المستخدم</th>
-              <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>البريد</th>
-              <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>الرصيد</th>
-              <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>الصلاحية</th>
-              <th style={{ padding: '1rem', color: 'var(--text-secondary)' }}>إجراءات</th>
+            <tr className="border-b-2 border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] font-semibold">
+              <th className="p-4">المعرف</th>
+              <th className="p-4">المستخدم</th>
+              <th className="p-4">البريد</th>
+              <th className="p-4">الرصيد</th>
+              <th className="p-4">الصلاحية</th>
+              <th className="p-4">إجراءات</th>
             </tr>
           </thead>
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ padding: '2rem', textAlign: 'center' }}>لا يوجد مستخدمين مسجلين بعد.</td>
+                <td colSpan={6} className="p-8 text-center text-[var(--text-secondary)]">لا يوجد مستخدمين مسجلين بعد.</td>
               </tr>
             ) : (
               users.map(user => (
-                <tr key={user.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '1rem', color: 'var(--text-secondary)', fontSize: '0.8rem' }} dir="ltr">{user.id.slice(0, 8)}...</td>
-                  <td style={{ padding: '1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{user.username}</td>
-                  <td style={{ padding: '1rem', color: 'var(--text-secondary)' }} dir="ltr">{user.email}</td>
-                  <td style={{ padding: '1rem', color: 'var(--brand-primary)', fontWeight: 800 }} dir="ltr">${user.balance.toFixed(2)}</td>
-                  <td style={{ padding: '1rem' }}>
-                    <span style={{
-                      padding: '0.25rem 0.5rem', 
-                      borderRadius: '4px', 
-                      fontSize: '0.8rem', 
-                      fontWeight: 700,
-                      background: user.role === 'ADMIN' ? 'var(--brand-danger)' : 'var(--bg-secondary)',
-                      color: user.role === 'ADMIN' ? '#fff' : 'var(--text-primary)'
-                    }}>
+                <tr key={user.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-card-hover)] transition-colors">
+                  <td className="p-4 text-[var(--text-secondary)] text-[0.8rem]" dir="ltr">{user.id.slice(0, 8)}...</td>
+                  <td className="p-4 font-bold text-[var(--text-primary)]">{user.username}</td>
+                  <td className="p-4 text-[var(--text-secondary)]" dir="ltr">{user.email}</td>
+                  <td className="p-4 text-[var(--brand-primary)] font-extrabold" dir="ltr">{user.balance.toFixed(2)} {CURRENCY_SYMBOL}</td>
+                  <td className="p-4">
+                    <span className={`px-2 py-1 rounded-[4px] text-[0.8rem] font-bold ${
+                      user.role === 'ADMIN' 
+                        ? 'bg-[var(--brand-danger)] text-white' 
+                        : 'bg-[var(--bg-secondary)] text-[var(--text-primary)]'
+                    }`}>
                       {user.role}
                     </span>
                   </td>
-                  <td style={{ padding: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    <button className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', background: 'var(--brand-success)', gap: '0.4rem' }} onClick={() => handleAction(user.id, 'add_balance')}>
-                      <img src="https://img.icons8.com/fluency/256/plus.png" width={14} height={14} style={{ filter: 'brightness(0) invert(1)' }} /> إضافة رصيد
+                  <td className="p-4 flex gap-2 flex-wrap min-w-[280px]">
+                    <button className="btn-primary !p-2 !px-4 !text-[0.8rem] !bg-[var(--brand-success)] !shadow-none flex items-center gap-1.5" onClick={() => handleAction(user.id, 'add_balance')}>
+                      <img src="https://img.icons8.com/fluency/256/plus.png" width={14} height={14} className="brightness-0 invert" alt="إضافة" /> إضافة رصيد
                     </button>
-                    <button className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', gap: '0.4rem' }} onClick={() => handleAction(user.id, 'set_balance')}>
-                      <img src="https://img.icons8.com/fluency/256/edit.png" width={14} height={14} /> تعديل
+                    <button className="btn-secondary !p-2 !px-4 !text-[0.8rem] flex items-center gap-1.5" onClick={() => handleAction(user.id, 'set_balance')}>
+                      <img src="https://img.icons8.com/fluency/256/edit.png" width={14} height={14} alt="تعديل" /> تعديل
                     </button>
                     {user.role !== 'ADMIN' && (
-                      <button className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', color: 'var(--brand-danger)', borderColor: 'var(--brand-danger)', gap: '0.4rem' }} onClick={() => handleAction(user.id, 'change_role')}>
-                        <img src="https://img.icons8.com/fluency/256/crown.png" width={14} height={14} /> ترقية
+                      <button className="btn-secondary !p-2 !px-4 !text-[0.8rem] !text-[var(--brand-danger)] !border-[var(--brand-danger)] flex items-center gap-1.5" onClick={() => handleAction(user.id, 'change_role')}>
+                        <img src="https://img.icons8.com/fluency/256/crown.png" width={14} height={14} alt="ترقية" /> ترقية
                       </button>
                     )}
                   </td>
