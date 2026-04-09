@@ -3,6 +3,9 @@
 import { useEffect, useState } from 'react';
 import { showToast } from '@/hooks/useNotification';
 
+export default function AdminTickets() {
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeTicket, setActiveTicket] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [reply, setReply] = useState('');
