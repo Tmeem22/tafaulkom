@@ -2,12 +2,13 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getUserFromSession } from '@/lib/auth';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const user = await getUserFromSession();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const ticketId = Number(params.id);
+    const ticketId = Number(id);
     const ticket = await prisma.ticket.findUnique({
       where: { id: ticketId },
       include: {
@@ -31,12 +32,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const user = await getUserFromSession();
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const ticketId = Number(params.id);
+    const ticketId = Number(id);
     const { message } = await req.json();
 
     if (!message) return NextResponse.json({ error: 'Message is required' }, { status: 400 });
