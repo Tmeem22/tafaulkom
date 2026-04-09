@@ -1,7 +1,30 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "prisma generate && prisma migrate deploy && next build",
-  "installCommand": "npm install",
-  "regions": ["cdg1"],
-  "cleanUrls": true
+  "version": 2,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Vercel-Shield", "value": "Enabled" },
+        { "key": "X-DNS-Prefetch-Control", "value": "on" }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/.env",
+      "destination": "https://www.google.com",
+      "permanent": true
+    },
+    {
+      "source": "/wp-admin/(.*)",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/admin/security/clean-logs",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }

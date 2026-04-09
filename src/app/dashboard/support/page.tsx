@@ -16,9 +16,9 @@ const sideLinks = [
 
 type TicketStatus = 'open' | 'closed';
 
-const statusConfig: Record<TicketStatus, { label: string; color: string; bg: string }> = {
-  open: { label: 'مفتوحة / قيد المراجعة', color: 'var(--brand-accent)', bg: 'rgba(245,158,11,0.1)' },
-  closed: { label: 'مغلقة', color: 'var(--text-tertiary)', bg: 'var(--bg-secondary)' },
+const statusConfig: Record<TicketStatus, { label: string; colorClass: string; bgClass: string }> = {
+  open: { label: 'مفتوحة / قيد المراجعة', colorClass: 'text-[var(--brand-accent)]', bgClass: 'bg-amber-500/10' },
+  closed: { label: 'مغلقة', colorClass: 'text-[var(--text-tertiary)]', bgClass: 'bg-[var(--bg-secondary)]' },
 };
 
 const subjects = [
@@ -161,7 +161,7 @@ export default function Support() {
                   </div>
                   <div>
                     <p className="text-[0.7rem] font-bold text-[var(--text-secondary)] uppercase tracking-wider">{s.label}</p>
-                    <p className="text-[1.8rem] font-black" style={{ color: s.color }}>{s.value}</p>
+                    <p className={`text-[1.8rem] font-black ${s.color === 'var(--brand-accent)' ? 'text-[var(--brand-accent)]' : 'text-[var(--text-tertiary)]'}`}>{s.value}</p>
                   </div>
                 </div>
               ))}
@@ -210,7 +210,7 @@ export default function Support() {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1.5 flex-wrap">
                           <span className="text-[0.75rem] font-bold text-[var(--brand-primary)] uppercase">تذكرة #{ticket.id}</span>
-                          <span className="px-2.5 py-1 rounded-full text-[0.65rem] font-bold" style={{ background: sc.bg, color: sc.color }}>{sc.label}</span>
+                          <span className={`px-2.5 py-1 rounded-full text-[0.65rem] font-bold ${sc.bgClass} ${sc.colorClass}`}>{sc.label}</span>
                         </div>
                         <h3 className="text-[1rem] font-bold text-[var(--text-primary)] transition-colors group-hover:text-[var(--brand-primary)]">{ticket.subject}</h3>
                       </div>

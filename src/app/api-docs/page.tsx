@@ -162,7 +162,7 @@ export default function APIDocs() {
               </div>
               <div className="card p-6 text-center">
                 <p className="text-[0.8rem] text-[var(--text-secondary)] font-semibold mb-1">API URL</p>
-                <p className="text-[0.85rem] font-bold text-[var(--text-primary)]" dir="ltr">https://tafaulkom.app/api/v2</p>
+                <p className="text-[0.85rem] font-bold text-[var(--text-primary)]" dir="ltr">https://smm-panel-olive.vercel.app/api/v2</p>
               </div>
               <div className="card p-6 text-center">
                 <p className="text-[0.8rem] text-[var(--text-secondary)] font-semibold mb-1">صيغة الاستجابة</p>
@@ -243,7 +243,7 @@ export default function APIDocs() {
               <div className="p-6 md:p-8">
                 <pre className="bg-[var(--bg-secondary)] p-6 rounded-[var(--radius-md)] overflow-auto direction-ltr text-left">
                   <code className="text-[0.8rem] font-mono text-[var(--text-primary)]">{`<?php
-$api_url = 'https://tafaulkom.app/api/v2';
+$api_url = 'https://smm-panel-olive.vercel.app/api/v2';
 $api_key = 'YOUR_API_KEY';
 
 $data = [

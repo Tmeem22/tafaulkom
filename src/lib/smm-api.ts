@@ -94,12 +94,27 @@ export async function getProviderOrderStatuses(orderIds: (number | string)[]) {
 
     const response = await fetch(url.toString());
     const data = await response.json();
-    
-    // SMM providers typically return an object for multi-status:
-    // { "1": { charge: "1", ...}, "2": { ...} }
     return data;
   } catch (error) {
     console.error("Failed to retrieve multiple order statuses", error);
     return {};
+  }
+}
+
+export async function createProviderRefill(orderId: number | string) {
+  try {
+    const url = new URL(API_URL);
+    url.searchParams.append('key', API_KEY);
+    url.searchParams.append('action', 'refill');
+    url.searchParams.append('order', String(orderId));
+
+    const response = await fetch(url.toString());
+    const data = await response.json();
+    
+    // Returns { refill: "123456" } or { error: "..." }
+    return data;
+  } catch (error) {
+    console.error("Failed to create provider refill", error);
+    return { error: "Internal provider error" };
   }
 }

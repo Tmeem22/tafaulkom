@@ -57,22 +57,27 @@ const platformIcons: Record<string, { icon: string, color: string, keywords: str
     keywords: ['whatsapp', 'واتساب', 'واتس'] 
   },
   'kick': { 
-    icon: 'https://img.icons8.com/color/96/kick.png', 
+    icon: 'https://www.google.com/s2/favicons?domain=kick.com&sz=128', 
     color: '#53fc18', 
     keywords: ['كيك', 'kick'] 
   },
   'jaco': { 
-    icon: 'https://img.icons8.com/color/96/vigo-video.png', 
+    icon: 'https://www.google.com/s2/favicons?domain=jaco.live&sz=128', 
     color: '#ff0050', 
     keywords: ['جاكو', 'jaco'] 
   },
+  'discord': { 
+    icon: 'https://www.google.com/s2/favicons?domain=discord.com&sz=128', 
+    color: '#5865f2', 
+    keywords: ['ديسكورد', 'discord'] 
+  },
   'pinterest': { 
-    icon: 'https://img.icons8.com/color/96/pinterest.png', 
+    icon: 'https://www.google.com/s2/favicons?domain=pinterest.com&sz=128', 
     color: '#bd081c', 
     keywords: ['بنتريست', 'pinterest'] 
   },
   'threads': { 
-    icon: 'https://img.icons8.com/color/96/threads.png', 
+    icon: 'https://www.google.com/s2/favicons?domain=threads.net&sz=128', 
     color: '#000000', 
     keywords: ['ثريدز', 'threads'] 
   },

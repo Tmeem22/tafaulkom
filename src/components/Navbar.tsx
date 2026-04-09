@@ -92,7 +92,7 @@ export default function Navbar() {
               alt="تفاعلكم - SMM Panel" 
               className="h-[60px] w-auto object-contain"
             />
-            <span className="text-[0.7rem] bg-[var(--brand-primary)] text-white px-2 py-0.5 rounded-full font-extrabold">V3-321-READY</span>
+            <span className="text-[0.7rem] bg-[var(--brand-primary)] text-white px-2 py-0.5 rounded-full font-extrabold">V4.0-SUCCESS</span>
           </Link>
 
           {/* Desktop Nav */}

@@ -62,12 +62,33 @@ export default function AdminServices() {
     handleUpdate(id, undefined, newRate === '' ? null : newRate);
   };
 
+  const handleSync = async () => {
+    try {
+      const res = await fetch('/api/sync-services');
+      const data = await res.json();
+      if (res.ok) {
+        showToast("تم مزامنة الخدمات بنجاح", "success");
+        fetchServices();
+      } else {
+        showToast(`فشلت المزامنة: ${data.error}`, "error");
+      }
+    } catch (err) {
+      showToast("خطأ في الاتصال بالسيرفر", "error");
+    }
+  };
+
   return (
     <div className="animate-fade-in">
       <div className="mb-8 flex justify-between items-end flex-wrap gap-4">
         <div>
           <h1 className="text-[2rem] font-extrabold text-[var(--text-primary)] mb-2">إدارة الخدمات</h1>
           <p className="text-[var(--text-secondary)]">التحكم في الأسعار وتفعيل/تعطيل الخدمات من المزود.</p>
+          <button 
+            onClick={handleSync}
+            className="mt-4 bg-[var(--brand-primary)] text-white px-6 py-3 rounded-2xl font-black shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+          >
+             <span>🔄</span> مزامنة الخدمات من SMMCPan
+          </button>
         </div>
         <div className="flex gap-4 w-full max-w-[600px]">
           <div className="flex-1 relative">

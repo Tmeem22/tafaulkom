@@ -17,6 +17,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { label: 'سجل الطلبات', href: '/admin/orders', icon: 'https://img.icons8.com/fluency/256/shopping-basket.png' },
     { label: 'تذاكر الدعم', href: '/admin/tickets', icon: 'https://img.icons8.com/fluency/256/headset.png' },
     { label: 'الإيداعات', href: '/admin/deposits', icon: 'https://img.icons8.com/fluency/256/safe.png' },
+    { label: 'مركز الأمن', href: '/admin/security', icon: 'https://img.icons8.com/fluency/256/checked-shield.png' },
+    { label: 'طلبات التعويض', href: '/admin/refills', icon: 'https://img.icons8.com/fluency/256/help.png' },
   ];
 
   return (

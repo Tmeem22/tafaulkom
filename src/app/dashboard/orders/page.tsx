@@ -36,8 +36,17 @@ export default function Orders() {
   const [reviewText, setReviewText] = useState('');
   const [submittingRating, setSubmittingRating] = useState(false);
 
+  // Refill Modal State
+  const [refillOrder, setRefillOrder] = useState<any>(null);
+  const [isHonest, setIsHonest] = useState(false);
+  const [isSubmittingRefill, setIsSubmittingRefill] = useState(false);
+
   useEffect(() => {
     fetchOrdersAndUser();
+    
+    // Auto-sync polling every 60 seconds
+    const interval = setInterval(fetchOrdersAndUser, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchOrdersAndUser = async () => {
@@ -77,8 +86,49 @@ export default function Orders() {
     cancelled: orders.filter(o => o.status === 'cancelled').length,
   };
 
-  const handleAction = async (orderId: number, action: 'refill' | 'cancel') => {
-    alert(`${action === 'refill' ? 'طلب تعويض' : 'طلب إلغاء'} للطلب #${orderId}`);
+  const handleAction = async (order: any, action: 'refill' | 'cancel') => {
+    if (action === 'cancel') {
+        alert('يرجى التواصل مع الدعم الفني لإلغاء هذا الطلب');
+        return;
+    }
+
+    if (action === 'refill') {
+        const now = new Date();
+        const orderDate = new Date(order.createdAt);
+        const diffHours = (now.getTime() - orderDate.getTime()) / (1000 * 60 * 60);
+
+        if (diffHours < 48) {
+            alert('عذراً، يجب مرور 48 ساعة على الأقل من وقت الطلب للمطالبة بالتعويض.');
+            return;
+        }
+
+        setRefillOrder(order);
+        setIsHonest(false);
+    }
+  };
+
+  const submitRefillRequest = async () => {
+    if (!refillOrder || !isHonest) return;
+    setIsSubmittingRefill(true);
+    try {
+        const res = await fetch('/api/orders/refill', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId: refillOrder.id, confirmStatement: isHonest })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            alert(data.message || 'تم إرسال طلب التعويض للإدارة بنجاح. سيتم مراجعته وتمريره للمزود فوراً.');
+            setRefillOrder(null);
+            fetchOrdersAndUser();
+        } else {
+            alert(data.error || 'فشل في إرسال طلب التعويض');
+        }
+    } catch (err) {
+        alert('حدث خطأ أثناء إرسال الطلب');
+    } finally {
+        setIsSubmittingRefill(false);
+    }
   };
 
   const submitRating = async () => {
@@ -99,7 +149,7 @@ export default function Orders() {
         setRatingOrder(null);
         setSelectedStars(5);
         setReviewText('');
-        fetchOrdersAndUser(); // Refresh list
+        fetchOrdersAndUser();
       }
     } catch (err) {
       alert('فشل في إرسال التقييم. يرجى المحاولة لاحقاً.');
@@ -199,6 +249,7 @@ export default function Orders() {
                       <th className="p-5 text-right text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الخدمة</th>
                       <th className="p-5 text-right text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الرابط</th>
                       <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الكمية</th>
+                      <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">التقدم</th>
                       <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">التكلفة</th>
                       <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الحالة</th>
                       <th className="p-5 text-center text-[0.75rem] font-black text-[var(--text-secondary)] uppercase tracking-wider">الإجراءات</th>
@@ -208,20 +259,23 @@ export default function Orders() {
                   <tbody className="divide-y divide-[var(--border-color)]">
                     {loading ? (
                       <tr>
-                        <td colSpan={8} className="p-20 text-center">
+                        <td colSpan={9} className="p-20 text-center">
                           <img src="https://img.icons8.com/fluency/256/hourglass.png" width={48} height={48} className="animate-spin mx-auto mb-4 opacity-50" alt="تحميل" />
                           <p className="text-[var(--text-tertiary)] font-bold">جاري جلب طلباتك المسجلة...</p>
                         </td>
                       </tr>
                     ) : filtered.length === 0 ? (
                       <tr>
-                        <td colSpan={8} className="p-20 text-center">
+                        <td colSpan={9} className="p-20 text-center">
                           <img src="https://img.icons8.com/fluency/256/nothing-found.png" width={64} height={64} className="mx-auto mb-4 opacity-30" alt="لا يوجد" />
                           <p className="text-[var(--text-tertiary)] font-bold">لا توجد طلبات تطابق معايير البحث</p>
                         </td>
                       </tr>
                     ) : filtered.map(order => {
                       const sc = statusConfig[order.status as keyof typeof statusConfig] || statusConfig['pending'];
+                      const processed = order.quantity - (order.remains || 0);
+                      const progressWidth = Math.min(100, Math.max(0, (processed / order.quantity) * 100));
+
                       return (
                         <tr key={order.id} className="transition-all hover:bg-[var(--bg-secondary)]/50">
                           <td className="p-5 text-[0.85rem] font-black text-[var(--brand-primary)]">#{order.id}</td>
@@ -234,6 +288,22 @@ export default function Orders() {
                             </a>
                           </td>
                           <td className="p-5 text-center text-[0.85rem] font-bold text-[var(--text-secondary)]">{order.quantity.toLocaleString()}</td>
+                          <td className="p-5 text-center min-w-[120px]">
+                            <div className="flex flex-col gap-1.5 items-center">
+                                    <div className="w-full bg-[var(--bg-secondary)] h-1.5 rounded-full overflow-hidden">
+                                        <svg width="100%" height="6" className="block">
+                                            <rect 
+                                                width={`${progressWidth}%`} 
+                                                height="6" 
+                                                fill="var(--brand-primary)" 
+                                                rx="3"
+                                                className="transition-all duration-1000"
+                                            />
+                                        </svg>
+                                    </div>
+                                <span className="text-[0.65rem] font-black text-[var(--text-tertiary)]">{processed.toLocaleString()} / {order.quantity.toLocaleString()}</span>
+                            </div>
+                          </td>
                           <td className="p-5 text-center text-[0.85rem] font-black text-[var(--text-primary)]" dir="ltr">{order.charge.toFixed(4)} {CURRENCY_SYMBOL}</td>
                           <td className="p-5 text-center">
                             <span className={`px-3 py-1.5 rounded-full text-[0.7rem] font-black flex items-center justify-center gap-2 mx-auto w-fit ${
@@ -272,13 +342,22 @@ export default function Orders() {
                                 </span>
                               )}
 
-                              {order.status === 'completed' && order.refill && (
-                                <button onClick={() => handleAction(order.id, 'refill')} className="p-2 rounded-[10px] bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all border-none cursor-pointer" title="طلب تعويض">
-                                  <img src="https://img.icons8.com/fluency/256/rotate.png" width={16} height={16} alt="Refill" />
+                              {order.status === 'completed' && (
+                                <button 
+                                  onClick={() => handleAction(order, 'refill')} 
+                                  disabled={order.refillRequested}
+                                  className={`p-2 rounded-[10px] transition-all border-none cursor-pointer ${
+                                    order.refillRequested 
+                                      ? 'bg-gray-500/10 text-gray-500 cursor-not-allowed' 
+                                      : 'bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white'
+                                  }`} 
+                                  title={order.refillRequested ? "طلب التعويض قيد المراجعة" : "طلب تعويض"}
+                                >
+                                  <img src="https://img.icons8.com/fluency/256/rotate.png" width={16} height={16} alt="Refill" className={order.refillRequested ? 'grayscale' : ''} />
                                 </button>
                               )}
                               {(order.status === 'pending' || order.status === 'processing') && (
-                                <button onClick={() => handleAction(order.id, 'cancel')} className="p-2 rounded-[10px] bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border-none cursor-pointer" title="إلغاء الطلب">
+                                <button onClick={() => handleAction(order, 'cancel')} className="p-2 rounded-[10px] bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all border-none cursor-pointer" title="إلغاء الطلب">
                                   <img src="https://img.icons8.com/fluency/256/delete-sign.png" width={16} height={16} alt="Cancel" />
                                 </button>
                               )}
@@ -296,6 +375,52 @@ export default function Orders() {
             </div>
           </div>
         </div>
+
+        {/* Refill Request Modal */}
+        {refillOrder && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-fade-in">
+            <div className="bg-[var(--bg-card)] w-full max-w-[480px] rounded-[32px] border border-[var(--border-color)] overflow-hidden shadow-[var(--shadow-lg)] animate-scale-up">
+              <div className="p-8 pb-4 flex justify-between items-center">
+                <h3 className="text-[1.5rem] font-black text-[var(--text-primary)] tracking-tight">طلب تعويض (Refill)</h3>
+                <button onClick={() => setRefillOrder(null)} className="w-10 h-10 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center border-none cursor-pointer hover:bg-red-500/10 group">
+                  <img src="https://img.icons8.com/fluency/256/delete-sign.png" width={20} height={20} className="group-hover:rotate-90 transition-all" alt="إغلاق" />
+                </button>
+              </div>
+              <div className="p-8 pt-0">
+                <div className="bg-amber-500/10 border border-amber-500/20 p-5 rounded-[20px] mb-6">
+                    <p className="text-[0.85rem] text-amber-600 font-bold leading-relaxed mb-0">
+                        ⚠️ تنبيه: نظام التعويض متاح للطلبات التي لم تكتمل أو حدث بها نقص حقيقي. يتم مراجعة كل طلب يدوياً من قبل الإدارة.
+                    </p>
+                </div>
+
+                <div className="mb-8">
+                    <p className="text-[0.9rem] font-bold text-[var(--text-secondary)] mb-2">رقم الطلب: #{refillOrder.id}</p>
+                    <p className="text-[0.9rem] font-bold text-[var(--text-secondary)]">الخدمة: {refillOrder.service}</p>
+                </div>
+
+                <div 
+                    className={`p-5 rounded-[22px] border-2 transition-all cursor-pointer flex items-center gap-4 mb-8 ${isHonest ? 'border-emerald-500 bg-emerald-500/5' : 'border-[var(--border-color)] bg-[var(--bg-secondary)]'}`}
+                    onClick={() => setIsHonest(!isHonest)}
+                >
+                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${isHonest ? 'bg-emerald-500 border-emerald-500' : 'border-[var(--text-tertiary)]'}`}>
+                        {isHonest && <span className="text-white text-xs">✓</span>}
+                    </div>
+                    <span className="text-[0.9rem] font-black text-[var(--text-primary)]">أقسم بالله وأؤكد أنني لم أحصل على الخدمة كاملة أو حدث نقص حقيقي في العدد.</span>
+                </div>
+
+                <button 
+                  onClick={submitRefillRequest}
+                  disabled={isSubmittingRefill || !isHonest}
+                  className="w-full py-5 bg-[var(--brand-primary)] text-white font-black text-[1.1rem] rounded-[22px] border-none shadow-[0_10px_25px_rgba(108,60,225,0.4)] transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+                >
+                  {isSubmittingRefill ? (
+                    <img src="https://img.icons8.com/fluency/256/spinner-frame-2.png" width={24} height={24} className="animate-spin brightness-0 invert" alt="loading" />
+                  ) : 'إرسال طلب التعويض'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Rating Modal */}
         {ratingOrder && (

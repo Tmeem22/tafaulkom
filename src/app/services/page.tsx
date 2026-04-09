@@ -16,10 +16,11 @@ const platformIcons: Record<string, string> = {
   telegram: 'https://img.icons8.com/fluency/256/telegram-app.png',
   spotify: 'https://img.icons8.com/fluency/256/spotify.png',
   whatsapp: 'https://img.icons8.com/color/256/whatsapp.png',
-  kick: 'https://img.icons8.com/color/256/kick.png',
-  jaco: 'https://img.icons8.com/color/256/vigo-video.png',
-  threads: 'https://img.icons8.com/color/256/threads.png',
-  pinterest: 'https://img.icons8.com/color/256/pinterest.png',
+  kick: 'https://www.google.com/s2/favicons?domain=kick.com&sz=128',
+  jaco: 'https://www.google.com/s2/favicons?domain=jaco.live&sz=128',
+  threads: 'https://www.google.com/s2/favicons?domain=threads.net&sz=128',
+  discord: 'https://www.google.com/s2/favicons?domain=discord.com&sz=128',
+  pinterest: 'https://www.google.com/s2/favicons?domain=pinterest.com&sz=128',
 };
 
 const categories = [
@@ -31,6 +32,7 @@ const categories = [
   { name: 'Facebook', key: 'facebook', icon: platformIcons.facebook },
   { name: 'Snapchat', key: 'snapchat', icon: platformIcons.snapchat },
   { name: 'Telegram', key: 'telegram', icon: platformIcons.telegram },
+  { name: 'Discord', key: 'discord', icon: platformIcons.discord },
   { name: 'WhatsApp', key: 'whatsapp', icon: platformIcons.whatsapp },
   { name: 'Jaco', key: 'jaco', icon: platformIcons.jaco },
   { name: 'Kick', key: 'kick', icon: platformIcons.kick },
@@ -51,11 +53,9 @@ export default function Services() {
         const res = await fetch('/api/services');
         const data = await res.json();
         if (Array.isArray(data)) {
-          // Format standard provider structure if needed, or just use raw:
-          // Often providers return object or array. Assume standard SMM array structure
           const formatted = data.map((s: any) => ({
             id: s.service,
-            platform: (s.category || '').split(' ')[0].toLowerCase(), // heuristic
+            platform: (s.category || '').split(' ')[0].toLowerCase(),
             category: s.category,
             name: s.name,
             rate: parseFloat(s.rate),
@@ -81,7 +81,15 @@ export default function Services() {
   return (
     <>
       <Navbar />
-      <main dir="rtl" className="pt-[90px] min-h-screen">
+      <main dir="rtl" className="pt-[90px] min-h-screen relative">
+        {/* Back to Dashboard Button */}
+        <div className="fixed top-[100px] left-6 z-[40] animate-bounce-slow">
+           <Link href="/dashboard" className="flex items-center gap-2 py-3 px-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-full text-[var(--text-primary)] font-black text-[0.9rem] shadow-xl hover:bg-[var(--brand-primary)] hover:text-white transition-all group no-underline">
+             <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
+             العودة لطلب خدمة
+           </Link>
+        </div>
+
         <section className="py-12 px-6">
           <div className="max-w-[1280px] mx-auto">
             <div className="text-center mb-12">
