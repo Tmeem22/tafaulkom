@@ -112,7 +112,13 @@ export default function Support() {
     try {
       const res = await fetch(`/api/tickets/${ticketId}/messages`);
       const data = await res.json();
-      if (data.messages) setMessages(data.messages);
+      if (data.messages) {
+        setMessages(data.messages);
+        setTimeout(() => {
+          const container = document.getElementById('user-chat-container');
+          if (container) container.scrollTop = container.scrollHeight;
+        }, 100);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -276,18 +282,17 @@ export default function Support() {
                       <div className="p-5 pt-0 animate-fade-in">
                         <div className="border-t border-[var(--border-color)] pt-5 flex flex-col gap-4">
                           {/* Messages Thread */}
-                          <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto p-2">
+                          <div id="user-chat-container" className="flex flex-col gap-4 max-h-[400px] overflow-y-auto p-2">
                              {/* Original Message */}
                              <div className="flex flex-col items-start max-w-[90%]">
-                                <div className="p-4 rounded-2xl rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[0.9rem] text-[var(--text-primary)]">
+                                <div className="p-4 rounded-2xl rounded-tr-none bg-[var(--bg-card)] border border-[var(--border-color)] text-[0.9rem] text-[var(--text-primary)]">
                                    {ticket.message}
                                 </div>
                                 <span className="text-[0.6rem] text-[var(--text-tertiary)] mt-1 px-2">{new Date(ticket.createdAt).toLocaleString('ar-SA')}</span>
                              </div>
 
-                             {messages.map((m) => (
                                <div key={m.id} className={`flex flex-col ${m.role === 'ADMIN' ? 'items-end' : 'items-start'} max-w-[90%] ${m.role === 'ADMIN' ? 'mr-auto' : ''}`}>
-                                  <div className={`p-4 rounded-2xl ${m.role === 'ADMIN' ? 'rounded-tl-none bg-[var(--brand-primary)] text-white shadow-md' : 'rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)]'} text-[0.9rem]`}>
+                                  <div className={`p-4 rounded-2xl ${m.role === 'ADMIN' ? 'rounded-tl-none bg-[var(--brand-primary)] text-white shadow-md' : 'rounded-tr-none bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)]'} text-[0.9rem]`}>
                                      {m.message}
                                   </div>
                                   <span className="text-[0.6rem] text-[var(--text-tertiary)] mt-1 px-2">

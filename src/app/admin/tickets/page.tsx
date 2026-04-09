@@ -27,7 +27,13 @@ export default function AdminTickets() {
     try {
       const res = await fetch(`/api/tickets/${ticketId}/messages`);
       const data = await res.json();
-      if (data.messages) setMessages(data.messages);
+      if (data.messages) {
+        setMessages(data.messages);
+        setTimeout(() => {
+          const container = document.getElementById('admin-chat-container');
+          if (container) container.scrollTop = container.scrollHeight;
+        }, 100);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -169,10 +175,10 @@ export default function AdminTickets() {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-[var(--bg-primary)]/30">
+            <div id="admin-chat-container" className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-[var(--bg-primary)]/30">
               {/* Original Message */}
               <div className="flex flex-col items-start max-w-[85%] animate-fade-in">
-                <div className="p-4 rounded-2xl rounded-tr-none bg-white border border-[var(--border-color)] text-[0.9rem] text-[var(--text-primary)] shadow-sm">
+                <div className="p-4 rounded-2xl rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[0.9rem] text-[var(--text-primary)] shadow-sm">
                   {activeTicket.message}
                 </div>
                 <span className="text-[0.65rem] text-[var(--text-tertiary)] mt-1 mr-2">{new Date(activeTicket.createdAt).toLocaleString('ar-SA')}</span>
@@ -188,7 +194,7 @@ export default function AdminTickets() {
                     className={`p-4 rounded-2xl ${
                       m.role === 'ADMIN' 
                         ? 'rounded-tl-none bg-[var(--brand-primary)] text-white shadow-md' 
-                        : 'rounded-tr-none bg-white border border-[var(--border-color)] text-[var(--text-primary)] shadow-sm'
+                        : 'rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] shadow-sm'
                     } text-[0.9rem]`}
                   >
                     {m.message}
