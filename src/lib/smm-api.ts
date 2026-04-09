@@ -48,17 +48,22 @@ export async function getProviderBalance() {
 
 export async function createProviderOrder(serviceId: string | number, link: string, quantity: number) {
   try {
-    const url = new URL(API_URL);
-    url.searchParams.append('key', API_KEY);
-    url.searchParams.append('action', 'add');
-    url.searchParams.append('service', String(serviceId));
-    url.searchParams.append('link', link);
-    url.searchParams.append('quantity', String(quantity));
+    const params = new URLSearchParams();
+    params.append('key', API_KEY);
+    params.append('action', 'add');
+    params.append('service', String(serviceId));
+    params.append('link', link);
+    params.append('quantity', String(quantity));
 
-    const response = await fetch(url.toString(), { method: 'POST' });
-    const data = await response.json();
+    const response = await fetch(API_URL, { 
+      method: 'POST',
+      body: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
     
-    // SMM providers usually return { order: 12345 } on success or { error: "reason" }
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error("Failed to create provider order", error);
@@ -103,15 +108,19 @@ export async function getProviderOrderStatuses(orderIds: (number | string)[]) {
 
 export async function createProviderRefill(orderId: number | string) {
   try {
-    const url = new URL(API_URL);
-    url.searchParams.append('key', API_KEY);
-    url.searchParams.append('action', 'refill');
-    url.searchParams.append('order', String(orderId));
+    const params = new URLSearchParams();
+    params.append('key', API_KEY);
+    params.append('action', 'refill');
+    params.append('order', String(orderId));
 
-    const response = await fetch(url.toString());
+    const response = await fetch(API_URL, { 
+      method: 'POST',
+      body: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
     const data = await response.json();
-    
-    // Returns { refill: "123456" } or { error: "..." }
     return data;
   } catch (error) {
     console.error("Failed to create provider refill", error);
