@@ -14,13 +14,14 @@ const sideLinks = [
   { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
 ];
 
-type OrderStatus = 'all' | 'completed' | 'pending' | 'processing' | 'cancelled';
+type OrderStatus = 'all' | 'completed' | 'pending' | 'processing' | 'cancelled' | 'partial';
 
 const statusConfig = {
   completed: { label: 'مكتمل', color: 'var(--brand-success)', bg: 'rgba(16,185,129,0.1)', icon: 'https://img.icons8.com/fluency/256/checkmark.png' },
   processing: { label: 'قيد التنفيذ', color: 'var(--brand-primary)', bg: 'rgba(108,60,225,0.1)', icon: 'https://img.icons8.com/fluency/256/spinner-frame-2.png' },
   pending: { label: 'معلّق', color: 'var(--brand-accent)', bg: 'rgba(245,158,11,0.1)', icon: 'https://img.icons8.com/fluency/256/hourglass.png' },
   cancelled: { label: 'ملغي', color: 'var(--brand-danger)', bg: 'rgba(239,68,68,0.1)', icon: 'https://img.icons8.com/fluency/256/delete-sign.png' },
+  partial: { label: 'مكتمل جزئياً', color: 'var(--brand-info)', bg: 'rgba(59,130,246,0.1)', icon: 'https://img.icons8.com/fluency/256/partially-filled-battery.png' },
 };
 
 export default function Orders() {
@@ -84,6 +85,7 @@ export default function Orders() {
     processing: orders.filter(o => o.status === 'processing').length,
     pending: orders.filter(o => o.status === 'pending').length,
     cancelled: orders.filter(o => o.status === 'cancelled').length,
+    partial: orders.filter(o => o.status === 'partial').length,
   };
 
   const handleAction = async (order: any, action: 'refill' | 'cancel') => {
@@ -208,7 +210,7 @@ export default function Orders() {
             {/* Filters and Search */}
             <div className="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between">
               <div className="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto no-scrollbar">
-                {(['all', 'completed', 'processing', 'pending', 'cancelled'] as OrderStatus[]).map(status => (
+                {(['all', 'completed', 'processing', 'pending', 'cancelled', 'partial'] as OrderStatus[]).map(status => (
                   <button
                     key={status}
                     onClick={() => setFilter(status)}

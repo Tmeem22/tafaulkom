@@ -1,5 +1,6 @@
 const API_URL = process.env.SMM_API_URL || 'https://smmcpan.com/api/v2';
-const API_KEY = process.env.SMM_API_KEY || '';
+const API_KEY = (process.env.SMM_API_KEY || '').replace(/['"]/g, '').trim();
+const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
 export interface SMMService {
   service: string;
@@ -37,7 +38,10 @@ export async function getProviderServices(): Promise<SMMService[]> {
 
 export async function getProviderBalance() {
   try {
-    const response = await fetch(`${API_URL}?key=${API_KEY}&action=balance`);
+    const url = new URL(API_URL);
+    url.searchParams.append('key', API_KEY);
+    url.searchParams.append('action', 'balance');
+    const response = await fetch(url.toString());
     const data = await response.json();
     return data;
   } catch (error) {
@@ -47,15 +51,23 @@ export async function getProviderBalance() {
 }
 
 export async function createProviderOrder(serviceId: string | number, link: string, quantity: number) {
+  if (DEMO_MODE) {
+    console.log(`[DEMO MODE] Simulating order for service ${serviceId}`);
+    return { order: Math.floor(Math.random() * 1000000) };
+  }
+  
   try {
+    const url = new URL(API_URL);
+    url.searchParams.append('key', API_KEY); // Some providers require it in the URL even for POST
+
     const params = new URLSearchParams();
-    params.append('key', API_KEY);
+    params.append('key', API_KEY); // Others in the body
     params.append('action', 'add');
     params.append('service', String(serviceId));
     params.append('link', link);
     params.append('quantity', String(quantity));
 
-    const response = await fetch(API_URL, { 
+    const response = await fetch(url.toString(), { 
       method: 'POST',
       body: params,
       headers: {

@@ -243,10 +243,8 @@ function DashboardContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           serviceId: selectedServiceId,
-          serviceName: selectedService?.name,
           link,
           quantity,
-          charge: totalCost,
         })
       });
 

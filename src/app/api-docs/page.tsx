@@ -132,11 +132,12 @@ export default function APIDocs() {
 
   const handleCopy = () => {
     if (!apiKey) return;
-    navigator.clipboard.writeText(apiKey);
+    const fullKey = `tf_live_${apiKey}`;
+    navigator.clipboard.writeText(fullKey);
     showToast('تم نسخ الرمز السري بنجاح!', 'success');
   };
 
-  const maskedKey = apiKey ? `tf_live_${'*'.repeat(24)}` : 'يجب تسجيل الدخول لرؤية رمزك';
+  const maskedKey = apiKey ? `tf_live_${apiKey.substring(0, 4)}****${apiKey.substring(apiKey.length - 4)}` : 'يجب تسجيل الدخول لرؤية رمزك';
 
   return (
     <>

@@ -12,6 +12,7 @@ export default function AdminOrders() {
   const [status, setStatus] = useState('all');
   const [search, setSearch] = useState('');
   const [totalOrders, setTotalOrders] = useState(0);
+  const [syncing, setSyncing] = useState(false);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -32,6 +33,24 @@ export default function AdminOrders() {
     }
   }, [page, status, search]);
 
+  const handleSync = async () => {
+    setSyncing(true);
+    try {
+      const res = await fetch('/api/admin/orders/sync', { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        showToast(data.message, "success");
+        fetchOrders();
+      } else {
+        showToast(data.error || "فشلت عملية المزامنة", "error");
+      }
+    } catch (err) {
+      showToast("خطأ في الاتصال بالسيرفر", "error");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchOrders();
@@ -42,16 +61,25 @@ export default function AdminOrders() {
   return (
     <div className="animate-fade-in">
        <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-          <div>
+          <div className="flex-1">
             <h1 className="text-[2.2rem] font-black text-[var(--text-primary)] mb-2 tracking-tight">إدارة الطلبات</h1>
             <p className="text-[var(--text-secondary)] font-medium">مراقبة جميع طلبات المستخدمين وحالات التنفيذ (الإجمالي: {totalOrders})</p>
           </div>
           
-          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-             <div className="relative w-full md:w-[300px]">
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-center">
+             <button 
+                onClick={handleSync} 
+                disabled={syncing}
+                className="btn-primary !bg-emerald-500 !p-3 px-6 rounded-[15px] font-bold flex items-center gap-2 whitespace-nowrap shadow-lg shadow-emerald-500/20"
+             >
+                {syncing ? 'جاري المزامنة...' : 'تحديث جميع الحالات'}
+                <img src="https://img.icons8.com/fluency/256/synchronize.png" width={20} className={`brightness-0 invert ${syncing ? 'animate-spin' : ''}`} alt="sync" />
+             </button>
+
+             <div className="relative w-full md:w-[250px]">
                 <input 
                   type="text" 
-                  placeholder="بحث برقم الطلب، الرابط، أو المستخدم..." 
+                  placeholder="بحث..." 
                   value={search} 
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                   className="input-field pr-10 h-[52px]"

@@ -48,7 +48,8 @@ export function middleware(request: NextRequest) {
   }
 
   // 2. Bot Protection (Targeted at scanners)
-  if (BOT_KEYWORDS.some(keyword => userAgent.toLowerCase().includes(keyword))) {
+  const isApiV2 = pathname.startsWith('/api/v2');
+  if (!isApiV2 && BOT_KEYWORDS.some(keyword => userAgent.toLowerCase().includes(keyword))) {
     logThreat(`Bot/Scanner: ${userAgent}`, 'INFO');
     return new NextResponse('Bot Access Reserved for Official Engines.', { status: 403 });
   }

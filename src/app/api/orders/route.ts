@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { createProviderOrder, getProviderOrderStatuses } from '@/lib/smm-api';
 import { getUserFromSession } from '@/lib/auth';
+import { USD_TO_SAR_RATE, DEFAULT_PROFIT_MARGIN } from '@/lib/constants';
 
 export async function GET() {
   try {
@@ -75,62 +76,87 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { serviceId, serviceName, link, quantity, charge } = body;
+    const { serviceId, link, quantity } = body;
 
-    // 1. Validate data
-    if (!serviceId || !link || !quantity || !charge) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    // 1. Validate basic input
+    if (!serviceId || !link || !quantity) {
+      return NextResponse.json({ error: 'الرجاء إدخال كافة الحقول المطلوبة' }, { status: 400 });
     }
 
-    // 2. Check Balance
-    if (user.balance < Number(charge)) {
-      return NextResponse.json({ error: 'الرصيد غير كافٍ' }, { status: 400 });
+    // 2. Fetch service from DB to get the actual rate and limits
+    const service = await prisma.service.findUnique({
+      where: { id: Number(serviceId) }
+    });
+
+    if (!service || !service.active) {
+      return NextResponse.json({ error: 'الخدمة المختارة غير متوفرة حالياً' }, { status: 400 });
     }
 
-    // 3. Send order to Provider
-    const providerResponse = await createProviderOrder(serviceId, link, quantity);
+    // 3. Validate Quantity
+    if (quantity < service.min || quantity > service.max) {
+      return NextResponse.json({ 
+        error: `الكمية يجب أن تكون بين ${service.min} و ${service.max}` 
+      }, { status: 400 });
+    }
+
+    // 4. Calculate Charge on Backend
+    const costInSar = service.originalRate * USD_TO_SAR_RATE;
+    const ratePer1000 = service.customRate ? service.customRate : costInSar * DEFAULT_PROFIT_MARGIN;
+    const finalCharge = (quantity / 1000) * ratePer1000;
+
+    // 5. Check Balance
+    if (user.balance < finalCharge) {
+      return NextResponse.json({ error: 'رصيدك غير كافٍ لإتمام هذا الطلب' }, { status: 400 });
+    }
+
+    // 6. Send order to Provider
+    const providerResponse = await createProviderOrder(service.id, link, quantity);
     
     if (providerResponse.error) {
       const errStr = providerResponse.error.toLowerCase();
       if (errStr.includes('fund') || errStr.includes('balance')) {
-        return NextResponse.json({ error: 'عذراً، السيرفرات متوقفة مؤقتاً للصيانة والتحديث. يرجى المحاولة لاحقاً.' }, { status: 400 });
+        return NextResponse.json({ error: 'عذراً، السيرفرات متوقفة مؤقتاً للصيانة. يرجى المحاولة لاحقاً.' }, { status: 400 });
       }
       return NextResponse.json({ error: providerResponse.error }, { status: 400 });
     }
 
-    // 4. Deduct balance and Save order
-    const providerOrderId = providerResponse.order ? String(providerResponse.order) : String(Math.floor(Math.random() * 1000000)); 
+    // 7. Deduct balance and Save order
+    const providerOrderId = providerResponse.order ? String(providerResponse.order) : null;
     
-    const newBalance = user.balance - Number(charge);
-    
-    // Update balance
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { balance: newBalance }
-    });
+    if (!providerOrderId) {
+      return NextResponse.json({ error: 'فشل في الحصول على رقم الطلب من المزود' }, { status: 400 });
+    }
 
-    // Create order
-    const newOrder = await prisma.order.create({
-      data: {
-        userId: user.id,
-        providerOrderId: providerOrderId,
-        service: serviceName || `Service #${serviceId}`,
-        link,
-        quantity: Number(quantity),
-        charge: Number(charge),
-        remains: Number(quantity),
-        status: 'pending',
-      }
-    });
+    const newBalance = user.balance - finalCharge;
+    
+    // Use a transaction for reliability
+    const [updatedUser, newOrder] = await prisma.$transaction([
+      prisma.user.update({
+        where: { id: user.id },
+        data: { balance: newBalance }
+      }),
+      prisma.order.create({
+        data: {
+          userId: user.id,
+          providerOrderId: providerOrderId,
+          service: service.name,
+          link,
+          quantity: Number(quantity),
+          charge: finalCharge,
+          remains: Number(quantity),
+          status: 'pending',
+        }
+      })
+    ]);
 
     return NextResponse.json({ 
       success: true, 
       order: newOrder,
-      newBalance
+      newBalance: updatedUser.balance
     });
 
   } catch (error) {
     console.error("Order API Error:", error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'حدث خطأ داخلي في الخادم' }, { status: 500 });
   }
 }
