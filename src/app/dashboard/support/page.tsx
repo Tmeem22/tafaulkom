@@ -98,6 +98,53 @@ export default function Support() {
     window.location.href = "/login";
   };
 
+  const [messages, setMessages] = useState<any[]>([]);
+  const [reply, setReply] = useState('');
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    if (selectedTicket) {
+      fetchMessages(selectedTicket);
+    }
+  }, [selectedTicket]);
+
+  const fetchMessages = async (ticketId: number) => {
+    try {
+      const res = await fetch(`/api/tickets/${ticketId}/messages`);
+      const data = await res.json();
+      if (data.messages) setMessages(data.messages);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleReply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reply.trim() || !selectedTicket) return;
+
+    setSending(true);
+    try {
+      const res = await fetch(`/api/tickets/${selectedTicket}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: reply }),
+      });
+
+      if (res.ok) {
+        setReply('');
+        fetchMessages(selectedTicket);
+        showToast('تم إرسال ردك بنجاح', 'success');
+      } else {
+        const data = await res.json();
+        showToast(data.error || 'فشل إرسال الرد', 'error');
+      }
+    } catch (error) {
+      showToast('حدث خطأ في الاتصال', 'error');
+    } finally {
+      setSending(false);
+    }
+  };
+
   const filtered = filter === 'all' ? tickets : tickets.filter(t => t.status === filter);
 
   return (
@@ -228,14 +275,54 @@ export default function Support() {
                     {isOpen && (
                       <div className="p-5 pt-0 animate-fade-in">
                         <div className="border-t border-[var(--border-color)] pt-5 flex flex-col gap-4">
-                          <div className="p-5 rounded-[var(--radius-lg)] bg-[var(--bg-secondary)] border-r-4 border-[var(--brand-primary)] shadow-inner">
-                            <p className="text-[0.7rem] font-bold text-[var(--brand-primary)] uppercase tracking-wider mb-2">محتوى رسالتك:</p>
-                            <p className="text-[0.95rem] text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap">{ticket.message}</p>
+                          {/* Messages Thread */}
+                          <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto p-2">
+                             {/* Original Message */}
+                             <div className="flex flex-col items-start max-w-[90%]">
+                                <div className="p-4 rounded-2xl rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[0.9rem] text-[var(--text-primary)]">
+                                   {ticket.message}
+                                </div>
+                                <span className="text-[0.6rem] text-[var(--text-tertiary)] mt-1 px-2">{new Date(ticket.createdAt).toLocaleString('ar-SA')}</span>
+                             </div>
+
+                             {messages.map((m) => (
+                               <div key={m.id} className={`flex flex-col ${m.role === 'ADMIN' ? 'items-end' : 'items-start'} max-w-[90%] ${m.role === 'ADMIN' ? 'mr-auto' : ''}`}>
+                                  <div className={`p-4 rounded-2xl ${m.role === 'ADMIN' ? 'rounded-tl-none bg-[var(--brand-primary)] text-white shadow-md' : 'rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)]'} text-[0.9rem]`}>
+                                     {m.message}
+                                  </div>
+                                  <span className="text-[0.6rem] text-[var(--text-tertiary)] mt-1 px-2">
+                                     {m.role === 'ADMIN' ? 'الإدارة' : 'أنت'} • {new Date(m.createdAt).toLocaleString('ar-SA')}
+                                  </span>
+                               </div>
+                             ))}
                           </div>
-                          {ticket.status === 'closed' && (
-                            <div className="p-5 rounded-[var(--radius-lg)] bg-emerald-500/5 border-r-4 border-[var(--brand-success)] shadow-inner">
-                              <p className="text-[0.7rem] font-bold text-[var(--brand-success)] uppercase tracking-wider mb-2">الرد من الإدارة:</p>
-                              <p className="text-[0.95rem] text-[var(--text-secondary)] leading-relaxed">تم الرد وإغلاق هذه التذكرة بنجاح. إذا كان لديك استفسار آخر لا تتردد في فتح تذكرة جديدة.</p>
+
+                          {/* Reply Box */}
+                          {ticket.status === 'open' ? (
+                            <form onSubmit={handleReply} className="flex gap-2 mt-4">
+                               <input 
+                                 type="text" 
+                                 placeholder="اكتب ردك هنا..."
+                                 className="input-field flex-1 !py-3 !bg-[var(--bg-secondary)]" 
+                                 value={reply}
+                                 onChange={(e) => setReply(e.target.value)}
+                                 disabled={sending}
+                               />
+                               <button 
+                                 type="submit" 
+                                 disabled={sending || !reply.trim()}
+                                 className="btn-primary !px-5 !py-3 flex items-center justify-center disabled:opacity-50"
+                               >
+                                 {sending ? (
+                                   <img src="https://img.icons8.com/fluency/48/hourglass.png" width={22} height={22} className="animate-spin brightness-0 invert" alt="انتظار" />
+                                 ) : (
+                                   <img src="https://img.icons8.com/fluency/48/sent.png" width={22} height={22} className="brightness-0 invert" alt="إرسال" />
+                                 )}
+                               </button>
+                            </form>
+                          ) : (
+                            <div className="p-4 bg-[var(--bg-secondary)] rounded-xl text-center text-[var(--text-tertiary)] text-[0.85rem] font-bold">
+                               تم إغلاق هذه التذكرة. إذا كان لديك استفسار آخر يرجى فتح تذكرة جديدة.
                             </div>
                           )}
                         </div>
