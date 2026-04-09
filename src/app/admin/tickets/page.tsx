@@ -179,7 +179,7 @@ export default function AdminTickets() {
               {/* Original Message */}
               <div className="flex flex-col items-start max-w-[85%] animate-fade-in">
                 <div className="p-4 rounded-2xl rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[0.9rem] text-[var(--text-primary)] shadow-sm">
-                  {activeTicket.message}
+                  {activeTicket.message?.split('[MSG_')[0]}
                 </div>
                 <span className="text-[0.65rem] text-[var(--text-tertiary)] mt-1 mr-2">{new Date(activeTicket.createdAt).toLocaleString('ar-SA')}</span>
               </div>

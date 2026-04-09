@@ -289,7 +289,7 @@ export default function Support() {
                              {/* Original Message */}
                              <div className="flex flex-col items-start max-w-[90%]">
                                 <div className="p-4 rounded-2xl rounded-tr-none bg-[var(--bg-card)] border border-[var(--border-color)] text-[0.9rem] text-[var(--text-primary)]">
-                                   {ticket.message}
+                                   {ticket.message?.split('[MSG_')[0]}
                                 </div>
                                 <span className="text-[0.6rem] text-[var(--text-tertiary)] mt-1 px-2">{new Date(ticket.createdAt).toLocaleString('ar-SA')}</span>
                              </div>
