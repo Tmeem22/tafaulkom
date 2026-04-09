@@ -113,6 +113,7 @@ export async function POST(request: Request) {
     const providerResponse = await createProviderOrder(service.id, link, quantity);
     
     if (providerResponse.error) {
+      console.error("[Order API] Provider Error:", providerResponse.error);
       const errStr = providerResponse.error.toLowerCase();
       if (errStr.includes('fund') || errStr.includes('balance')) {
         return NextResponse.json({ error: 'عذراً، السيرفرات متوقفة مؤقتاً للصيانة. يرجى المحاولة لاحقاً.' }, { status: 400 });
