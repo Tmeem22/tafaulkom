@@ -56,6 +56,7 @@ export async function createProviderOrder(serviceId: string | number, link: stri
     return { order: Math.floor(Math.random() * 1000000) };
   }
   
+  try {
     const url = new URL(API_URL);
     console.log(`[SMM API] Placing order to ${API_URL}`);
     console.log(`[SMM API] Using Key: ${API_KEY.substring(0, 4)}... (Length: ${API_KEY.length})`);

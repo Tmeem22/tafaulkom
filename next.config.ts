@@ -3,8 +3,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
+  experimental: {
+    // some next.config options might be moved here in v16
   },
   async headers() {
     return [
