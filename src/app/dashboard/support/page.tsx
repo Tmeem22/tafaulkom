@@ -70,11 +70,14 @@ export default function Support() {
     e.preventDefault();
     setSubmitObj({ loading: true, error: '' });
 
+    const needsOrder = subject.includes('تعويض') || subject.includes('إلغاء') || subject.includes('مشكلة في طلب') || subject.includes('Refill') || subject.includes('Cancel');
+    const finalOrderId = needsOrder ? orderId : '';
+
     try {
       const res = await fetch('/api/tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, message, orderId })
+        body: JSON.stringify({ subject, message, orderId: finalOrderId })
       });
       const data = await res.json();
       
@@ -368,7 +371,13 @@ export default function Support() {
                   id="subject-select"
                   className="input-field !py-3 font-bold !bg-[var(--bg-secondary)]" 
                   value={subject} 
-                  onChange={e => setSubject(e.target.value)}
+                  onChange={e => {
+                    const val = e.target.value;
+                    setSubject(val);
+                    if (!(val.includes('تعويض') || val.includes('إلغاء') || val.includes('مشكلة في طلب') || val.includes('Refill') || val.includes('Cancel'))) {
+                      setOrderId('');
+                    }
+                  }}
                 >
                   {subjects.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
