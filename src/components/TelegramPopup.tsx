@@ -58,12 +58,12 @@ export default function TelegramPopup() {
           {/* New Premium Badges */}
           <div className="flex gap-2 justify-center mb-10 flex-wrap" dir="rtl">
             {[
-              { text: 'هدايا أسبوعية', icon: '🎁', color: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
-              { text: 'تحديثات فورية', icon: '⚡', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
-              { text: 'كوبونات حصرية', icon: '🏷️', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' }
+              { text: 'هدايا أسبوعية', icon: '/gift_icon.png', color: 'bg-purple-500/10 text-purple-400 border-purple-500/20' },
+              { text: 'تحديثات فورية', icon: '/bolt_icon.png', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
+              { text: 'كوبونات حصرية', icon: '/tag_icon.png', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' }
             ].map((item, i) => (
-              <span key={i} className={`px-4 py-2 rounded-2xl border ${item.color} text-[0.8rem] font-bold flex items-center gap-2 backdrop-blur-md`}>
-                <span>{item.icon}</span>
+              <span key={i} className={`px-4 py-2 rounded-2xl border ${item.color} text-[0.8rem] font-bold flex items-center gap-2 backdrop-blur-md transition-all hover:scale-105`}>
+                <img src={item.icon} alt={item.text} className="w-6 h-6 object-contain" />
                 {item.text}
               </span>
             ))}
