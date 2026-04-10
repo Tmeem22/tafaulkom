@@ -331,20 +331,20 @@ export default function AccountPage() {
                   <p className="text-[1.4rem] font-black text-[var(--brand-primary)]" dir="rtl">{user?.balance?.toFixed(2) || '0.00'} ر.س</p>
                </div>
 
-               {/* Points Card - Sapphire Royal Style */}
-               <div className="bg-gradient-to-br from-[#1a1c2e] to-[#0f111a] p-4 rounded-2xl border border-indigo-500/20 shadow-[0_4px_20px_rgba(79,70,229,0.1)] group hover:border-indigo-500/50 transition-all">
-                  <p className="text-[0.65rem] font-black text-indigo-400 uppercase mb-1 flex justify-between">
-                    نقاط تفاعلكم
-                    <span className="animate-pulse">✨</span>
-                  </p>
-                  <div className="flex items-end gap-2">
-                    <p className="text-[1.4rem] font-black text-white" dir="rtl">{(user as any)?.points || 0}</p>
-                    <span className="text-[0.7rem] font-bold text-indigo-300/60 mb-1">نقطة</span>
-                  </div>
-                  <button className="mt-3 w-full py-2 bg-indigo-600/10 border border-indigo-500/30 text-indigo-400 text-[0.75rem] font-black rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
-                    استبدال النقاط
-                  </button>
-               </div>
+                {/* Points Card - Sapphire Royal Style */}
+                <div className="bg-gradient-to-br from-[#1a1c2e] to-[#0f111a] p-4 rounded-2xl border border-indigo-500/20 shadow-[0_4px_20px_rgba(79,70,229,0.1)] group hover:border-indigo-500/50 transition-all">
+                   <p className="text-[0.65rem] font-black text-indigo-400 uppercase mb-1 flex justify-between">
+                     نقاط تفاعلكم
+                     <span className="animate-pulse">✨</span>
+                   </p>
+                   <div className="flex items-end gap-2">
+                     <p className="text-[1.4rem] font-black text-white" dir="rtl">{(user as any)?.points || 0}</p>
+                     <span className="text-[0.7rem] font-bold text-indigo-300/60 mb-1">نقطة</span>
+                   </div>
+                   <Link href="/dashboard/points" className="mt-3 block w-full py-2 bg-indigo-600/10 border border-indigo-500/30 text-indigo-400 text-[0.75rem] font-black rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm text-center no-underline">
+                     استبدال النقاط
+                   </Link>
+                </div>
 
                {/* Account Tier Card */}
                <div className="bg-yellow-400 p-4 rounded-2xl border-none shadow-lg shadow-yellow-400/10">

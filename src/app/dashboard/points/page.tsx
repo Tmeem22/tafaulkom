@@ -18,7 +18,9 @@ export default function PointsPage() {
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [videoUrl, setVideoUrl] = useState('');
+  const [exchangeAmount, setExchangeAmount] = useState(500);
   const [submitting, setSubmitting] = useState(false);
+  const [isExchanging, setIsExchanging] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -30,6 +32,7 @@ export default function PointsPage() {
       const taskData = await tRes.json();
       setUser(userData);
       setTasks(taskData);
+      if (userData.points >= 500) setExchangeAmount(userData.points);
     } catch (e) {
       console.error(e);
     } finally {
@@ -40,6 +43,32 @@ export default function PointsPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleExchange = async () => {
+     if (exchangeAmount < 500) {
+        showToast('الحد الأدنى للاستبدال هو 500 نقطة', 'error');
+        return;
+     }
+     setIsExchanging(true);
+     try {
+        const res = await fetch('/api/user/points-exchange', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ amount: exchangeAmount })
+        });
+        const data = await res.json();
+        if (res.ok) {
+           showToast('تم استبدال النقاط وإضافة الرصيد بنجاح! 🎉', 'success');
+           fetchData();
+        } else {
+           showToast(data.error || 'فشل في عملية الاستبدال', 'error');
+        }
+     } catch (e) {
+        showToast('حدث خطأ في الاتصال', 'error');
+     } finally {
+        setIsExchanging(false);
+     }
+  };
 
   const handleSubmitVideo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,8 +110,24 @@ export default function PointsPage() {
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 md:mr-[250px] p-6 lg:p-12">
-          <div className="max-w-[1000px] mx-auto">
+        <div className="flex-1 md:mr-[250px] p-6 lg:p-12 relative">
+          
+          {/* Top Right Floating Stats */}
+          <div className="absolute top-6 left-6 md:left-12 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-700 z-10">
+             <div className="bg-[var(--bg-card)] p-3 px-5 rounded-2xl border border-[var(--border-color)] shadow-xl flex items-center gap-3">
+                <div className="flex flex-col text-left" dir="ltr">
+                   <span className="text-[0.6rem] font-bold text-[var(--text-secondary)] uppercase">Balance</span>
+                   <span className="text-[0.9rem] font-black text-emerald-500">{user?.balance?.toFixed(2) || '0.00'} $</span>
+                </div>
+                <div className="w-[1px] h-8 bg-[var(--border-color)] mx-1"></div>
+                <div className="flex flex-col text-left" dir="ltr">
+                   <span className="text-[0.6rem] font-bold text-[var(--text-secondary)] uppercase">Points</span>
+                   <span className="text-[0.9rem] font-black text-amber-500">{user?.points || 0} ✨</span>
+                </div>
+             </div>
+          </div>
+
+          <div className="max-w-[1000px] mx-auto pt-10 md:pt-0">
             <div className="mb-10">
               <h1 className="text-[2.5rem] font-black text-[var(--text-primary)] mb-4 flex items-center gap-4">
                 <img src="https://img.icons8.com/fluency/256/coins.png" width={56} height={56} alt="Points" />
@@ -101,10 +146,31 @@ export default function PointsPage() {
                   <p className="text-[4rem] font-black leading-none">{user?.points || 0}</p>
                   <p className="mt-4 text-[0.9rem] bg-white/20 inline-block px-4 py-1 rounded-full backdrop-blur-sm">نقطة مكافأة متوفرة</p>
                </div>
-               <div className="relative z-10">
-                  <button className="px-10 py-5 bg-white text-[var(--brand-primary)] font-black rounded-2xl shadow-2xl hover:scale-105 transition-all active:scale-95 disabled:opacity-50" disabled={(user?.points || 0) < 500}>
-                    استبدال النقاط الآن 🪙
-                  </button>
+               <div className="relative z-10 w-full md:w-auto">
+                  <div className="bg-white/10 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/20 shadow-inner flex flex-col gap-4">
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[0.7rem] font-black opacity-70 mb-1">عدد النقاط المراد استبدالها:</label>
+                      <input 
+                        type="number" 
+                        min="500" 
+                        step="100"
+                        value={exchangeAmount}
+                        onChange={(e) => setExchangeAmount(parseInt(e.target.value))}
+                        className="bg-white text-black p-4 rounded-2xl w-full md:w-48 font-black text-center text-[1.2rem] outline-none"
+                      />
+                    </div>
+                    <div className="flex justify-between items-center px-2">
+                       <span className="text-[0.8rem] font-bold opacity-80">سوف تحصل على:</span>
+                       <span className="text-[1.1rem] font-black">{(exchangeAmount * 0.001).toFixed(2)} $</span>
+                    </div>
+                    <button 
+                      onClick={handleExchange}
+                      disabled={isExchanging || (user?.points || 0) < 500 || exchangeAmount > (user?.points || 0)}
+                      className="w-full py-4 bg-white text-[var(--brand-primary)] font-black rounded-2xl shadow-xl hover:scale-105 transition-all active:scale-95 disabled:opacity-50"
+                    >
+                      {isExchanging ? 'جاري الاستبدال...' : 'استبدال النقاط 🪙'}
+                    </button>
+                  </div>
                </div>
             </div>
 
