@@ -14,6 +14,7 @@ const sideLinks = [
   { label: 'نظام النقاط', href: '/dashboard/points', icon: 'https://img.icons8.com/fluency/256/coins.png' },
   { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/fluency/256/headset.png' },
   { label: 'التسويق بالعمولة', href: '/dashboard/affiliate', icon: 'https://img.icons8.com/fluency/256/share.png' },
+  { label: 'تقاريري', href: '/dashboard/analytics', icon: 'https://img.icons8.com/fluency/256/combo-chart.png' },
   { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
 ];
 

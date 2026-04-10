@@ -115,6 +115,9 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-2">
+            <Link href="/bundles" className="px-4 py-2 rounded-[var(--radius-md)] text-[var(--brand-primary)] bg-[var(--brand-primary)]/10 no-underline text-[0.9rem] font-bold transition-all hover:bg-[var(--brand-primary)] hover:text-white flex items-center gap-1">
+              <span className="text-[1.1rem]">🎁</span> الباقات
+            </Link>
             <Link href="/services" className="px-4 py-2 rounded-[var(--radius-md)] text-[var(--text-secondary)] no-underline text-[0.9rem] font-semibold transition-all hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]">
               خدماتنا
             </Link>

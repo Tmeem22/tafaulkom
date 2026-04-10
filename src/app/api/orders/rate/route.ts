@@ -42,9 +42,35 @@ export async function POST(request: Request) {
       },
     });
 
+    // Auto-create Testimonial for 4-5 star positive reviews
+    if (rating >= 4 && review && review.length > 10) {
+      await prisma.testimonial.create({
+        data: {
+          name: user.username.substring(0, 3) + '***',
+          text: review,
+          rating: Number(rating),
+        }
+      });
+    }
+
+    // Award 10 bonus points for reviewing
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: user.id },
+        data: { points: { increment: 10 } }
+      }),
+      prisma.notification.create({
+        data: {
+          userId: user.id,
+          title: 'شكراً لتقييمك! ⭐',
+          message: `تم إضافة 10 نقاط مكافأة لحسابك كشكر على تقييمك.`
+        }
+      })
+    ]);
+
     return NextResponse.json({ 
       success: true, 
-      message: 'شكراً لتقييمك!',
+      message: 'شكراً لتقييمك! حصلت على 10 نقاط مكافأة ⭐',
       order: updatedOrder 
     });
 

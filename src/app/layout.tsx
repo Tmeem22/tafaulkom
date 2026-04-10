@@ -3,6 +3,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import TelegramPopup from "@/components/TelegramPopup";
 import Notification from "@/components/Notification";
+import SpinWheel from "@/components/SpinWheel";
+import FlashSale from "@/components/FlashSale";
 
 export const metadata: Metadata = {
   title: "تفاعلكم - أرخص وأسرع منصة خدمات SMM عربية",
@@ -37,6 +39,8 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <ThemeProvider>
           {children}
+          <FlashSale />
+          <SpinWheel />
           <TelegramPopup />
           <Notification />
         </ThemeProvider>

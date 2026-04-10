@@ -156,3 +156,24 @@ model SecurityLog {
   userId    String?
   createdAt DateTime @default(now())
 }
+
+model Coupon {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  discountType  String   @default("percentage") // "percentage" or "fixed"
+  discountValue Float
+  minOrder      Float    @default(0)
+  maxUses       Int      @default(100)
+  usedCount     Int      @default(0)
+  expiresAt     DateTime?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model SpinResult {
+  id        String   @id @default(cuid())
+  userId    String
+  prize     String
+  value     Float
+  createdAt DateTime @default(now())
+}
