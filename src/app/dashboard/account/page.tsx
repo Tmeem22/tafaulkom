@@ -79,19 +79,30 @@ export default function AccountPage() {
     })
     .finally(() => setLoading(false));
 
-    // Listen for Claim Event from Navbar
-    const handleClaimEvent = () => {
-      const balance = user?.balance || 0;
-      const eligibleTier = [...TIERS].reverse().find(t => balance >= t.spend && t.spend > 0);
-      if (eligibleTier) {
-        setUnlockedTier(eligibleTier);
-        playCelebrate();
-        localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'true');
+    // Listen for Claim Event (Custom Event & LocalStorage fallback)
+    const handleClaimCheck = () => {
+      const pendingClaim = localStorage.getItem('pending_reward_claim');
+      if (pendingClaim && user) {
+        const balance = user.balance || 0;
+        const eligibleTier = [...TIERS].reverse().find(t => balance >= t.spend && t.spend > 0);
+        if (eligibleTier) {
+          setUnlockedTier(eligibleTier);
+          playCelebrate();
+          localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'true');
+          localStorage.removeItem('pending_reward_claim'); // Cleanup
+        }
       }
     };
 
-    window.addEventListener('reward_claimed', handleClaimEvent);
-    return () => window.removeEventListener('reward_claimed', handleClaimEvent);
+    // Check immediately on load/user change
+    handleClaimCheck();
+
+    window.addEventListener('reward_claimed', handleClaimCheck);
+    window.addEventListener('storage', handleClaimCheck); // Sync across tabs
+    return () => {
+      window.removeEventListener('reward_claimed', handleClaimCheck);
+      window.removeEventListener('storage', handleClaimCheck);
+    };
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
