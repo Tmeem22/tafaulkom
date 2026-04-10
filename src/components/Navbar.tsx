@@ -143,9 +143,18 @@ export default function Navbar() {
                     {/* Notifications Dropdown */}
                     {showNotifications && (
                       <div className="absolute top-full right-0 mt-3 w-72 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[20px] shadow-[var(--shadow-lg)] z-50 overflow-hidden backdrop-blur-md">
-                        <div className="p-4 border-b border-[var(--border-color)] flex justify-between items-center text-[0.9rem] font-bold text-[var(--text-primary)]">
+                        <div className="p-4 border-b border-[var(--border-color)] flex justify-between items-center text-[0.8rem] font-bold text-[var(--text-primary)] bg-white/5">
                           <span>التنبيهات</span>
-                          <span className="text-[0.7rem] bg-[var(--bg-secondary)] px-2 py-0.5 rounded-full text-[var(--text-secondary)]">{notifications.length} إجمالي</span>
+                          <button 
+                            onClick={async () => {
+                              await fetch('/api/notifications', { method: 'DELETE' });
+                              setNotifications([]);
+                              setShowNotifications(false);
+                            }}
+                            className="text-emerald-400 hover:text-emerald-300 transition-colors text-[0.7rem] font-black"
+                          >
+                            استلم الكل ✅
+                          </button>
                         </div>
                         <div className="max-h-80 overflow-y-auto">
                           {notifications.length > 0 ? (
@@ -199,8 +208,13 @@ export default function Navbar() {
                       </div>
                     )}
                   </div>
-                  <Link href="/dashboard" className="p-1 rounded-full border-2 border-[var(--brand-primary)] overflow-hidden hover:scale-105 transition-all shadow-[var(--shadow-sm)]">
-                    <img src="https://img.icons8.com/papercut/256/user-male-circle.png" width={32} height={32} alt="الملف الشخصي" className="bg-[var(--bg-secondary)]" />
+                  <Link href="/dashboard/account" className="relative p-1 rounded-full border-2 border-[var(--brand-primary)] overflow-visible hover:scale-105 transition-all shadow-[var(--shadow-sm)]">
+                    <img src="https://img.icons8.com/papercut/256/user-male-circle.png" width={32} height={32} alt="الملف الشخصي" className="bg-[var(--bg-secondary)] rounded-full" />
+                    {notifications.length > 0 && (
+                      <div className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-[var(--bg-primary)] animate-bounce shadow-lg">
+                        1
+                      </div>
+                    )}
                   </Link>
                 </div>
               ) : (

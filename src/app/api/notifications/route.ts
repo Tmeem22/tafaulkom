@@ -23,28 +23,26 @@ export async function GET() {
   }
 }
 
-// POST: Send a notification (Admin only)
+// POST: Send a notification
 export async function POST(req: Request) {
   try {
     const { userId, title, message } = await req.json();
     const user = await getUserFromSession();
     
-    // Allow if user is admin OR if user is sending to themselves
     if (!user || (user.role !== 'ADMIN' && user.id !== userId)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    if (!userId || !message) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    // Anti-Spam: Check if a notification with this title/message already exists for this user
+    const existing = await prisma.notification.findFirst({
+      where: { userId, title, message }
+    });
+    if (existing) {
+      return NextResponse.json(existing); // Return existing instead of creating duplicate
     }
 
-    // Handle 'ALL' or specific userId
     const notification = await prisma.notification.create({
-      data: {
-        userId,
-        title,
-        message,
-      },
+      data: { userId, title, message },
     });
 
     return NextResponse.json(notification);
@@ -54,46 +52,27 @@ export async function POST(req: Request) {
   }
 }
 
-// PATCH: Mark all as read
-export async function PATCH() {
-  try {
-    const user = await getUserFromSession();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    await prisma.notification.updateMany({
-      where: { userId: user.id, isRead: false },
-      data: { isRead: true },
-    });
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Mark read notifications error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}
-
-// DELETE: Remove a notification
+// DELETE: Remove a notification or all notifications
 export async function DELETE(req: Request) {
   try {
-    const { id } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { id } = body;
     const user = await getUserFromSession();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const notification = await prisma.notification.findUnique({
-      where: { id }
-    });
-
-    if (!notification || notification.userId !== user.id) {
-       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (id) {
+      // Delete specific
+      await prisma.notification.delete({
+        where: { id, userId: user.id }
+      });
+    } else {
+      // Bulk Delete (Delete All for user)
+      await prisma.notification.deleteMany({
+        where: { userId: user.id }
+      });
     }
-
-    await prisma.notification.delete({
-      where: { id }
-    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
