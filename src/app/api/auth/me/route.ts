@@ -17,7 +17,8 @@ export async function GET() {
         username: user.username,
         email: user.email,
         role: user.role,
-        balance: user.balance
+        balance: user.balance,
+        points: (user as any).points || 0
       }
     });
   } catch (error) {
