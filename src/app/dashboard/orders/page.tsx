@@ -174,6 +174,7 @@ export default function Orders() {
             </Link>
           </div>
 
+          <div className="flex flex-col gap-2">
             {sideLinks.map((link, i) => (
               <Link key={i} href={link.href} className={`p-3.5 px-5 rounded-[14px] no-underline flex items-center gap-4 text-[0.9rem] font-bold transition-all duration-300 ${
                 link.active ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]' : 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]'

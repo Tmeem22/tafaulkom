@@ -126,10 +126,9 @@ export default function Navbar() {
                        }}>
                     <img src="https://img.icons8.com/fluency/256/bell.png" width={22} height={22} alt="التنبيهات" />
                     {unreadCount > 0 && (
-                      <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-[var(--brand-danger)] text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-[var(--bg-card)] shadow-[0_0_8px_rgba(239,68,68,0.6)] animate-pulse px-1">
-                        {unreadCount}
                       </span>
                     )}
+                  </div>
 
                   {/* Home Button */}
                   <Link href="/" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl flex items-center gap-2 hover:bg-white/10 transition-all no-underline">
@@ -194,7 +193,7 @@ export default function Navbar() {
                   <Link href="/login" className="btn-secondary py-2 px-6 text-[0.85rem]">تسجيل الدخول</Link>
                   <Link href="/register" className="btn-primary py-2 px-6 text-[0.85rem]">سجل مجاناً</Link>
                 </div>
-              )}
+              )
             )}
           </div>
 
