@@ -19,6 +19,7 @@ export default function PointsPage() {
   const [loading, setLoading] = useState(true);
   const [videoUrl, setVideoUrl] = useState('');
   const [exchangeAmount, setExchangeAmount] = useState(500);
+  const [submitting, setSubmitting] = useState(false);
   const [isExchanging, setIsExchanging] = useState(false);
   const [hasSupportUnread, setHasSupportUnread] = useState(false);
 
@@ -236,7 +237,7 @@ export default function PointsPage() {
                      <div className="flex flex-col gap-3">
                         <label className="text-[0.9rem] font-black">اختر طريقة الإرسال:</label>
                         <div className="flex gap-4">
-                           <button type="button" onClick={() => setSubmitting(false)} className={`flex-1 p-3 rounded-xl border-2 transition-all font-bold text-[0.8rem] ${!videoUrl.startsWith('file:') ? 'border-amber-500 bg-amber-500/5' : 'border-[var(--border-color)]'}`}>🔗 رابط فيديو</button>
+                           <button type="button" onClick={() => setVideoUrl('')} className={`flex-1 p-3 rounded-xl border-2 transition-all font-bold text-[0.8rem] ${!videoUrl.startsWith('/uploads/') ? 'border-amber-500 bg-amber-500/5' : 'border-[var(--border-color)]'}`}>🔗 رابط فيديو</button>
                            <button type="button" onClick={() => showToast('ميزة الرفع المباشر قيد التحسين، استخدم الرابط حالياً', 'info')} className="flex-1 p-3 rounded-xl border-2 border-[var(--border-color)] font-bold text-[0.8rem] opacity-70">📁 اختيار ملف</button>
                         </div>
                      </div>

@@ -78,9 +78,11 @@ export function middleware(request: NextRequest) {
 // Ensure security logic applies to API and sensitive routes
 export const config = {
   matcher: [
+    '/',
     '/api/:path*',
     '/dashboard/:path*',
     '/admin/:path*',
+    '/my-secret-door-67/:path*',
     '/register',
     '/login',
   ],
