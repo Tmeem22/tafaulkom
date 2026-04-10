@@ -73,3 +73,31 @@ export async function PATCH() {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+// DELETE: Remove a notification
+export async function DELETE(req: Request) {
+  try {
+    const { id } = await req.json();
+    const user = await getUserFromSession();
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const notification = await prisma.notification.findUnique({
+      where: { id }
+    });
+
+    if (!notification || notification.userId !== user.id) {
+       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    await prisma.notification.delete({
+      where: { id }
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Delete notification error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
