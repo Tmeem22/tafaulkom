@@ -55,23 +55,29 @@ export default function AccountPage() {
           const balance = data.user.balance || 0;
           const eligibleTier = [...TIERS].reverse().find(t => balance >= t.spend && t.spend > 0);
           if (eligibleTier) {
+            // Force re-check for high tiers if missing
+            if (balance >= 5000) localStorage.removeItem('celebrated_tier_royal');
+            
             const hasCelebrated = localStorage.getItem(`celebrated_tier_${eligibleTier.id}`);
             if (!hasCelebrated) {
-              fetch('/api/notifications', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  userId: data.user.id,
-                  title: '🎁 هدية: مبروك وصولك لمستوى جديد!',
-                  message: `مبروك! لقد أصبحت الآن في مستوى ${eligibleTier.name}. استلم هديتك الآن بضغط الزر بالأسفل. ✨`
-                })
-              });
-              localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'pending');
-            }
+            fetch('/api/notifications', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                userId: data.user.id,
+                title: '🎁 هدية: مبروك وصولك لمستوى جديد!',
+                message: `مبروك! لقد أصبحت الآن في مستوى ${eligibleTier.name}. استلم هديتك الآن بضغط الزر بالأسفل. ✨`
+              })
+            }).then(res => {
+              if (res.ok) {
+                localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'pending');
+              }
+            });
           }
         }
-      })
-      .finally(() => setLoading(false));
+      }
+    })
+    .finally(() => setLoading(false));
 
     // Listen for Claim Event from Navbar
     const handleClaimEvent = () => {
