@@ -126,7 +126,7 @@ export default function PointsPage() {
 
                 <div className="card p-6 border-r-4 border-blue-500 space-y-4">
                   <div className="flex items-center gap-3">
-                    <img src="https://img.icons8.com/fluency/256/video.png" width={32} />
+                    <img src="https://img.icons8.com/fluency/256/video.png" width={32} alt="Video content creation icon" />
                     <h3 className="font-black text-[1.1rem]">2. صانع المحتوى (250 نقطة)</h3>
                   </div>
                   <p className="text-[0.85rem] text-[var(--text-secondary)] leading-relaxed">
