@@ -68,8 +68,8 @@ export default function AccountPage() {
               <div className="relative w-full aspect-video flex items-center justify-center overflow-hidden rounded-[30px] border border-white/5 bg-gradient-to-t from-white/5 to-transparent shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
                  {/* Parallax speed lines for depth */}
                  <div className="absolute inset-x-0 h-[300%] w-[1px] bg-white/10 left-1/4 animate-speed-line"></div>
-                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-[var(--brand-primary)]/20 left-1/2 animate-speed-line" style={{ animationDelay: '0.3s' }}></div>
-                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-white/10 left-3/4 animate-speed-line" style={{ animationDelay: '0.6s' }}></div>
+                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-[var(--brand-primary)]/20 left-1/2 animate-speed-line animate-delay-300"></div>
+                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-white/10 left-3/4 animate-speed-line animate-delay-600"></div>
 
                  <img 
                     src="/running_away.png" 
