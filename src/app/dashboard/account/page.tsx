@@ -60,35 +60,36 @@ export default function AccountPage() {
   return (
     <div className="max-w-[800px] mx-auto animate-fade-in-up relative">
       
-      {/* 🚀 Saudi Run-Away Motion Graphic */}
+      {/* 👾 Saudi Pixel-Art Motion Graphic */}
       {saving && (
-        <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-[#05060f]/95 backdrop-blur-3xl animate-in fade-in duration-700">
-           <div className="flex flex-col items-center gap-10 max-w-[440px] w-full text-center px-8">
+        <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-[#07080a] animate-in fade-in duration-500">
+           <div className="flex flex-col items-center gap-10 max-w-[400px] w-full text-center px-10">
               
-              <div className="relative w-full aspect-video flex items-center justify-center overflow-hidden rounded-[30px] border border-white/5 bg-gradient-to-t from-white/5 to-transparent shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
-                 {/* Parallax speed lines for depth */}
-                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-white/10 left-1/4 animate-speed-line"></div>
-                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-[var(--brand-primary)]/20 left-1/2 animate-speed-line animate-delay-300"></div>
-                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-white/10 left-3/4 animate-speed-line animate-delay-600"></div>
+              <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden rounded-[40px] border-4 border-white/10 bg-black/40 shadow-[0_0_50px_rgba(108,60,225,0.3)]">
+                 {/* Retro speed lines */}
+                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/pixel-weave.png')] opacity-20"></div>
+                 <div className="absolute inset-x-0 h-[4px] bg-white/5 left-1/4 animate-speed-line"></div>
+                 <div className="absolute inset-x-0 h-[4px] bg-[var(--brand-primary)]/40 left-1/2 animate-speed-line animate-delay-300"></div>
+                 <div className="absolute inset-x-0 h-[4px] bg-white/5 left-3/4 animate-speed-line animate-delay-600"></div>
 
                  <img 
-                    src="/running_away.png" 
-                    className="relative z-10 w-[320px] h-[320px] object-contain animate-run-away drop-shadow-[0_25px_60px_rgba(0,0,0,0.9)]" 
-                    alt="جاري الانطلاق..." 
+                    src="/pixel_saudi.png" 
+                    className="relative z-10 w-[300px] h-[300px] object-contain animate-pixel-run image-render-pixel" 
+                    alt="Pixel Running..." 
                  />
                  
-                 {/* Portal Glow */}
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[var(--brand-primary)]/30 blur-[120px] rounded-full"></div>
+                 {/* Retro Scanline Effect */}
+                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-full w-full pointer-events-none animate-scanline"></div>
               </div>
 
               <div className="space-y-4">
-                 <h2 className="text-[2rem] font-black text-white tracking-tight">جاري معالجة طلبك.. 🚀</h2>
-                 <p className="text-white/40 text-[1.1rem] font-bold">بطلنا في طريقه لتحديث بياناتك بأمان</p>
+                 <h2 className="text-[2rem] font-black text-white tracking-widest uppercase" style={{ fontFamily: 'monospace' }}>UPDATING... 👾</h2>
+                 <p className="text-[var(--brand-primary)] text-[1.1rem] font-black tracking-tight">جاري تشغيل الطاقة البكسلية لحفظ بياناتك</p>
                  
                  <div className="flex justify-center gap-4 pt-4">
-                    <div className="w-4 h-4 rounded-full bg-[var(--brand-primary)] animate-pulse shadow-[0_0_25px_var(--brand-primary)]"></div>
-                    <div className="w-4 h-4 rounded-full bg-[var(--brand-primary)] animate-pulse shadow-[0_0_25px_var(--brand-primary)] animate-delay-200"></div>
-                    <div className="w-4 h-4 rounded-full bg-[var(--brand-primary)] animate-pulse shadow-[0_0_25px_var(--brand-primary)] animate-delay-400"></div>
+                    <div className="w-4 h-4 rounded-none bg-[var(--brand-primary)] animate-pulse"></div>
+                    <div className="w-4 h-4 rounded-none bg-[var(--brand-primary)] animate-pulse animate-delay-200"></div>
+                    <div className="w-4 h-4 rounded-none bg-[var(--brand-primary)] animate-pulse animate-delay-400"></div>
                  </div>
               </div>
 

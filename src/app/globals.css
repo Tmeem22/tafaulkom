@@ -388,6 +388,26 @@ body {
 .animate-run-away { animation: run-away 1.2s ease-in-out infinite alternate; }
 .animate-speed-line { animation: speed-line 0.5s linear infinite; }
 
+/* 👾 Retro Pixel Animations */
+@keyframes pixel-run {
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(0.9) translateY(-10px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-pixel-run { animation: pixel-run 0.4s steps(2) infinite; }
+.animate-scanline { animation: scanline 4s linear infinite; }
+.image-render-pixel { 
+  image-rendering: pixelated; 
+  image-rendering: -moz-crisp-edges; 
+  image-rendering: crisp-edges; 
+}
+
 .marquee-track {
   display: flex;
   width: max-content;
