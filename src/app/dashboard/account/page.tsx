@@ -321,7 +321,7 @@ export default function AccountPage() {
                     <span className="animate-pulse">✨</span>
                   </p>
                   <div className="flex items-end gap-2">
-                    <p className="text-[1.4rem] font-black text-white" dir="rtl">{(user as any)?.points || '1,250'}</p>
+                    <p className="text-[1.4rem] font-black text-white" dir="rtl">{(user as any)?.points || 0}</p>
                     <span className="text-[0.7rem] font-bold text-indigo-300/60 mb-1">نقطة</span>
                   </div>
                   <button className="mt-3 w-full py-2 bg-indigo-600/10 border border-indigo-500/30 text-indigo-400 text-[0.75rem] font-black rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
