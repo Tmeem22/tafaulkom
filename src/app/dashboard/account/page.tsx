@@ -60,36 +60,35 @@ export default function AccountPage() {
   return (
     <div className="max-w-[800px] mx-auto animate-fade-in-up relative">
       
-      {/* 🚀 Premium Saudi Motion Graphic Loading */}
+      {/* 🚀 Saudi Run-Away Motion Graphic */}
       {saving && (
-        <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-[#0a0a0c]/90 backdrop-blur-xl animate-in fade-in duration-500">
-           <div className="flex flex-col items-center gap-8 max-w-[400px] w-full text-center px-6">
+        <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-[#05060f]/95 backdrop-blur-3xl animate-in fade-in duration-700">
+           <div className="flex flex-col items-center gap-10 max-w-[440px] w-full text-center px-8">
               
-              <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden rounded-[40px] border border-white/5 bg-gradient-to-b from-white/5 to-transparent">
-                 {/* Moving background lines to simulate speed */}
-                 <div className="absolute inset-x-0 h-[2px] bg-white/10 top-1/4 -translate-x-full animate-progress-fast"></div>
-                 <div className="absolute inset-x-0 h-[2px] bg-[var(--brand-primary)]/20 top-1/2 -translate-x-full animate-progress-fast animate-delay-200"></div>
-                 <div className="absolute inset-x-0 h-[2px] bg-white/10 top-3/4 -translate-x-full animate-progress-fast animate-delay-400"></div>
+              <div className="relative w-full aspect-video flex items-center justify-center overflow-hidden rounded-[30px] border border-white/5 bg-gradient-to-t from-white/5 to-transparent shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
+                 {/* Parallax speed lines for depth */}
+                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-white/10 left-1/4 animate-speed-line"></div>
+                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-[var(--brand-primary)]/20 left-1/2 animate-speed-line" style={{ animationDelay: '0.3s' }}></div>
+                 <div className="absolute inset-x-0 h-[300%] w-[1px] bg-white/10 left-3/4 animate-speed-line" style={{ animationDelay: '0.6s' }}></div>
 
                  <img 
-                    src="/running_saudi.png" 
-                    className="relative z-10 w-[280px] h-[280px] object-contain animate-float drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]" 
-                    alt="جاري الركض..." 
+                    src="/running_away.png" 
+                    className="relative z-10 w-[320px] h-[320px] object-contain animate-run-away drop-shadow-[0_25px_60px_rgba(0,0,0,0.9)]" 
+                    alt="جاري الانطلاق..." 
                  />
                  
-                 {/* Glow effect */}
-                 <div className="absolute inset-0 bg-[var(--brand-primary)]/10 blur-[100px] rounded-full"></div>
+                 {/* Portal Glow */}
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[var(--brand-primary)]/30 blur-[120px] rounded-full"></div>
               </div>
 
-              <div className="mt-4">
-                 <h2 className="text-[1.8rem] font-black text-white mb-2 leading-tight">لحظات قليلة.. 🏃‍♂️</h2>
-                 <p className="text-white/60 text-[1rem] font-bold mb-6">جاري حفظ بياناتك في خوادمنا المؤمنة</p>
+              <div className="space-y-4">
+                 <h2 className="text-[2rem] font-black text-white tracking-tight">جاري معالجة طلبك.. 🚀</h2>
+                 <p className="text-white/40 text-[1.1rem] font-bold">بطلنا في طريقه لتحديث بياناتك بأمان</p>
                  
-                 {/* Progress dots animation */}
-                 <div className="flex justify-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]"></div>
-                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)] animate-delay-200"></div>
-                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)] animate-delay-400"></div>
+                 <div className="flex justify-center gap-4 pt-4">
+                    <div className="w-4 h-4 rounded-full bg-[var(--brand-primary)] animate-pulse shadow-[0_0_25px_var(--brand-primary)]"></div>
+                    <div className="w-4 h-4 rounded-full bg-[var(--brand-primary)] animate-pulse shadow-[0_0_25px_var(--brand-primary)] animate-delay-200"></div>
+                    <div className="w-4 h-4 rounded-full bg-[var(--brand-primary)] animate-pulse shadow-[0_0_25px_var(--brand-primary)] animate-delay-400"></div>
                  </div>
               </div>
 
