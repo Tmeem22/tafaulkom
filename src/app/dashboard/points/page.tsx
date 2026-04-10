@@ -94,7 +94,7 @@ export default function PointsPage() {
             {/* Current Balance Card */}
             <div className="card p-8 bg-[var(--gradient-primary)] text-white rounded-[32px] shadow-xl mb-12 flex flex-col md:flex-row justify-between items-center gap-8 relative overflow-hidden">
                <div className="absolute -right-20 -bottom-20 opacity-10 rotate-12">
-                  <img src="https://img.icons8.com/fluency/512/coins.png" width={300} alt="bg" />
+                  <img src="https://img.icons8.com/fluency/512/coins.png" width={300} alt="Background decoration coin" />
                </div>
                <div className="relative z-10 text-center md:text-right">
                   <p className="text-white/80 font-bold uppercase tracking-widest mb-2 text-[0.8rem]">رصيد نقاطك الحالي</p>
@@ -115,7 +115,7 @@ export default function PointsPage() {
                 
                 <div className="card p-6 border-r-4 border-emerald-500 space-y-4">
                   <div className="flex items-center gap-3">
-                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={32} />
+                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={32} alt="Cart icon" />
                     <h3 className="font-black text-[1.1rem]">1. عبر الطلبات (تلقائياً)</h3>
                   </div>
                   <ul className="text-[0.9rem] text-[var(--text-secondary)] font-bold space-y-2 list-none p-0">
