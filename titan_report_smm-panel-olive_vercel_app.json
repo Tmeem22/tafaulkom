@@ -1,0 +1,88 @@
+{
+    "metadata": {
+        "target": "https://smm-panel-olive.vercel.app",
+        "engine": "Titan V5.0",
+        "duration": 36.0,
+        "pages_scanned": [
+            "https://smm-panel-olive.vercel.app/terms#refund",
+            "https://smm-panel-olive.vercel.app/services",
+            "https://smm-panel-olive.vercel.app/register?serviceId=Snapchat",
+            "https://smm-panel-olive.vercel.app/register?serviceId=TikTok",
+            "https://smm-panel-olive.vercel.app/dashboard",
+            "https://smm-panel-olive.vercel.app/register?serviceId=Telegram",
+            "https://smm-panel-olive.vercel.app/blog",
+            "https://smm-panel-olive.vercel.app/register?serviceId=Instagram",
+            "https://smm-panel-olive.vercel.app",
+            "https://smm-panel-olive.vercel.app/terms#disclaimer",
+            "https://smm-panel-olive.vercel.app/register?serviceId=YouTube",
+            "https://smm-panel-olive.vercel.app/login",
+            "https://smm-panel-olive.vercel.app/register?serviceId=Twitter",
+            "https://smm-panel-olive.vercel.app/how-it-works",
+            "https://smm-panel-olive.vercel.app/terms",
+            "https://smm-panel-olive.vercel.app/register",
+            "https://smm-panel-olive.vercel.app/",
+            "https://smm-panel-olive.vercel.app/terms#privacy"
+        ]
+    },
+    "technologies": [],
+    "threats": [
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: www.vercel.app",
+            "timestamp": 1775815638.065467
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: dev.vercel.app",
+            "timestamp": 1775815638.2621994
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: test.vercel.app",
+            "timestamp": 1775815638.3891592
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: api.vercel.app",
+            "timestamp": 1775815638.5173223
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: admin.vercel.app",
+            "timestamp": 1775815638.6416192
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: mail.vercel.app",
+            "timestamp": 1775815638.8449452
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: staging.vercel.app",
+            "timestamp": 1775815639.03176
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: portal.vercel.app",
+            "timestamp": 1775815639.240183
+        },
+        {
+            "severity": "MED",
+            "message": "Discovered Active Subdomain: secure.vercel.app",
+            "timestamp": 1775815639.4037728
+        }
+    ],
+    "infrastructure": {
+        "subdomains": [
+            "admin.vercel.app",
+            "mail.vercel.app",
+            "secure.vercel.app",
+            "www.vercel.app",
+            "dev.vercel.app",
+            "portal.vercel.app",
+            "test.vercel.app",
+            "api.vercel.app",
+            "staging.vercel.app"
+        ]
+    }
+}

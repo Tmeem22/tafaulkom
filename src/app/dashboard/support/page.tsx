@@ -48,7 +48,7 @@ export default function Support() {
     try {
       const uRes = await fetch('/api/user/me');
       const uData = await uRes.json();
-      if (uData.user) setUser(uData.user);
+      if (uData.id) setUser(uData);
 
       const res = await fetch('/api/tickets');
       const data = await res.json();

@@ -30,10 +30,13 @@ export function middleware(request: NextRequest) {
   // Helper to log security threats asynchronously
   const logThreat = async (reason: string, severity: string = 'WARNING') => {
     try {
-      // In Next.js middleware, we use fetch with absolute URLs
+      const secret = process.env.SECURITY_SECRET || 'internal-secret-123';
       fetch(`${request.nextUrl.origin}/api/admin/security/log`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-security-secret': secret
+        },
         body: JSON.stringify({ ip, event: `Blocked Request: ${reason} (${pathname})`, severity, userAgent }),
       }).catch(() => {});
     } catch (e) {}

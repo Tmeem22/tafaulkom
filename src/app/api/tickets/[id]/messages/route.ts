@@ -68,15 +68,16 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     if (!ticket) return NextResponse.json({ error: 'Ticket not found' }, { status: 404 });
 
-    // Append to existing message
-    const updatedMessageContent = `${ticket.message}\n[MSG_${user.role}]${replyText}`;
+    // Determine the role based on ownership
+    const senderRole = user.id === ticket.userId ? 'USER' : 'ADMIN';
+    const updatedMessageContent = `${ticket.message}\n[MSG_${senderRole}]${replyText}`;
 
     await prisma.ticket.update({
       where: { id: ticketId },
       data: {
         message: updatedMessageContent,
         updatedAt: new Date(),
-        status: user.role === 'ADMIN' ? 'open' : ticket.status // Admin reply keeps it open or similar
+        status: 'open' // Any reply ensures the ticket is seen as active/open
       }
     });
 

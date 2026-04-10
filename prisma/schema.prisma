@@ -50,6 +50,9 @@ model Order {
   createdAt       DateTime @default(now())
   refillRequested Boolean  @default(false)
   refillStatus    String?   // PENDING, APPROVED, REJECTED
+  rating          Int?
+  review          String?
+  updatedAt       DateTime @updatedAt
   user            User     @relation(fields: [userId], references: [id])
 }
 

@@ -3,6 +3,13 @@ import prisma from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
+    const secret = process.env.SECURITY_SECRET || 'internal-secret-123';
+    const clientSecret = request.headers.get('x-security-secret');
+
+    if (clientSecret !== secret) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { ip, event, severity, userAgent } = await request.json();
 
     await prisma.securityLog.create({
