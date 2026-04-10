@@ -371,6 +371,8 @@ body {
 .animate-bounce-gentle { animation: bounce-gentle 2s ease-in-out infinite; }
 .animate-push-left { animation: push-left 1.2s ease-in-out infinite; }
 .animate-progress-fast { animation: progress-fast 1s linear infinite; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-400 { animation-delay: 0.4s; }
 
 .marquee-track {
   display: flex;

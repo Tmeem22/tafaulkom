@@ -68,8 +68,8 @@ export default function AccountPage() {
               <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden rounded-[40px] border border-white/5 bg-gradient-to-b from-white/5 to-transparent">
                  {/* Moving background lines to simulate speed */}
                  <div className="absolute inset-x-0 h-[2px] bg-white/10 top-1/4 -translate-x-full animate-progress-fast"></div>
-                 <div className="absolute inset-x-0 h-[2px] bg-[var(--brand-primary)]/20 top-1/2 -translate-x-full animate-progress-fast" style={{ animationDelay: '0.2s' }}></div>
-                 <div className="absolute inset-x-0 h-[2px] bg-white/10 top-3/4 -translate-x-full animate-progress-fast" style={{ animationDelay: '0.4s' }}></div>
+                 <div className="absolute inset-x-0 h-[2px] bg-[var(--brand-primary)]/20 top-1/2 -translate-x-full animate-progress-fast animate-delay-200"></div>
+                 <div className="absolute inset-x-0 h-[2px] bg-white/10 top-3/4 -translate-x-full animate-progress-fast animate-delay-400"></div>
 
                  <img 
                     src="/running_saudi.png" 
@@ -87,9 +87,9 @@ export default function AccountPage() {
                  
                  {/* Progress dots animation */}
                  <div className="flex justify-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]" style={{ animationDelay: '0s' }}></div>
-                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]"></div>
+                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)] animate-delay-200"></div>
+                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)] animate-delay-400"></div>
                  </div>
               </div>
 
