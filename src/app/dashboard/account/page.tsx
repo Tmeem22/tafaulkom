@@ -20,12 +20,12 @@ export default function AccountPage() {
   };
 
   const TIERS = [
-    { id: 'new', name: 'جديد', spend: 0, discount: '0%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/bronze-medal-3d-icon-download-in-png-blend-fbx-gltf-file-formats--winner-sport-first-pack-icons-5232924.png', perks: [true, false, false, false, false, false] },
-    { id: 'beginner', name: 'مبتدئ', spend: 25, discount: '0.5%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/silver-badge-3d-icon-download-in-png-blend-fbx-gltf-file-formats--quality-guarantee-award-prize-objects-pack-icons-5061619.png', perks: [true, true, true, false, false, false] },
-    { id: 'active', name: 'نشيط', spend: 100, discount: '2%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/gold-trophy-3d-icon-download-in-png-blend-fbx-gltf-file-formats--winner-cup-achievement-best-pack-business-icons-5231908.png', perks: [true, true, true, true, false, false] },
-    { id: 'elite', name: 'مميز', spend: 500, discount: '5%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/vip-3d-icon-download-in-png-blend-fbx-gltf-file-formats--membership-badge-label-exclusive-objects-pack-icons-7798314.png', perks: [true, true, true, true, true, true] },
-    { id: 'vip', name: 'VIP', spend: 2500, discount: '8%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/crown-3d-icon-download-in-png-blend-fbx-gltf-file-formats--birthday-party-celebration-headwear-pack-event-icons-5813334.png', perks: [true, true, true, true, true, true] },
-    { id: 'royal', name: 'ملكي', spend: 5000, discount: '10%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/royal-crown-3d-icon-download-in-png-blend-fbx-gltf-file-formats--gold-jewelry-royalty-jewelry-pack-luxury-icons-9669532.png', perks: [true, true, true, true, true, true] },
+    { id: 'new', name: 'جديد', spend: 0, discount: '0%', icon: '/tier_new.png', perks: [true, false, false, false, false, false] },
+    { id: 'beginner', name: 'مبتدئ', spend: 25, discount: '0.5%', icon: '/tier_beginner.png', perks: [true, true, true, false, false, false] },
+    { id: 'active', name: 'نشيط', spend: 100, discount: '2%', icon: '/tier_active.png', perks: [true, true, true, true, false, false] },
+    { id: 'elite', name: 'مميز', spend: 500, discount: '5%', icon: '/tier_elite.png', perks: [true, true, true, true, true, true] },
+    { id: 'vip', name: 'VIP', spend: 2500, discount: '8%', icon: '/tier_vip.png', perks: [true, true, true, true, true, true] },
+    { id: 'royal', name: 'ملكي', spend: 5000, discount: '10%', icon: '/tier_royal.png', perks: [true, true, true, true, true, true] },
   ];
 
   const handleClaim = () => {
@@ -335,12 +335,12 @@ export default function AccountPage() {
          {/* Grid 6 Tiers - Obsidian Style */}
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {[
-               { id: 'new', name: 'جديد', spend: '0', discount: '0%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/bronze-medal-3d-icon-download-in-png-blend-fbx-gltf-file-formats--winner-sport-first-pack-icons-5232924.png', perks: [true, false, false, false, false, false] },
-               { id: 'beginner', name: 'مبتدئ', spend: '25', discount: '0.5%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/silver-badge-3d-icon-download-in-png-blend-fbx-gltf-file-formats--quality-guarantee-award-prize-objects-pack-icons-5061619.png', perks: [true, true, true, false, false, false] },
-               { id: 'active', name: 'نشيط', spend: '100', discount: '2%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/gold-trophy-3d-icon-download-in-png-blend-fbx-gltf-file-formats--winner-cup-achievement-best-pack-business-icons-5231908.png', perks: [true, true, true, true, false, false] },
-               { id: 'elite', name: 'مميز', spend: '500', discount: '5%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/vip-3d-icon-download-in-png-blend-fbx-gltf-file-formats--membership-badge-label-exclusive-objects-pack-icons-7798314.png', perks: [true, true, true, true, true, true] },
-               { id: 'vip', name: 'VIP', spend: '2,500', discount: '8%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/crown-3d-icon-download-in-png-blend-fbx-gltf-file-formats--birthday-party-celebration-headwear-pack-event-icons-5813334.png', perks: [true, true, true, true, true, true] },
-               { id: 'royal', name: 'ملكي', spend: '5,000', discount: '10%', icon: 'https://cdn3d.iconscout.com/3d/premium/thumb/royal-crown-3d-icon-download-in-png-blend-fbx-gltf-file-formats--gold-jewelry-royalty-jewelry-pack-luxury-icons-9669532.png', perks: [true, true, true, true, true, true] },
+               { id: 'new', name: 'جديد', spend: '0', discount: '0%', icon: '/tier_new.png', perks: [true, false, false, false, false, false] },
+               { id: 'beginner', name: 'مبتدئ', spend: '25', discount: '0.5%', icon: '/tier_beginner.png', perks: [true, true, true, false, false, false] },
+               { id: 'active', name: 'نشيط', spend: '100', discount: '2%', icon: '/tier_active.png', perks: [true, true, true, true, false, false] },
+               { id: 'elite', name: 'مميز', spend: '500', discount: '5%', icon: '/tier_elite.png', perks: [true, true, true, true, true, true] },
+               { id: 'vip', name: 'VIP', spend: '2,500', discount: '8%', icon: '/tier_vip.png', perks: [true, true, true, true, true, true] },
+               { id: 'royal', name: 'ملكي', spend: '5,000', discount: '10%', icon: '/tier_royal.png', perks: [true, true, true, true, true, true] },
             ].map((tier, idx) => (
                <div key={idx} className={`relative overflow-hidden rounded-[2.5rem] p-6 flex flex-col gap-6 shadow-xl border-4 transition-all hover:scale-[1.03] ${tier.id === 'royal' ? 'bg-[#0a0a0c] border-yellow-400 shadow-yellow-400/20' : 'bg-[#0f1118] border-white/5 hover:border-white/10'}`}>
                   <div className={`p-4 rounded-[1.8rem] flex justify-between items-center ${tier.id === 'royal' ? 'bg-yellow-400' : 'bg-white/5'}`}>
