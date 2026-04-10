@@ -60,27 +60,39 @@ export default function AccountPage() {
   return (
     <div className="max-w-[800px] mx-auto animate-fade-in-up relative">
       
-      {/* 🚀 Custom Saving Overlay - Motion Graphic Style */}
+      {/* 🚀 Premium Saudi Motion Graphic Loading */}
       {saving && (
-        <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-[var(--bg-primary)]/80 backdrop-blur-md">
-           <div className="flex flex-col items-center gap-6 animate-in zoom-in duration-300">
-              <div className="relative w-32 h-32 flex items-center justify-center">
-                 <div className="absolute inset-0 bg-[var(--brand-primary)]/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-[#0a0a0c]/90 backdrop-blur-xl animate-in fade-in duration-500">
+           <div className="flex flex-col items-center gap-8 max-w-[400px] w-full text-center px-6">
+              
+              <div className="relative w-full aspect-square flex items-center justify-center overflow-hidden rounded-[40px] border border-white/5 bg-gradient-to-b from-white/5 to-transparent">
+                 {/* Moving background lines to simulate speed */}
+                 <div className="absolute inset-x-0 h-[2px] bg-white/10 top-1/4 -translate-x-full animate-progress-fast"></div>
+                 <div className="absolute inset-x-0 h-[2px] bg-[var(--brand-primary)]/20 top-1/2 -translate-x-full animate-progress-fast" style={{ animationDelay: '0.2s' }}></div>
+                 <div className="absolute inset-x-0 h-[2px] bg-white/10 top-3/4 -translate-x-full animate-progress-fast" style={{ animationDelay: '0.4s' }}></div>
+
                  <img 
-                    src="https://img.icons8.com/fluency/256/running.png" 
-                    className="w-24 h-24 object-contain animate-bounce transition-all" 
-                    style={{ animationDuration: '0.6s' }}
-                    alt="Running..." 
+                    src="/running_saudi.png" 
+                    className="relative z-10 w-[280px] h-[280px] object-contain animate-float drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]" 
+                    alt="جاري الركض..." 
                  />
+                 
+                 {/* Glow effect */}
+                 <div className="absolute inset-0 bg-[var(--brand-primary)]/10 blur-[100px] rounded-full"></div>
               </div>
-              <div className="flex flex-col items-center">
-                 <p className="text-[1.2rem] font-black text-[var(--text-primary)] mb-3">جاري حفظ التغييرات...</p>
-                 <div className="flex gap-2">
-                    <div className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-bounce" style={{ animationDelay: '0s' }}></div>
-                    <div className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+
+              <div className="mt-4">
+                 <h2 className="text-[1.8rem] font-black text-white mb-2 leading-tight">لحظات قليلة.. 🏃‍♂️</h2>
+                 <p className="text-white/60 text-[1rem] font-bold mb-6">جاري حفظ بياناتك في خوادمنا المؤمنة</p>
+                 
+                 {/* Progress dots animation */}
+                 <div className="flex justify-center gap-3">
+                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]" style={{ animationDelay: '0s' }}></div>
+                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-bounce shadow-[0_0_15px_var(--brand-primary)]" style={{ animationDelay: '0.4s' }}></div>
                  </div>
               </div>
+
            </div>
         </div>
       )}
