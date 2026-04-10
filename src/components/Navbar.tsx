@@ -93,13 +93,15 @@ export default function Navbar() {
               className="h-[60px] w-auto object-contain"
             />
             <span className="text-[0.75rem] bg-[var(--brand-primary)] text-white px-3 py-1 rounded-full font-black">العودة للرئيسية</span>
-            {user && (
-              <Link href="/dashboard/account" className="no-underline bg-[var(--bg-secondary)] text-[var(--text-primary)] px-4 py-1.5 rounded-full font-bold text-[0.85rem] flex items-center gap-2 border border-[var(--border-color)] hover:border-[var(--brand-primary)] transition-all">
-                <img src="https://img.icons8.com/fluency/256/manager.png" width={18} height={18} alt="حسابي" />
-                <span>حسابي</span>
-              </Link>
-            )}
           </Link>
+
+          {/* Quick Account Access if Logged in - Fixed Placement */}
+          {user && (
+            <Link href="/dashboard/account" className="no-underline hidden sm:flex items-center gap-2 bg-[var(--bg-secondary)] text-[var(--text-primary)] px-4 py-2 rounded-xl font-bold text-[0.85rem] border border-[var(--border-color)] hover:border-[var(--brand-primary)] transition-all mr-4">
+              <img src="https://img.icons8.com/fluency/256/manager.png" width={20} height={20} alt="حسابي" />
+              <span>إعدادات حسابي</span>
+            </Link>
+          )}
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-2">

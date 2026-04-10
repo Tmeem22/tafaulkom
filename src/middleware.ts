@@ -27,6 +27,14 @@ export function middleware(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
   const userAgent = request.headers.get('user-agent') || '';
 
+  // 1. Auto-redirect Logged-in Users from Landing Page ('/')
+  if (pathname === '/') {
+    const session = request.cookies.get('session');
+    if (session) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+  }
+
   // Helper to log security threats asynchronously
   const logThreat = async (reason: string, severity: string = 'WARNING') => {
     try {
