@@ -208,14 +208,29 @@ export default function Navbar() {
                       </div>
                     )}
                   </div>
-                  <Link href="/dashboard/account" className="relative p-1 rounded-full border-2 border-[var(--brand-primary)] overflow-visible hover:scale-105 transition-all shadow-[var(--shadow-sm)]">
-                    <img src="https://img.icons8.com/papercut/256/user-male-circle.png" width={32} height={32} alt="الملف الشخصي" className="bg-[var(--bg-secondary)] rounded-full" />
+                  <Link href="/dashboard/account" className="relative px-5 py-2.5 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl flex items-center gap-2 hover:bg-[var(--bg-card)] transition-all group overflow-visible">
+                    <img src="https://img.icons8.com/fluency/256/manager.png" width={22} height={22} alt="Account" />
+                    <span className="text-[0.85rem] font-black text-[var(--text-primary)]">إعدادات حسابي</span>
                     {notifications.length > 0 && (
-                      <div className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-[var(--bg-primary)] animate-bounce shadow-lg">
+                      <div className="absolute -top-2 -right-1 bg-red-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-[var(--bg-primary)] animate-bounce shadow-lg z-[60]">
                         1
                       </div>
                     )}
                   </Link>
+
+                  <Link href="/" className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-2 hover:bg-white/10 transition-all no-underline">
+                    <img src="https://img.icons8.com/fluency/256/home.png" width={22} height={22} alt="Home" />
+                    <span className="text-[0.85rem] font-bold text-white">الرئيسية</span>
+                  </Link>
+
+                  <div className="relative group">
+                    <button 
+                      onClick={() => setShowNotifications(!showNotifications)}
+                      className="p-1 rounded-full border-2 border-[var(--brand-primary)] overflow-hidden hover:scale-105 transition-all shadow-[var(--shadow-sm)]"
+                    >
+                      <img src="https://img.icons8.com/papercut/256/user-male-circle.png" width={32} height={32} alt="الملف الشخصي" className="bg-[var(--bg-secondary)] rounded-full" />
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-3 mr-4">
