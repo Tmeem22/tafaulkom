@@ -92,16 +92,7 @@ export default function Navbar() {
               alt="تفاعلكم - SMM Panel" 
               className="h-[60px] w-auto object-contain"
             />
-            <span className="text-[0.75rem] bg-[var(--brand-primary)] text-white px-3 py-1 rounded-full font-black">العودة للرئيسية</span>
           </Link>
-
-          {/* Quick Account Access if Logged in - Fixed Placement */}
-          {user && (
-            <Link href="/dashboard/account" className="no-underline hidden sm:flex items-center gap-2 bg-[var(--bg-secondary)] text-[var(--text-primary)] px-4 py-2 rounded-xl font-bold text-[0.85rem] border border-[var(--border-color)] hover:border-[var(--brand-primary)] transition-all mr-4">
-              <img src="https://img.icons8.com/fluency/256/manager.png" width={20} height={20} alt="حسابي" />
-              <span>إعدادات حسابي</span>
-            </Link>
-          )}
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-2">
@@ -140,77 +131,22 @@ export default function Navbar() {
                       </span>
                     )}
 
-                    {/* Notifications Dropdown */}
-                    {showNotifications && (
-                      <div className="absolute top-full right-0 mt-3 w-72 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[20px] shadow-[var(--shadow-lg)] z-50 overflow-hidden backdrop-blur-md">
-                        <div className="p-4 border-b border-[var(--border-color)] flex justify-between items-center text-[0.8rem] font-bold text-[var(--text-primary)] bg-white/5">
-                          <span>التنبيهات</span>
-                          <button 
-                            onClick={async () => {
-                              await fetch('/api/notifications', { method: 'DELETE' });
-                              setNotifications([]);
-                              setShowNotifications(false);
-                            }}
-                            className="text-emerald-400 hover:text-emerald-300 transition-colors text-[0.7rem] font-black"
-                          >
-                            استلم الكل ✅
-                          </button>
-                        </div>
-                        <div className="max-h-80 overflow-y-auto">
-                          {notifications.length > 0 ? (
-                            notifications.map((n) => (
-                              <div key={n.id} className={`p-4 border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--bg-secondary)] transition-all ${!n.isRead ? 'bg-[var(--brand-primary)] bg-opacity-5' : ''}`}>
-                                <h4 className="m-0 text-[0.85rem] font-bold text-[var(--text-primary)] mb-1">{n.title || 'رسالة جديدة'}</h4>
-                                <p className="m-0 text-[0.75rem] text-[var(--text-secondary)] line-clamp-2 leading-relaxed">{n.message}</p>
+                  {/* Home Button */}
+                  <Link href="/" className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl flex items-center gap-2 hover:bg-white/10 transition-all no-underline">
+                    <img src="https://img.icons8.com/fluency/256/home.png" width={20} height={20} alt="Home" />
+                    <span className="text-[0.8rem] font-bold text-white">الرئيسية</span>
+                  </Link>
 
-                                {/* Global Disappear Action Button */}
-                                <button 
-                                  onClick={async (e) => {
-                                    e.stopPropagation();
-                                    try {
-                                      // Call delete API
-                                      await fetch('/api/notifications', {
-                                        method: 'DELETE',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({ id: n.id })
-                                      });
+                  {/* Orders Button */}
+                  <Link href="/dashboard" className="px-4 py-2 bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 rounded-xl flex items-center gap-2 hover:bg-[var(--brand-primary)] group transition-all no-underline">
+                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={20} height={20} alt="Orders" className="group-hover:brightness-0 group-hover:invert" />
+                    <span className="text-[0.8rem] font-bold text-[var(--brand-primary)] group-hover:text-white transition-colors">الذهاب للطلبات</span>
+                  </Link>
 
-                                      // If it was a reward, trigger celebration
-                                      if (n.title?.includes('هدية') || n.message?.includes('استلم') || n.message?.includes('هدية')) {
-                                         localStorage.setItem('pending_reward_claim', n.id);
-                                         window.dispatchEvent(new Event('reward_claimed'));
-                                      }
-
-                                      setNotifications(prev => prev.filter(item => item.id !== n.id));
-                                      setShowNotifications(false);
-                                    } catch (err) {
-                                      console.error('Delete error:', err);
-                                    }
-                                  }}
-                                  className="mt-3 w-full py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[0.7rem] font-black rounded-xl hover:bg-emerald-500 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2"
-                                >
-                                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                   { (n.title?.includes('هدية') || n.message?.includes('استلم') || n.message?.includes('هدية')) ? 'استلم الجائزة 🎁' : 'تم الاستلام ✅' }
-                                </button>
-                                
-                                <span className="text-[0.65rem] text-[var(--text-secondary)] mt-2 block opacity-60">
-                                  {new Date(n.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
-                                </span>
-                              </div>
-                            ))
-                          ) : (
-                             <div className="p-8 text-center text-[var(--text-secondary)] text-[0.8rem]">
-                               <img src="/tier_new.png" width={40} className="mx-auto mb-2 opacity-50 grayscale" alt="لا توجد تنبيهات" />
-                               <p>لا توجد تنبيهات حالياً</p>
-                             </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <Link href="/dashboard/account" className="relative px-5 py-2.5 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl flex items-center gap-2 hover:bg-[var(--bg-card)] transition-all group overflow-visible">
-                    <img src="https://img.icons8.com/fluency/256/manager.png" width={22} height={22} alt="Account" />
-                    <span className="text-[0.85rem] font-black text-[var(--text-primary)]">إعدادات حسابي</span>
+                  {/* Account Settings with Badge */}
+                  <Link href="/dashboard/account" className="relative px-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl flex items-center gap-2 hover:bg-[var(--bg-card)] transition-all group overflow-visible no-underline">
+                    <img src="https://img.icons8.com/fluency/256/manager.png" width={20} height={20} alt="Account" />
+                    <span className="text-[0.8rem] font-black text-[var(--text-primary)]">إعدادات حسابي</span>
                     {notifications.length > 0 && (
                       <div className="absolute -top-2 -right-1 bg-red-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-[var(--bg-primary)] animate-bounce shadow-lg z-[60]">
                         1
@@ -218,35 +154,47 @@ export default function Navbar() {
                     )}
                   </Link>
 
-                  <Link href="/" className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-2 hover:bg-white/10 transition-all no-underline">
-                    <img src="https://img.icons8.com/fluency/256/home.png" width={22} height={22} alt="Home" />
-                    <span className="text-[0.85rem] font-bold text-white">الرئيسية</span>
-                  </Link>
-
-                  <Link href="/dashboard" className="px-5 py-2.5 bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 rounded-2xl flex items-center gap-2 hover:bg-[var(--brand-primary)] group transition-all no-underline">
-                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={22} height={22} alt="Orders" className="group-hover:brightness-0 group-hover:invert" />
-                    <span className="text-[0.85rem] font-bold text-[var(--brand-primary)] group-hover:text-white transition-colors">الذهاب للطلبات</span>
-                  </Link>
-
+                  {/* Profile / Notifications Toggle */}
                   <div className="relative group">
                     <button 
                       onClick={() => setShowNotifications(!showNotifications)}
-                      className="p-1 rounded-full border-2 border-[var(--brand-primary)] overflow-hidden hover:scale-105 transition-all shadow-[var(--shadow-sm)]"
+                      className="p-1 rounded-full border-2 border-[var(--brand-primary)] overflow-hidden hover:scale-105 transition-all shadow-sm"
                     >
-                      <img src="https://img.icons8.com/papercut/256/user-male-circle.png" width={32} height={32} alt="الملف الشخصي" className="bg-[var(--bg-secondary)] rounded-full" />
+                      <img src="https://img.icons8.com/papercut/256/user-male-circle.png" width={30} height={30} alt="Profile" className="bg-[var(--bg-secondary)] rounded-full" />
                     </button>
+                    
+                    {showNotifications && (
+                      <div className="absolute top-full left-0 mt-3 w-72 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[20px] shadow-[var(--shadow-lg)] z-50 overflow-hidden backdrop-blur-md">
+                        <div className="p-4 border-b border-[var(--border-color)] flex justify-between items-center text-[0.8rem] font-bold text-[var(--text-primary)] bg-white/5">
+                          <span>التنبيهات</span>
+                          <button onClick={() => setNotifications([])} className="text-emerald-400 hover:text-emerald-300 transition-colors text-[0.7rem] font-black">استلم الكل ✅</button>
+                        </div>
+                        <div className="max-h-80 overflow-y-auto">
+                           {notifications.length > 0 ? (
+                             notifications.map((n) => (
+                               <div key={n.id} className="p-4 border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--bg-secondary)] transition-all">
+                                 <h4 className="m-0 text-[0.85rem] font-bold text-[var(--text-primary)] mb-1">{n.title}</h4>
+                                 <p className="m-0 text-[0.75rem] text-[var(--text-secondary)] line-clamp-2 leading-relaxed">{n.message}</p>
+                                 <button 
+                                   onClick={() => setNotifications(prev => prev.filter(item => item.id !== n.id))}
+                                   className="mt-2 w-full py-1.5 bg-emerald-500/10 text-emerald-400 text-[0.7rem] font-black rounded-lg hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-1"
+                                 >تم الاستلام</button>
+                               </div>
+                             ))
+                           ) : (
+                              <div className="p-8 text-center text-[var(--text-secondary)]">لا توجد تنبيهات</div>
+                           )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-3 mr-4">
-                  <Link href="/login" className="btn-secondary py-2 px-6 text-[0.85rem]">
-                    تسجيل الدخول
-                  </Link>
-                  <Link href="/register" className="btn-primary py-2 px-6 text-[0.85rem]">
-                    سجل مجاناً
-                  </Link>
+                  <Link href="/login" className="btn-secondary py-2 px-6 text-[0.85rem]">تسجيل الدخول</Link>
+                  <Link href="/register" className="btn-primary py-2 px-6 text-[0.85rem]">سجل مجاناً</Link>
                 </div>
-              )
+              )}
             )}
           </div>
 

@@ -287,7 +287,6 @@ function DashboardContent() {
             </Link>
           </div>
 
-          <div className="flex flex-col gap-2">
             {sideLinks.map((link, i) => (
               <Link key={i} href={link.href} className={`p-3.5 px-5 rounded-[14px] no-underline flex items-center gap-4 text-[0.9rem] font-bold transition-all duration-300 ${
                 link.active ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]' : 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]'
@@ -295,6 +294,30 @@ function DashboardContent() {
                 <img src={link.icon} alt={link.label} width={22} height={22} className={link.active ? 'opacity-100' : 'opacity-70'} /> {link.label}
               </Link>
             ))}
+
+            {/* Points System Guide Box */}
+            <div className="mt-6 p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl mx-1">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="https://img.icons8.com/fluency/256/coins.png" width={22} height={22} alt="Points" />
+                <span className="text-[0.85rem] font-black text-amber-600">نظام النقاط</span>
+              </div>
+              <div className="space-y-2 mb-4">
+                <div className="flex gap-2 items-start">
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5"></div>
+                  <p className="text-[0.72rem] text-[var(--text-secondary)] leading-snug">تجمع النقاط تلقائياً مع كل طلب مكتمل.</p>
+                </div>
+                <div className="flex gap-2 items-start">
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5"></div>
+                  <p className="text-[0.72rem] text-[var(--text-secondary)] leading-snug">كل 1000 نقطة تساوي مبالغ مالية تضاف لرصيدك.</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => alert('سيتم تفعيل ميزة التحويل قريباً عند وصولك للحد الأدنى!')}
+                className="w-full py-2 bg-amber-500 text-white border-none rounded-xl text-[0.75rem] font-black cursor-pointer hover:scale-[1.02] transition-all shadow-md active:scale-95"
+              >
+                تحويل النقاط الآن 🪙
+              </button>
+            </div>
           </div>
 
           <div className="mt-auto py-4 border-t border-[var(--border-color)]">
