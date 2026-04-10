@@ -223,6 +223,11 @@ export default function Navbar() {
                     <span className="text-[0.85rem] font-bold text-white">الرئيسية</span>
                   </Link>
 
+                  <Link href="/dashboard" className="px-5 py-2.5 bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 rounded-2xl flex items-center gap-2 hover:bg-[var(--brand-primary)] group transition-all no-underline">
+                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={22} height={22} alt="Orders" className="group-hover:brightness-0 group-hover:invert" />
+                    <span className="text-[0.85rem] font-bold text-[var(--brand-primary)] group-hover:text-white transition-colors">الذهاب للطلبات</span>
+                  </Link>
+
                   <div className="relative group">
                     <button 
                       onClick={() => setShowNotifications(!showNotifications)}
