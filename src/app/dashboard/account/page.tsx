@@ -91,11 +91,14 @@ export default function AccountPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[0.85rem] font-black text-[var(--text-secondary)] mb-2 mr-1">البريد الإلكتروني (لا يمكن تغييره)</label>
+                  <label htmlFor="email" className="block text-[0.85rem] font-black text-[var(--text-secondary)] mb-2 mr-1">البريد الإلكتروني (لا يمكن تغييره)</label>
                   <input 
+                    id="email"
                     type="email" 
                     value={user?.email || ''} 
                     disabled 
+                    placeholder="بريدك الإلكتروني"
+                    title="البريد الإلكتروني لا يمكن تغييره"
                     className="input-field h-14 rounded-2xl opacity-50 cursor-not-allowed bg-[var(--bg-secondary)]" 
                   />
                 </div>
