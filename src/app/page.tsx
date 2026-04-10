@@ -20,6 +20,16 @@ export default function Home() {
   const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
+    // Check if user is already logged in to redirect them to dashboard
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          window.location.href = '/dashboard';
+        }
+      })
+      .catch(() => {});
+
     // Fetch Real Stats
     fetch('/api/stats')
       .then(res => res.json())

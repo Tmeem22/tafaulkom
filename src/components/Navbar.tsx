@@ -93,6 +93,12 @@ export default function Navbar() {
               className="h-[60px] w-auto object-contain"
             />
             <span className="text-[0.75rem] bg-[var(--brand-primary)] text-white px-3 py-1 rounded-full font-black">العودة للرئيسية</span>
+            {user && (
+              <Link href="/dashboard/account" className="no-underline bg-[var(--bg-secondary)] text-[var(--text-primary)] px-4 py-1.5 rounded-full font-bold text-[0.85rem] flex items-center gap-2 border border-[var(--border-color)] hover:border-[var(--brand-primary)] transition-all">
+                <img src="https://img.icons8.com/fluency/256/manager.png" width={18} height={18} alt="حسابي" />
+                <span>حسابي</span>
+              </Link>
+            )}
           </Link>
 
           {/* Desktop Nav */}
@@ -205,6 +211,10 @@ export default function Navbar() {
             <div className="flex gap-3 mt-2 px-4">
               {user ? (
                 <>
+                  <Link href="/dashboard/account" className="btn-primary flex-1 text-center py-3 flex items-center justify-center gap-2" onClick={() => setMobileOpen(false)}>
+                    <img src="https://img.icons8.com/fluency/256/manager.png" width={18} height={18} className="brightness-0 invert" alt="حسابي" />
+                    <span>حسابي</span>
+                  </Link>
                   <Link href="/dashboard" className="btn-secondary flex-1 text-center py-3" onClick={() => setMobileOpen(false)}>لوحة التحكم</Link>
                   <Link href="/dashboard/support" className="p-3 bg-[var(--bg-secondary)] rounded-[14px] flex items-center justify-center" onClick={() => setMobileOpen(false)}>
                     <img src="https://img.icons8.com/fluency/256/bell.png" width={24} height={24} alt="التنبيهات" />
