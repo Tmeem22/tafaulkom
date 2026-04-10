@@ -10,6 +10,7 @@ const sideLinks = [
   { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/fluency/256/list.png' },
   { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/fluency/256/flash-on.png' },
   { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/fluency/256/card-exchange.png' },
+  { label: 'نظام النقاط', href: '/dashboard/points', icon: 'https://img.icons8.com/fluency/256/coins.png' },
   { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/fluency/256/headset.png', active: true },
   { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
 ];
@@ -180,30 +181,6 @@ export default function Support() {
               {l.label}
             </Link>
           ))}
-
-          {/* Points System Guide Box */}
-          <div className="mt-6 p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
-            <div className="flex items-center gap-2 mb-3">
-              <img src="https://img.icons8.com/fluency/256/coins.png" width={22} height={22} alt="Points" />
-              <span className="text-[0.85rem] font-black text-amber-600">نظام النقاط</span>
-            </div>
-            <div className="space-y-2 mb-4">
-              <div className="flex gap-2 items-start">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5"></div>
-                <p className="text-[0.72rem] text-[var(--text-secondary)] leading-snug">تجمع النقاط تلقائياً مع كل طلب مكتمل.</p>
-              </div>
-              <div className="flex gap-2 items-start">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5"></div>
-                <p className="text-[0.72rem] text-[var(--text-secondary)] leading-snug">كل 1000 نقطة تساوي مبالغ مالية تضاف لرصيدك.</p>
-              </div>
-            </div>
-            <button 
-              onClick={() => showToast('سيتم تفعيل ميزة التحويل قريباً عند وصولك للحد الأدنى!', 'info')}
-              className="w-full py-2 bg-amber-500 text-white border-none rounded-xl text-[0.75rem] font-black cursor-pointer hover:scale-[1.02] transition-all shadow-md active:scale-95"
-            >
-              تحويل النقاط الآن 🪙
-            </button>
-          </div>
           <div className="mt-auto py-4 border-t border-[var(--border-color)]">
             <button 
               onClick={handleLogout} 

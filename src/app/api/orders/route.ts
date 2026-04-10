@@ -128,13 +128,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'فشل في الحصول على رقم الطلب من المزود' }, { status: 400 });
     }
 
+    const pointsToAdd = finalCharge < 10 ? 10 : 50;
     const newBalance = user.balance - finalCharge;
     
     // Use a transaction for reliability
     const [updatedUser, newOrder] = await prisma.$transaction([
       prisma.user.update({
         where: { id: user.id },
-        data: { balance: newBalance }
+        data: { 
+          balance: newBalance,
+          points: { increment: pointsToAdd }
+        }
       }),
       prisma.order.create({
         data: {
@@ -146,6 +150,13 @@ export async function POST(request: Request) {
           charge: finalCharge,
           remains: Number(quantity),
           status: 'pending',
+        }
+      }),
+      prisma.notification.create({
+        data: {
+          userId: user.id,
+          title: 'نقاط مكافأة جديدة 🪙',
+          message: `مبروك! حصلت على ${pointsToAdd} نقطة لإتمامك هذا الطلب.`
         }
       })
     ]);

@@ -138,10 +138,10 @@ export default function Navbar() {
                     <span className="text-[0.8rem] font-bold text-white">الرئيسية</span>
                   </Link>
 
-                  {/* Orders Button */}
-                  <Link href="/dashboard" className="px-4 py-2 bg-[var(--brand-primary)]/10 border border-[var(--brand-primary)]/20 rounded-xl flex items-center gap-2 hover:bg-[var(--brand-primary)] group transition-all no-underline">
-                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={20} height={20} alt="Orders" className="group-hover:brightness-0 group-hover:invert" />
-                    <span className="text-[0.8rem] font-bold text-[var(--brand-primary)] group-hover:text-white transition-colors">الذهاب للطلبات</span>
+                  {/* Points Button */}
+                  <Link href="/dashboard/points" className="px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-2 hover:bg-amber-500 group transition-all no-underline">
+                    <img src="https://img.icons8.com/fluency/256/coins.png" width={20} height={20} alt="Points" />
+                    <span className="text-[0.8rem] font-bold text-amber-600 group-hover:text-white transition-colors">نظام النقاط</span>
                   </Link>
 
                   {/* Account Settings with Badge */}
