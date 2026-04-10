@@ -296,11 +296,11 @@ export default function Support() {
 
                              {messages.map((m) => (
                                <div key={m.id} className={`flex flex-col ${m.role === 'ADMIN' ? 'items-end' : 'items-start'} max-w-[90%] ${m.role === 'ADMIN' ? 'mr-auto' : ''}`}>
-                                  <div className={`p-4 rounded-2xl ${m.role === 'ADMIN' ? 'rounded-tl-none bg-[var(--brand-primary)] text-white shadow-md' : 'rounded-tr-none bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-primary)]'} text-[0.9rem]`}>
+                                  <div className={`p-4 rounded-2xl ${m.role === 'ADMIN' ? 'rounded-tl-none bg-[#0070f3] text-white shadow-md' : 'rounded-tr-none bg-black border border-[var(--border-color)] text-white'} text-[0.9rem]`}>
                                      {m.message}
                                   </div>
-                                  <span className="text-[0.6rem] text-[var(--text-tertiary)] mt-1 px-2">
-                                     {m.role === 'ADMIN' ? 'الإدارة' : 'أنت'} • {new Date(m.createdAt).toLocaleString('ar-SA')}
+                                  <span className="text-[0.6rem] text-[var(--text-tertiary)] mt-1 px-2 font-bold">
+                                     {m.role === 'ADMIN' ? 'المطور 👨‍💻' : 'أنت'} • {new Date(m.createdAt).toLocaleString('ar-SA')}
                                   </span>
                                </div>
                              ))}

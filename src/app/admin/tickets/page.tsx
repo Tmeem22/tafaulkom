@@ -184,7 +184,7 @@ export default function AdminTickets() {
                 <span className="text-[0.65rem] text-[var(--text-tertiary)] mt-1 mr-2">{new Date(activeTicket.createdAt).toLocaleString('ar-SA')}</span>
               </div>
 
-              {/* Messages Thread */}
+               {/* Messages Thread */}
               {messages.map((m) => (
                 <div 
                   key={m.id} 
@@ -193,14 +193,14 @@ export default function AdminTickets() {
                   <div 
                     className={`p-4 rounded-2xl ${
                       m.role === 'ADMIN' 
-                        ? 'rounded-tl-none bg-[var(--brand-primary)] text-white shadow-md' 
-                        : 'rounded-tr-none bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] shadow-sm'
+                        ? 'rounded-tl-none bg-[#0070f3] text-white shadow-md' 
+                        : 'rounded-tr-none bg-black border border-[var(--border-color)] text-white shadow-sm'
                     } text-[0.9rem]`}
                   >
                     {m.message}
                   </div>
-                  <span className="text-[0.65rem] text-[var(--text-tertiary)] mt-1 px-2">
-                    {m.role === 'ADMIN' ? 'أنت' : activeTicket.user?.username} • {new Date(m.createdAt).toLocaleString('ar-SA')}
+                  <span className="text-[0.65rem] text-[var(--text-tertiary)] mt-1 px-2 font-bold">
+                    {m.role === 'ADMIN' ? 'أنت (المطور)' : activeTicket.user?.username} • {new Date(m.createdAt).toLocaleString('ar-SA')}
                   </span>
                 </div>
               ))}
