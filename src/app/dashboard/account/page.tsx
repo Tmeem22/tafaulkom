@@ -83,7 +83,7 @@ export default function AccountPage() {
               </div>
 
               <div className="space-y-4">
-                 <h2 className="text-[2rem] font-black text-white tracking-widest uppercase" style={{ fontFamily: 'monospace' }}>UPDATING... 👾</h2>
+                 <h2 className="text-[2rem] font-black text-white tracking-widest uppercase font-retro">UPDATING... 👾</h2>
                  <p className="text-[var(--brand-primary)] text-[1.1rem] font-black tracking-tight">جاري تشغيل الطاقة البكسلية لحفظ بياناتك</p>
                  
                  <div className="flex justify-center gap-4 pt-4">

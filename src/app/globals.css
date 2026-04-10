@@ -405,7 +405,12 @@ body {
 .image-render-pixel { 
   image-rendering: pixelated; 
   image-rendering: -moz-crisp-edges; 
+  image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges; 
+}
+
+.font-retro {
+  font-family: monospace !important;
 }
 
 .marquee-track {
