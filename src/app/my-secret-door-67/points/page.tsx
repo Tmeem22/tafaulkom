@@ -153,10 +153,13 @@ export default function AdminPoints() {
                           </div>
                           <div className="flex gap-2">
                              <input 
+                               id="manual-amount"
                                type="number" 
                                value={manualAmount}
                                onChange={e => setManualAmount(parseInt(e.target.value))}
                                className="w-20 bg-black/40 p-2 rounded-lg font-black text-center" 
+                               aria-label="المبلغ اليدوي"
+                               placeholder="250"
                              />
                              <button onClick={() => handleManualPoints(u.id, 'ADD')} className="flex-1 bg-emerald-600/20 text-emerald-500 border border-emerald-500/30 p-2 rounded-lg font-black text-[0.7rem] hover:bg-emerald-600 hover:text-white">إضافة (+)</button>
                              <button onClick={() => handleManualPoints(u.id, 'REMOVE')} className="flex-1 bg-red-600/20 text-red-500 border border-red-500/30 p-2 rounded-lg font-black text-[0.7rem] hover:bg-red-600 hover:text-white">سحب (-)</button>

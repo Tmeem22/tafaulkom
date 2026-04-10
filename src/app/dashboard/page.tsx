@@ -274,6 +274,22 @@ function DashboardContent() {
   const baseCost = (totalCostFloat / 1.5).toFixed(4);
   const profit = (totalCostFloat - parseFloat(baseCost)).toFixed(4);
 
+  const [hasSupportUnread, setHasSupportUnread] = useState(false);
+
+  useEffect(() => {
+    const checkSupport = async () => {
+       try {
+          const res = await fetch('/api/tickets');
+          const data = await res.json();
+          if (data.tickets) {
+             const unread = data.tickets.some((t: any) => t.status === 'open' && t.messages?.[0]?.isAdmin);
+             setHasSupportUnread(unread);
+          }
+       } catch (e) {}
+    };
+    checkSupport();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -290,10 +306,16 @@ function DashboardContent() {
 
           <div className="flex flex-col gap-2">
             {sideLinks.map((link, i) => (
-              <Link key={i} href={link.href} className={`p-3.5 px-5 rounded-[14px] no-underline flex items-center gap-4 text-[0.9rem] font-bold transition-all duration-300 ${
+              <Link key={i} href={link.href} className={`p-3.5 px-5 rounded-[14px] no-underline flex items-center justify-between gap-4 text-[0.9rem] font-bold transition-all duration-300 ${
                 link.active ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]' : 'bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]'
               }`}>
-                <img src={link.icon} alt={link.label} width={22} height={22} className={link.active ? 'opacity-100' : 'opacity-70'} /> {link.label}
+                <div className="flex items-center gap-4">
+                  <img src={link.icon} alt={link.label} width={22} height={22} className={link.active ? 'opacity-100' : 'opacity-70'} /> 
+                  {link.label}
+                </div>
+                {link.href === '/dashboard/support' && hasSupportUnread && (
+                   <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
+                )}
               </Link>
             ))}
           </div>

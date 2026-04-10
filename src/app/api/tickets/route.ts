@@ -9,6 +9,12 @@ export async function GET() {
 
     const tickets = await prisma.ticket.findMany({
       where: { userId: user.id },
+      include: {
+        messages: {
+          orderBy: { createdAt: 'desc' },
+          take: 1
+        }
+      },
       orderBy: { createdAt: 'desc' }
     });
 

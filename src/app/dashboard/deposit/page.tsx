@@ -70,6 +70,22 @@ export default function Deposit() {
     }
   };
 
+  const [hasSupportUnread, setHasSupportUnread] = useState(false);
+
+  useEffect(() => {
+    const checkSupport = async () => {
+       try {
+          const res = await fetch('/api/tickets');
+          const data = await res.json();
+          if (data.tickets) {
+             const unread = data.tickets.some((t: any) => t.status === 'open' && t.messages?.[0]?.isAdmin);
+             setHasSupportUnread(unread);
+          }
+       } catch (e) {}
+    };
+    checkSupport();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -84,14 +100,19 @@ export default function Deposit() {
             <Link 
               key={i} 
               href={l.href} 
-              className={`p-3 rounded-[var(--radius-md)] no-underline flex items-center gap-3 text-[0.9rem] font-bold transition-all ${
+              className={`p-3 rounded-[var(--radius-md)] no-underline flex items-center justify-between gap-3 text-[0.9rem] font-bold transition-all ${
                 l.active 
                   ? 'bg-[var(--bg-secondary)] text-[var(--brand-primary)]' 
                   : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--brand-primary)]'
               }`}
             >
-              <img src={l.icon} alt={l.label} width={20} height={20} className={l.active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'} /> 
-              {l.label}
+              <div className="flex items-center gap-3">
+                <img src={l.icon} alt={l.label} width={20} height={20} className={l.active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'} /> 
+                {l.label}
+              </div>
+              {l.href === '/dashboard/support' && hasSupportUnread && (
+                 <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
+              )}
             </Link>
           ))}
           <div className="mt-auto py-4 border-t border-[var(--border-color)]">

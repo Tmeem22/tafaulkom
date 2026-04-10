@@ -19,19 +19,29 @@ export default function PointsPage() {
   const [loading, setLoading] = useState(true);
   const [videoUrl, setVideoUrl] = useState('');
   const [exchangeAmount, setExchangeAmount] = useState(500);
-  const [submitting, setSubmitting] = useState(false);
   const [isExchanging, setIsExchanging] = useState(false);
+  const [hasSupportUnread, setHasSupportUnread] = useState(false);
 
   const fetchData = async () => {
     try {
-      const [uRes, tRes] = await Promise.all([
+      const [uRes, tRes, sRes] = await Promise.all([
         fetch('/api/user/me'),
-        fetch('/api/user/points-tasks')
+        fetch('/api/user/points-tasks'),
+        fetch('/api/tickets') // Assuming this exists to check tickets
       ]);
       const userData = await uRes.json();
       const taskData = await tRes.json();
+      const tickets = await sRes.json();
+      
       setUser(userData);
       setTasks(taskData);
+      
+      // Check for unread support messages (last message is admin)
+      if (Array.isArray(tickets)) {
+        const unread = tickets.some((t: any) => t.status === 'OPEN' && t.messages?.[t.messages.length - 1]?.isAdmin);
+        setHasSupportUnread(unread);
+      }
+
       if (userData.points >= 500) setExchangeAmount(userData.points);
     } catch (e) {
       console.error(e);
@@ -102,9 +112,14 @@ export default function PointsPage() {
         {/* Sidebar */}
         <aside className="w-[250px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 fixed top-[70px] bottom-0 overflow-y-auto hidden md:flex flex-col gap-1">
           {sideLinks.map((l, i) => (
-            <Link key={i} href={l.href} className={`p-3 rounded-xl no-underline flex items-center gap-3 text-[0.9rem] font-bold transition-all ${l.active ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]'}`}>
-              <img src={l.icon} width={22} height={22} alt={l.label} />
-              {l.label}
+            <Link key={i} href={l.href} className={`p-3 rounded-xl no-underline flex items-center justify-between gap-3 text-[0.9rem] font-bold transition-all ${l.active ? 'bg-[var(--brand-primary)]/10 text-[var(--brand-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]'}`}>
+              <div className="flex items-center gap-3">
+                <img src={l.icon} width={22} height={22} alt={l.label} />
+                {l.label}
+              </div>
+              {l.href === '/dashboard/support' && hasSupportUnread && (
+                 <div className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+              )}
             </Link>
           ))}
         </aside>
@@ -227,29 +242,51 @@ export default function PointsPage() {
                      </div>
 
                      <div>
-                       <label className="block text-[0.85rem] font-black mb-3">رابط الفيديو (TikTok / YouTube)</label>
+                       <label htmlFor="video-url-input" className="block text-[0.85rem] font-black mb-3">رابط الفيديو (TikTok / YouTube)</label>
                        <input 
+                         id="video-url-input"
                          type="url" 
                          className="input-field p-4 rounded-2xl" 
-                         placeholder="https://..." 
+                         placeholder="ضع الرابط هنا..." 
                          dir="ltr" 
                          value={videoUrl}
                          onChange={(e) => setVideoUrl(e.target.value)}
-                         required={!videoUrl.startsWith('file:')}
+                         required={!videoUrl.startsWith('file:') && !videoUrl.startsWith('/uploads/')}
                        />
                         <p className="mt-2 text-[0.7rem] text-[var(--text-secondary)] font-medium">أو يمكنك رفع فيديو من جوالك مباشرة واختياره من المعرض.</p>
-                        <input 
-                           type="file" 
-                           accept="video/*" 
-                           className="mt-3 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-black file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer"
-                           onChange={(e) => {
-                             if(e.target.files?.[0]) {
-                               showToast('تم اختيار الملف: ' + e.target.files[0].name, 'success');
-                               // We simulate the file path with a mock
-                               setVideoUrl('file:' + e.target.files[0].name);
-                             }
-                           }}
-                        />
+                        <div className="flex flex-col gap-2 mt-3">
+                           <label htmlFor="video-file-upload" className="sr-only">رفع ملف فيديو</label>
+                           <input 
+                              id="video-file-upload"
+                              type="file" 
+                              accept="video/*" 
+                              className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-black file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer"
+                              onChange={async (e) => {
+                                if(e.target.files?.[0]) {
+                                   const file = e.target.files[0];
+                                   const formData = new FormData();
+                                   formData.append('file', file);
+                                   
+                                   showToast('جاري رفع الفيديو...', 'info');
+                                   try {
+                                      const res = await fetch('/api/user/points-tasks/upload', {
+                                         method: 'POST',
+                                         body: formData
+                                      });
+                                      const data = await res.json();
+                                      if (res.ok) {
+                                         setVideoUrl(data.url);
+                                         showToast('تم رفع الفيديو بنجاح! ✅', 'success');
+                                      } else {
+                                         showToast(data.error || 'فشل الرفع', 'error');
+                                      }
+                                   } catch (err) {
+                                      showToast('حدث خطأ أثناء الرفع', 'error');
+                                   }
+                                }
+                              }}
+                           />
+                        </div>
                      </div>
                      <button 
                        type="submit" 

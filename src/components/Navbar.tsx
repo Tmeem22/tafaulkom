@@ -80,6 +80,25 @@ export default function Navbar() {
     }
   };
 
+  const [hasSupportUnread, setHasSupportUnread] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    const checkSupport = async () => {
+       try {
+          const res = await fetch('/api/tickets');
+          const data = await res.json();
+          if (data.tickets) {
+             const unread = data.tickets.some((t: any) => t.status === 'open' && t.messages?.[0]?.isAdmin);
+             setHasSupportUnread(unread);
+          }
+       } catch (e) {}
+    };
+    checkSupport();
+    const interval = setInterval(checkSupport, 30000); // Check every 30s
+    return () => clearInterval(interval);
+  }, [user]);
+
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="max-w-[1280px] mx-auto px-6">
@@ -208,11 +227,14 @@ export default function Navbar() {
                 <img src="https://img.icons8.com/fluency/256/sun.png" width={20} height={20} alt="الوضع المضيء" />
               )}
             </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="bg-transparent border-none flex items-center justify-center text-[var(--text-primary)] cursor-pointer p-2" aria-label={mobileOpen ? 'إغلاق القائمة' : 'فتح القائمة'}>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="bg-transparent border-none flex items-center justify-center text-[var(--text-primary)] cursor-pointer p-2 relative" aria-label={mobileOpen ? 'إغلاق القائمة' : 'فتح القائمة'}>
               {mobileOpen ? (
                 <img src="https://img.icons8.com/fluency/256/delete-sign.png" width={24} height={24} alt="إغلاق" />
               ) : (
                 <img src="https://img.icons8.com/fluency/256/menu.png" width={24} height={24} alt="القائمة" />
+              )}
+              {!mobileOpen && hasSupportUnread && (
+                 <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--bg-card)]"></div>
               )}
             </button>
           </div>
@@ -235,8 +257,11 @@ export default function Navbar() {
                   <Link href="/dashboard/points" className="p-3 bg-amber-500/10 rounded-[14px] flex items-center justify-center border border-amber-500/20" onClick={() => setMobileOpen(false)}>
                     <img src="https://img.icons8.com/fluency/256/coins.png" width={24} height={24} alt="النقاط" />
                   </Link>
-                  <Link href="/dashboard/support" className="p-3 bg-[var(--bg-secondary)] rounded-[14px] flex items-center justify-center" onClick={() => setMobileOpen(false)}>
-                    <img src="https://img.icons8.com/fluency/256/bell.png" width={24} height={24} alt="التنبيهات" />
+                  <Link href="/dashboard/support" className="p-3 bg-[var(--bg-secondary)] rounded-[14px] flex items-center justify-center relative" onClick={() => setMobileOpen(false)}>
+                    <img src="https://img.icons8.com/fluency/256/headset.png" width={24} height={24} alt="الدعم الفني" />
+                    {hasSupportUnread && (
+                       <div className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[var(--bg-card)] animate-pulse"></div>
+                    )}
                   </Link>
                 </>
               ) : (
