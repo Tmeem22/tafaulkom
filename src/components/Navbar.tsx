@@ -126,6 +126,8 @@ export default function Navbar() {
                        }}>
                     <img src="https://img.icons8.com/fluency/256/bell.png" width={22} height={22} alt="التنبيهات" />
                     {unreadCount > 0 && (
+                      <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-[var(--brand-danger)] text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-[var(--bg-card)] shadow-[0_0_8px_rgba(239,68,68,0.6)] animate-pulse px-1">
+                        {unreadCount}
                       </span>
                     )}
                   </div>
