@@ -26,12 +26,13 @@ export async function GET() {
 // POST: Send a notification (Admin only)
 export async function POST(req: Request) {
   try {
+    const { userId, title, message } = await req.json();
     const user = await getUserFromSession();
-    if (!user || user.role !== 'ADMIN') {
+    
+    // Allow if user is admin OR if user is sending to themselves
+    if (!user || (user.role !== 'ADMIN' && user.id !== userId)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
-
-    const { userId, title, message } = await req.json();
 
     if (!userId || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });

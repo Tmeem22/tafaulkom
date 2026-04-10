@@ -153,6 +153,21 @@ export default function Navbar() {
                               <div key={n.id} className={`p-4 border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--bg-secondary)] transition-all ${!n.isRead ? 'bg-[var(--brand-primary)] bg-opacity-5' : ''}`}>
                                 <h4 className="m-0 text-[0.85rem] font-bold text-[var(--text-primary)] mb-1">{n.title || 'رسالة جديدة'}</h4>
                                 <p className="m-0 text-[0.75rem] text-[var(--text-secondary)] line-clamp-2 leading-relaxed">{n.message}</p>
+
+                                {/* Interactive Reward Button */}
+                                {(n.title?.includes('هدية') || n.message?.includes('هدية')) && (
+                                  <button 
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      localStorage.setItem('pending_reward_claim', n.id);
+                                      window.dispatchEvent(new Event('reward_claimed'));
+                                      setShowNotifications(false);
+                                    }}
+                                    className="mt-3 w-full py-2 bg-[var(--brand-primary)] text-white text-[0.75rem] font-black rounded-lg hover:brightness-110 transition-all shadow-lg flex items-center justify-center gap-2"
+                                  >
+                                    <span className="text-[1rem]">🎁</span> استلم الهدية
+                                  </button>
+                                )}
                                 <span className="text-[0.65rem] text-[var(--text-secondary)] mt-2 block opacity-60">
                                   {new Date(n.createdAt).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}
                                 </span>
@@ -160,7 +175,7 @@ export default function Navbar() {
                             ))
                           ) : (
                              <div className="p-8 text-center text-[var(--text-secondary)] text-[0.8rem]">
-                               <img src="https://img.icons8.com/fluency/256/no-notifications.png" width={40} className="mx-auto mb-2 opacity-50" alt="لا توجد تنبيهات" />
+                               <img src="/tier_new.png" width={40} className="mx-auto mb-2 opacity-50 grayscale" alt="لا توجد تنبيهات" />
                                <p>لا توجد تنبيهات حالياً</p>
                              </div>
                           )}

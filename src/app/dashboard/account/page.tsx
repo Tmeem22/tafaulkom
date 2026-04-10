@@ -51,23 +51,42 @@ export default function AccountPage() {
       .then(data => {
         if (data.authenticated) {
           setUser(data.user);
-          setFormData(prev => ({ ...prev, username: data.user.username }));
-
-          // 🎉 Check for Automatic Unlock Celebration
+          // 🎉 Send Reward Notification Instead of immediate popup
           const balance = data.user.balance || 0;
           const eligibleTier = [...TIERS].reverse().find(t => balance >= t.spend && t.spend > 0);
           if (eligibleTier) {
             const hasCelebrated = localStorage.getItem(`celebrated_tier_${eligibleTier.id}`);
             if (!hasCelebrated) {
-              setUnlockedTier(eligibleTier);
-              playCelebrate();
-              localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'true');
+              fetch('/api/notifications', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  userId: data.user.id,
+                  title: '🎁 هدية: مبروك وصولك لمستوى جديد!',
+                  message: `مبروك! لقد أصبحت الآن في مستوى ${eligibleTier.name}. استلم هديتك الآن بضغط الزر بالأسفل. ✨`
+                })
+              });
+              localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'pending');
             }
           }
         }
       })
       .finally(() => setLoading(false));
-  }, []);
+
+    // Listen for Claim Event from Navbar
+    const handleClaimEvent = () => {
+      const balance = user?.balance || 0;
+      const eligibleTier = [...TIERS].reverse().find(t => balance >= t.spend && t.spend > 0);
+      if (eligibleTier) {
+        setUnlockedTier(eligibleTier);
+        playCelebrate();
+        localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'true');
+      }
+    };
+
+    window.addEventListener('reward_claimed', handleClaimEvent);
+    return () => window.removeEventListener('reward_claimed', handleClaimEvent);
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,35 +189,7 @@ export default function AccountPage() {
                  </div>
               </div>
 
-              <button 
-                onClick={handleClaim}
-                className="group relative w-full py-6 rounded-3xl text-[1.6rem] font-black bg-yellow-400 text-black hover:bg-yellow-500 transition-all active:scale-95 shadow-2xl shadow-yellow-400/20"
-              >
-                استلام الجائزة 🔥
-                <span className="absolute -top-3 -right-3 bg-red-600 text-white text-[0.7rem] px-3 py-1 rounded-full animate-bounce">1 هدية</span>
-              </button>
-           </div>
-        </div>
-      )}
-
-      {/* Top Header & Back Button */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
-        <div className="flex items-center gap-4">
-           <div className="w-14 h-14 rounded-2xl bg-[var(--gradient-primary)] flex items-center justify-center shadow-lg">
-              <img src="https://img.icons8.com/papercut/256/user-male-circle.png" width={34} height={34} alt="Avatar" />
-           </div>
-           <div>
-             <h1 className="text-[1.8rem] font-black text-[var(--text-primary)] leading-tight">إعدادات حسابي</h1>
-             <p className="text-[var(--text-secondary)] text-[0.8rem] font-medium">التحكم في بياناتك الشخصية</p>
-           </div>
-        </div>
-        <div className="flex gap-3">
-           <button 
-              onClick={() => simulateUnlock(Math.floor(Math.random() * 6))}
-              className="btn-accent px-6 py-3 rounded-xl flex items-center gap-3 text-[0.85rem] font-black shadow-lg"
-           >
-              اختبار الهدية 🎁
-           </button>
+              
            <button 
               onClick={() => window.location.href = '/dashboard'}
               className="btn-secondary px-6 py-3 rounded-xl flex items-center gap-3 text-[0.85rem] font-black hover:border-[var(--brand-primary)] transition-all"
