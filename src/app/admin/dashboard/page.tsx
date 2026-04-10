@@ -71,12 +71,12 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <div className="card p-6 flex flex-col gap-4 hover:border-[var(--brand-primary)]/50 group transition-all">
+        <div className="card p-6 flex flex-col gap-4 hover:border-blue-500/50 group transition-all">
           <div className="flex justify-between items-start">
             <div className="bg-blue-500/10 p-3.5 rounded-2xl group-hover:scale-110 transition-transform">
                 <img src={statIcons.users} width={28} height={28} alt="users" />
             </div>
-            <span className="text-[0.7rem] font-black text-blue-500 bg-blue-500/10 p-1 px-3 rounded-full">الكل</span>
+            <span className="text-[0.7rem] font-black text-blue-500 bg-blue-500/10 p-1 px-3 rounded-full">المستخدمين</span>
           </div>
           <div>
             <p className="text-[0.85rem] font-bold text-[var(--text-secondary)] mb-1">إجمالي الأعضاء</p>
@@ -87,26 +87,26 @@ export default function AdminDashboard() {
         <div className="card p-6 flex flex-col gap-4 hover:border-emerald-500/50 group transition-all">
           <div className="flex justify-between items-start">
             <div className="bg-emerald-500/10 p-3.5 rounded-2xl group-hover:scale-110 transition-transform">
-                <img src={statIcons.sales} width={28} height={28} alt="sales" />
+                <img src={statIcons.orders} width={28} height={28} alt="orders" />
             </div>
-            <span className="text-[0.7rem] font-black text-emerald-500 bg-emerald-500/10 p-1 px-3 rounded-full">أرباح</span>
+            <span className="text-[0.7rem] font-black text-emerald-500 bg-emerald-500/10 p-1 px-3 rounded-full">تم التنفيذ</span>
           </div>
           <div>
-            <p className="text-[0.85rem] font-bold text-[var(--text-secondary)] mb-1">إجمالي المبيعات</p>
-            <h3 className="text-[1.8rem] font-black text-emerald-500 leading-none" dir="ltr">{(stats?.totalSales || 0).toFixed(2)} {CURRENCY_SYMBOL}</h3>
+            <p className="text-[0.85rem] font-bold text-[var(--text-secondary)] mb-1">الطلبات الناجحة</p>
+            <h3 className="text-[1.8rem] font-black text-emerald-500 leading-none">{stats?.completedOrders || 0}</h3>
           </div>
         </div>
 
         <div className="card p-6 flex flex-col gap-4 hover:border-amber-500/50 group transition-all">
           <div className="flex justify-between items-start">
             <div className="bg-amber-500/10 p-3.5 rounded-2xl group-hover:scale-110 transition-transform">
-                <img src={statIcons.deposits} width={28} height={28} alt="deposits" />
+                <img src={statIcons.sales} width={28} height={28} alt="sales" />
             </div>
-            <span className="text-[0.7rem] font-black text-amber-500 bg-amber-500/10 p-1 px-3 rounded-full">تحقق</span>
+            <span className="text-[0.7rem] font-black text-amber-500 bg-amber-500/10 p-1 px-3 rounded-full">مالية</span>
           </div>
           <div>
-            <p className="text-[0.85rem] font-bold text-[var(--text-secondary)] mb-1">إيداعات معلقة</p>
-            <h3 className="text-[1.8rem] font-black text-amber-500 leading-none">{stats?.pendingDeposits || 0}</h3>
+            <p className="text-[0.85rem] font-bold text-[var(--text-secondary)] mb-1">إجمالي المبيعات</p>
+            <h3 className="text-[1.8rem] font-black text-amber-500 leading-none" dir="ltr">{(stats?.totalSales || 0).toFixed(2)} {CURRENCY_SYMBOL}</h3>
           </div>
         </div>
 
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
             <div className="bg-red-500/10 p-3.5 rounded-2xl group-hover:scale-110 transition-transform">
                 <img src={statIcons.tickets} width={28} height={28} alt="tickets" />
             </div>
-            <span className="text-[0.7rem] font-black text-red-500 bg-red-500/10 p-1 px-3 rounded-full">عاجل</span>
+            <span className="text-[0.7rem] font-black text-red-500 bg-red-500/10 p-1 px-3 rounded-full">الدعم</span>
           </div>
           <div>
             <p className="text-[0.85rem] font-bold text-[var(--text-secondary)] mb-1">تذاكر مفتوحة</p>

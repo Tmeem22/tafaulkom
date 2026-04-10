@@ -12,6 +12,7 @@ export async function GET(req: Request) {
     const [
       totalUsers,
       totalSalesData,
+      completedOrders,
       pendingDeposits,
       openTickets,
       recentDeposits
@@ -19,6 +20,9 @@ export async function GET(req: Request) {
       prisma.user.count(),
       prisma.order.aggregate({
         _sum: { charge: true }
+      }),
+      prisma.order.count({
+        where: { status: 'completed' }
       }),
       prisma.deposit.count({
         where: { status: 'pending' }
@@ -39,6 +43,7 @@ export async function GET(req: Request) {
       stats: {
         totalUsers,
         totalSales: totalSalesData._sum.charge || 0,
+        completedOrders,
         pendingDeposits,
         openTickets
       },
