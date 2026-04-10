@@ -21,11 +21,11 @@ export default function AccountPage() {
 
   const TIERS = [
     { id: 'new', name: 'جديد', spend: 0, discount: '0%', icon: 'https://img.icons8.com/papercut/256/medal.png', perks: [true, false, false, false, false] },
-    { id: 'beginner', name: 'مبتدئ', spend: 10, discount: '0.5%', icon: 'https://img.icons8.com/fluency/256/medal.png', perks: [true, true, true, false, false] },
+    { id: 'beginner', name: 'مبتدئ', spend: 25, discount: '0.5%', icon: 'https://img.icons8.com/fluency/256/medal.png', perks: [true, true, true, false, false] },
     { id: 'active', name: 'نشيط', spend: 100, discount: '2%', icon: 'https://img.icons8.com/fluency/256/trophy.png', perks: [true, true, true, true, false] },
-    { id: 'elite', name: 'مميز', spend: 1000, discount: '5%', icon: 'https://img.icons8.com/fluency/256/vip.png', perks: [true, true, true, true, true] },
-    { id: 'vip', name: 'VIP', spend: 5000, discount: '8%', icon: 'https://img.icons8.com/fluency/256/crown.png', perks: [true, true, true, true, true] },
-    { id: 'royal', name: 'ملكي', spend: 10000, discount: '10%', icon: 'https://img.icons8.com/fluency/256/guarantee.png', perks: [true, true, true, true, true] },
+    { id: 'elite', name: 'مميز', spend: 500, discount: '5%', icon: 'https://img.icons8.com/fluency/256/vip.png', perks: [true, true, true, true, true] },
+    { id: 'vip', name: 'VIP', spend: 2500, discount: '8%', icon: 'https://img.icons8.com/fluency/256/crown.png', perks: [true, true, true, true, true] },
+    { id: 'royal', name: 'ملكي', spend: 5000, discount: '10%', icon: 'https://img.icons8.com/fluency/256/guarantee.png', perks: [true, true, true, true, true] },
   ];
 
   const handleClaim = () => {
@@ -52,6 +52,18 @@ export default function AccountPage() {
         if (data.authenticated) {
           setUser(data.user);
           setFormData(prev => ({ ...prev, username: data.user.username }));
+
+          // 🎉 Check for Automatic Unlock Celebration
+          const balance = data.user.balance || 0;
+          const eligibleTier = [...TIERS].reverse().find(t => balance >= t.spend && t.spend > 0);
+          if (eligibleTier) {
+            const hasCelebrated = localStorage.getItem(`celebrated_tier_${eligibleTier.id}`);
+            if (!hasCelebrated) {
+              setUnlockedTier(eligibleTier);
+              playCelebrate();
+              localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'true');
+            }
+          }
         }
       })
       .finally(() => setLoading(false));
@@ -291,7 +303,7 @@ export default function AccountPage() {
             <div className="flex flex-col gap-4">
                <div className="bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-color)]">
                   <p className="text-[0.65rem] font-black text-[var(--text-secondary)] uppercase mb-1">الرصيد المتاح</p>
-                  <p className="text-[1.2rem] font-black text-[var(--brand-primary)]" dir="ltr">${user?.balance?.toFixed(2) || '0.00'}</p>
+                  <p className="text-[1.2rem] font-black text-[var(--brand-primary)]" dir="rtl">{user?.balance?.toFixed(2) || '0.00'} ر.س</p>
                </div>
                <div className="bg-yellow-400 p-3 rounded-xl border-none shadow-sm">
                   <p className="text-[0.65rem] font-black text-black/60 uppercase mb-1">حالة الحساب</p>
@@ -322,12 +334,19 @@ export default function AccountPage() {
 
          {/* Grid 6 Tiers - Obsidian Style */}
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {TIERS.map((tier, idx) => (
+            {[
+               { id: 'new', name: 'جديد', spend: '0', discount: '0%', icon: 'https://img.icons8.com/papercut/256/medal.png', perks: [true, false, false, false, false] },
+               { id: 'beginner', name: 'مبتدئ', spend: '25', discount: '0.5%', icon: 'https://img.icons8.com/fluency/256/medal.png', perks: [true, true, true, false, false] },
+               { id: 'active', name: 'نشيط', spend: '100', discount: '2%', icon: 'https://img.icons8.com/fluency/256/trophy.png', perks: [true, true, true, true, false] },
+               { id: 'elite', name: 'مميز', spend: '500', discount: '5%', icon: 'https://img.icons8.com/fluency/256/vip.png', perks: [true, true, true, true, true] },
+               { id: 'vip', name: 'VIP', spend: '2,500', discount: '8%', icon: 'https://img.icons8.com/fluency/256/crown.png', perks: [true, true, true, true, true] },
+               { id: 'royal', name: 'ملكي', spend: '5,000', discount: '10%', icon: 'https://img.icons8.com/fluency/256/guarantee.png', perks: [true, true, true, true, true] },
+            ].map((tier, idx) => (
                <div key={idx} className={`relative overflow-hidden rounded-[2.5rem] p-6 flex flex-col gap-6 shadow-xl border-4 transition-all hover:scale-[1.03] ${tier.id === 'royal' ? 'bg-[#0a0a0c] border-yellow-400 shadow-yellow-400/20' : 'bg-[#0f1118] border-white/5 hover:border-white/10'}`}>
                   <div className={`p-4 rounded-[1.8rem] flex justify-between items-center ${tier.id === 'royal' ? 'bg-yellow-400' : 'bg-white/5'}`}>
                      <div className="flex flex-col">
                         <span className={`text-[0.65rem] font-black uppercase tracking-widest ${tier.id === 'royal' ? 'text-black/60' : 'text-white/40'}`}>انفق أكثر من</span>
-                        <span className={`text-[1.3rem] font-black ${tier.id === 'royal' ? 'text-black' : 'text-white'}`}>${tier.spend}</span>
+                        <span className={`text-[1.3rem] font-black ${tier.id === 'royal' ? 'text-black' : 'text-white'}`}>{tier.spend} ر.س</span>
                      </div>
                      <img src={tier.icon} width={45} height={45} alt={tier.name} className="drop-shadow-lg" />
                   </div>
@@ -340,6 +359,7 @@ export default function AccountPage() {
                            "نظام النقاط",
                            `خصم ${tier.discount} على الخدمات`,
                            "سحب على 100 دولار",
+                           "متجر إلكتروني لمدة عام (قريباً)",
                            "دعم عبر الواتساب"
                         ].map((perk, pIdx) => (
                            <div key={pIdx} className="flex justify-between items-center gap-3">
@@ -366,12 +386,12 @@ export default function AccountPage() {
             <div className="bg-white/5 p-8 flex justify-between items-center border-b border-white/5">
                <span className="text-white font-black text-[1.6rem]">جدول ميزات حالة الحساب</span>
                <div className="flex gap-12 ml-4 text-white/20">
-                  <span className="font-black text-[0.8rem] w-16 text-center">جديد</span>
-                  <span className="font-black text-[0.8rem] w-16 text-center text-yellow-500">مبتدئ</span>
-                  <span className="font-black text-[0.8rem] w-16 text-center">نشيط</span>
-                  <span className="font-black text-[0.8rem] w-16 text-center">مميز</span>
-                  <span className="font-black text-[0.8rem] w-16 text-center text-purple-400">VIP</span>
-                  <span className="font-black text-[0.8rem] w-16 text-center text-yellow-400">ملكي</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center">جديد (0 ر.س)</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center text-yellow-500">مبتدئ (25 ر.س)</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center">نشيط (100 ر.س)</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center text-emerald-400">مميز (500 ر.س)</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center text-purple-400">VIP (2.5k ر.س)</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center text-yellow-400">ملكي (5k ر.س)</span>
                </div>
             </div>
             <div className="p-8 flex flex-col gap-4">
@@ -380,6 +400,7 @@ export default function AccountPage() {
                   { name: 'نظام النقاط', checks: [false, true, true, true, true, true] },
                   { name: 'خصم على الخدمات', checks: [false, true, true, true, true, true] },
                   { name: 'سحب على 100 دولار', checks: [false, false, true, true, true, true] },
+                  { name: 'متجر إلكتروني (قريباً)', checks: [false, false, false, true, true, true] },
                   { name: 'دعم فني عبر الواتساب', checks: [false, false, false, false, true, true] },
                ].map((row, rIdx) => (
                   <div key={rIdx} className="bg-white/5 rounded-3xl p-5 flex justify-between items-center hover:bg-white/10 transition-all border border-white/5">
@@ -401,9 +422,9 @@ export default function AccountPage() {
                      </div>
                   </div>
                ))}
+            </div>
          </div>
       </div>
     </div>
   );
 }
-

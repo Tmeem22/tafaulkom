@@ -403,10 +403,10 @@ body {
 .animate-pixel-run { animation: pixel-run 0.4s steps(2) infinite; }
 .animate-scanline { animation: scanline 4s linear infinite; }
 .image-render-pixel { 
-  image-rendering: pixelated; 
-  image-rendering: -moz-crisp-edges; 
   image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated; 
 }
+
 
 .font-retro {
   font-family: monospace !important;

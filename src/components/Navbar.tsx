@@ -160,7 +160,7 @@ export default function Navbar() {
                             ))
                           ) : (
                              <div className="p-8 text-center text-[var(--text-secondary)] text-[0.8rem]">
-                               <img src="https://img.icons8.com/fluency/256/empty-filter.png" width={40} className="mx-auto mb-2 opacity-50" alt="لا توجد تنبيهات" />
+                               <img src="https://img.icons8.com/fluency/256/no-notifications.png" width={40} className="mx-auto mb-2 opacity-50" alt="لا توجد تنبيهات" />
                                <p>لا توجد تنبيهات حالياً</p>
                              </div>
                           )}
