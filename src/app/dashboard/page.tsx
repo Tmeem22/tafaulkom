@@ -8,6 +8,7 @@ import { CURRENCY_SYMBOL } from '@/lib/constants';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png', active: true },
+  { label: 'سلة المشتريات', href: '/dashboard/cart', icon: 'https://img.icons8.com/color/96/shopping-basket.png' },
   { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/fluency/256/list.png' },
   { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/fluency/256/flash-on.png' },
   { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/fluency/256/card-exchange.png' },
@@ -621,19 +622,49 @@ function DashboardContent() {
                       )}
                     </div>
 
-                    <button disabled={submitting || Number(totalCost) === 0} type="submit" className="btn-primary w-full p-5 text-[1.1rem] font-black rounded-[16px] shadow-[0_8px_25px_rgba(108,60,225,0.3)] transition-all flex items-center justify-center gap-3">
-                      {submitting ? (
-                        <>
-                          <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin brightness-0 invert" alt="جاري التحميل" />
-                          جاري معالجة الطلب...
-                        </>
-                      ) : (
-                        <>
-                          <img src="https://img.icons8.com/fluency/256/checkmark.png" width={24} height={24} className="brightness-0 invert" alt="تأكيد" />
-                          تأكيد وتنفيذ الطلب
-                        </>
-                      )}
-                    </button>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          if (!selectedService || !link || !quantity) {
+                            setMessage({ type: 'error', text: 'يرجى تعبئة جميع الحقول' });
+                            return;
+                          }
+                          const cart = JSON.parse(localStorage.getItem('smm_cart') || '[]');
+                          cart.push({
+                            serviceId: selectedService.id,
+                            serviceName: selectedService.name,
+                            link,
+                            quantity,
+                            cost: totalCost
+                          });
+                          localStorage.setItem('smm_cart', JSON.stringify(cart));
+                          // reset forms
+                          setLink('');
+                          setQuantity((selectedService as any)?.min || 100);
+                          setMessage({ type: 'success', text: `تم إضافة الخدمة للسلة بنجاح! السلة بها ${cart.length} طلبات.` });
+                        }}
+                        disabled={Number(totalCost) === 0} 
+                        className="btn-secondary p-4 text-[1rem] font-black rounded-[16px] border-2 border-[var(--brand-primary)] text-[var(--brand-primary)] transition-all flex items-center justify-center gap-2"
+                      >
+                        <img src="https://img.icons8.com/color/96/shopping-basket.png" width={22} height={22} alt="Add to cart" />
+                        أضف للسلة
+                      </button>
+
+                      <button disabled={submitting || Number(totalCost) === 0} type="submit" className="btn-primary p-4 text-[1rem] font-black rounded-[16px] shadow-lg transition-all flex items-center justify-center gap-2">
+                        {submitting ? (
+                          <>
+                            <img src="https://img.icons8.com/fluency/256/hourglass.png" width={22} height={22} className="animate-spin brightness-0 invert" alt="جاري التحميل" />
+                            معالجة...
+                          </>
+                        ) : (
+                          <>
+                            <img src="https://img.icons8.com/fluency/256/checkmark.png" width={22} height={22} className="brightness-0 invert" alt="تأكيد" />
+                            طلب مباشر
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </form>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import TelegramPopup from "@/components/TelegramPopup";
 import Notification from "@/components/Notification";
 import SpinWheel from "@/components/SpinWheel";
 import FlashSale from "@/components/FlashSale";
+import LiveSalesPopup from "@/components/LiveSalesPopup";
 
 export const metadata: Metadata = {
   title: "تفاعلكم - أرخص وأسرع منصة خدمات SMM عربية",
@@ -41,6 +42,7 @@ export default function RootLayout({
           {children}
           <FlashSale />
           <SpinWheel />
+          <LiveSalesPopup />
           <TelegramPopup />
           <Notification />
         </ThemeProvider>
