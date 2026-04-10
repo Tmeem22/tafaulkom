@@ -16,16 +16,21 @@ const sideLinks = [
 
 export default function AffiliatePage() {
   const [data, setData] = useState<any>(null);
+  const [leaderboard, setLeaderboard] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [withdrawing, setWithdrawing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState<'monthly' | 'alltime'>('monthly');
 
   useEffect(() => {
-    fetch('/api/user/affiliate')
-      .then(res => res.json())
-      .then(d => setData(d))
-      .catch(() => showToast('فشل تحميل البيانات', 'error'))
-      .finally(() => setLoading(false));
+    Promise.all([
+      fetch('/api/user/affiliate').then(r => r.json()),
+      fetch('/api/user/affiliate/leaderboard').then(r => r.json())
+    ]).then(([affData, lbData]) => {
+      setData(affData);
+      setLeaderboard(lbData);
+    }).catch(() => showToast('فشل تحميل البيانات', 'error'))
+    .finally(() => setLoading(false));
   }, []);
 
   const copyLink = () => {
@@ -156,6 +161,133 @@ export default function AffiliatePage() {
                 <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('سجّل في تفاعلكم واحصل على أفضل خدمات SMM! 🚀 ' + (data?.referralLink || ''))}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 px-4 rounded-full bg-[#1da1f2]/10 text-[#1da1f2] text-[0.8rem] font-black no-underline hover:bg-[#1da1f2] hover:text-white transition-all border border-[#1da1f2]/20">
                   <img src="https://img.icons8.com/color/96/twitter.png" width={20} height={20} alt="twitter" /> تويتر
                 </a>
+              </div>
+            </div>
+
+            {/* 🏆 LEADERBOARD SECTION */}
+            <div className="card p-0 rounded-[28px] overflow-hidden border-2 border-amber-500/20">
+              {/* Header Banner */}
+              <div className="bg-gradient-to-l from-amber-500 via-yellow-500 to-amber-600 p-6 md:p-8 text-center relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'url(https://img.icons8.com/fluency/256/trophy.png)', backgroundSize: '80px', backgroundRepeat: 'repeat'}} />
+                <div className="relative z-10">
+                  <h2 className="text-[1.8rem] md:text-[2.2rem] font-black text-white mb-2 tracking-tight">🏆 مسابقة أفضل مسوّق</h2>
+                  <p className="text-white/90 font-bold text-[0.95rem] mb-4">شهر {leaderboard?.currentMonth} {leaderboard?.currentYear} | جوائز نقدية حقيقية لأفضل 5!</p>
+                  <div className="inline-flex items-center gap-2 bg-black/20 backdrop-blur-sm px-5 py-2.5 rounded-full">
+                    <img src="https://img.icons8.com/fluency/256/hourglass.png" width={18} height={18} className="brightness-0 invert" alt="timer" />
+                    <span className="text-white font-black text-[0.9rem]">{leaderboard?.daysRemaining || 0} يوم متبقي</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Prize Tiers */}
+              <div className="p-5 md:p-8 bg-[var(--bg-card)]">
+                <div className="grid grid-cols-5 gap-2 md:gap-4 mb-8">
+                  {(leaderboard?.prizes || []).map((p: any) => (
+                    <div key={p.rank} className={`text-center p-3 md:p-4 rounded-2xl bg-gradient-to-b ${p.color} relative ${p.rank <= 3 ? 'scale-100' : 'scale-95 opacity-80'}`}>
+                      <p className="text-[1.5rem] md:text-[2rem] mb-1">{p.emoji}</p>
+                      <p className="text-white font-black text-[0.7rem] md:text-[0.85rem]">{p.title}</p>
+                      <p className="text-white font-black text-[1rem] md:text-[1.4rem] mt-1">{p.prize}</p>
+                      {p.rank === 1 && <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-ping" />}
+                    </div>
+                  ))}
+                </div>
+
+                {/* User's current position */}
+                <div className="bg-gradient-to-l from-[var(--brand-primary)]/10 to-[var(--brand-primary)]/5 border border-[var(--brand-primary)]/20 rounded-2xl p-5 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-[var(--brand-primary)] flex items-center justify-center text-white font-black text-[1.2rem] shadow-lg">
+                      {leaderboard?.userRank || '—'}
+                    </div>
+                    <div>
+                      <p className="font-black text-[1rem] text-[var(--text-primary)]">مركزك الحالي هذا الشهر</p>
+                      <p className="text-[0.75rem] text-[var(--text-secondary)] font-bold">
+                        {leaderboard?.userMonthlyOrders || 0} طلب عمولة • ${(leaderboard?.userMonthlyCommission || 0).toFixed(2)} مكسب
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-center sm:text-left">
+                    <p className="text-[0.7rem] text-[var(--text-tertiary)] font-bold">شارك أكثر = ارتقِ في الترتيب!</p>
+                  </div>
+                </div>
+
+                {/* Tabs */}
+                <div className="flex gap-2 mb-6 bg-[var(--bg-secondary)] p-1.5 rounded-2xl">
+                  <button onClick={() => setActiveTab('monthly')} className={`flex-1 py-3 rounded-xl font-black text-[0.85rem] transition-all ${activeTab === 'monthly' ? 'bg-[var(--bg-card)] text-[var(--text-primary)] shadow-md' : 'text-[var(--text-secondary)]'}`}>
+                    📅 هذا الشهر
+                  </button>
+                  <button onClick={() => setActiveTab('alltime')} className={`flex-1 py-3 rounded-xl font-black text-[0.85rem] transition-all ${activeTab === 'alltime' ? 'bg-[var(--bg-card)] text-[var(--text-primary)] shadow-md' : 'text-[var(--text-secondary)]'}`}>
+                    👑 على الإطلاق
+                  </button>
+                </div>
+
+                {/* Leaderboard Table */}
+                <div className="space-y-2">
+                  {(activeTab === 'monthly' ? leaderboard?.monthly : leaderboard?.allTime)?.length > 0 ? (
+                    (activeTab === 'monthly' ? leaderboard.monthly : leaderboard.allTime).map((entry: any, i: number) => {
+                      const rankEmojis = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+                      const rankColors = ['bg-amber-500/10 border-amber-500/30', 'bg-slate-200/10 border-slate-400/30', 'bg-amber-700/10 border-amber-700/30', 'bg-blue-500/5 border-blue-500/15', 'bg-purple-500/5 border-purple-500/15'];
+                      return (
+                        <div key={i} className={`flex items-center justify-between p-4 rounded-2xl border transition-all hover:scale-[1.01] ${entry.isCurrentUser ? 'bg-[var(--brand-primary)]/10 border-[var(--brand-primary)]/30 ring-2 ring-[var(--brand-primary)]/20' : (i < 5 ? rankColors[i] : 'bg-[var(--bg-secondary)] border-transparent')}`}>
+                          <div className="flex items-center gap-4">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-[1.1rem] ${i < 3 ? 'bg-gradient-to-br from-amber-300 to-amber-500 text-white shadow-md' : 'bg-[var(--bg-card)] text-[var(--text-primary)]'}`}>
+                              {i < 5 ? rankEmojis[i] : entry.rank}
+                            </div>
+                            <div>
+                              <p className={`font-black text-[0.9rem] ${entry.isCurrentUser ? 'text-[var(--brand-primary)]' : 'text-[var(--text-primary)]'}`}>
+                                {entry.username} {entry.isCurrentUser && '(أنت)'}
+                              </p>
+                              <p className="text-[0.7rem] text-[var(--text-tertiary)] font-bold">
+                                {entry.totalReferrals || 0} إحالة • {activeTab === 'monthly' ? entry.monthlyOrders : entry.totalOrders} طلب عمولة
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-left">
+                            <p className="font-black text-emerald-500 text-[1rem]" dir="ltr">
+                              ${(activeTab === 'monthly' ? entry.monthlyCommission : entry.totalCommission)?.toFixed(2)}
+                            </p>
+                            {i < 5 && activeTab === 'monthly' && (
+                              <p className="text-[0.6rem] text-amber-500 font-black">🏆 {leaderboard?.prizes?.[i]?.prize}</p>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-12">
+                      <img src="https://img.icons8.com/fluency/256/leaderboard.png" width={60} height={60} className="mx-auto mb-4 opacity-30" alt="empty" />
+                      <p className="text-[var(--text-tertiary)] font-black text-[1.1rem]">لا يوجد متسابقون بعد!</p>
+                      <p className="text-[var(--text-tertiary)] text-[0.85rem] mt-2 max-w-md mx-auto">كن أول من يشارك رابط الإحالة ويتصدر القائمة هذا الشهر واحصل على المركز الأول والجائزة الكبرى $25!</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Motivational Banner */}
+                <div className="mt-8 bg-gradient-to-l from-emerald-500/10 to-teal-500/5 border border-emerald-500/20 rounded-2xl p-6 text-center">
+                  <h4 className="font-black text-[1.1rem] text-[var(--text-primary)] mb-2">💡 نصائح لتصبح البطل!</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-right">
+                    <div className="flex items-start gap-3">
+                      <span className="text-[1.2rem]">📱</span>
+                      <div>
+                        <p className="font-black text-[0.8rem] text-[var(--text-primary)]">شارك بالقروبات</p>
+                        <p className="text-[0.7rem] text-[var(--text-secondary)]">أرسل رابطك في قروبات الواتساب والتيليجرام</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-[1.2rem]">🎥</span>
+                      <div>
+                        <p className="font-black text-[0.8rem] text-[var(--text-primary)]">محتوى فيديو</p>
+                        <p className="text-[0.7rem] text-[var(--text-secondary)]">اصنع فيديو قصير يشرح مميزات المنصة</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="text-[1.2rem]">💬</span>
+                      <div>
+                        <p className="font-black text-[0.8rem] text-[var(--text-primary)]">توصية مباشرة</p>
+                        <p className="text-[0.7rem] text-[var(--text-secondary)]">أنصح بالمنصة للمؤثرين الذين تعرفهم</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
