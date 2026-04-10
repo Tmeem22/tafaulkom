@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTheme } from './ThemeProvider';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCurrency } from './CurrencyProvider';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -11,6 +12,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { currency, setCurrency } = useCurrency();
   const router = useRouter();
 
   useEffect(() => {
@@ -136,6 +138,13 @@ export default function Navbar() {
               ) : (
                 <img src="https://img.icons8.com/fluency/256/sun.png" width={20} height={20} alt="تغيير للوضع المضيء" />
               )}
+            </button>
+
+            <button 
+              onClick={() => setCurrency(currency === 'SAR' ? 'USD' : 'SAR')} 
+              className="px-3 py-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[0.8rem] font-black text-[var(--text-primary)] hover:bg-[var(--brand-primary)] hover:text-white transition-all flex items-center gap-1"
+            >
+              {currency === 'SAR' ? '🇸🇦 ر.س' : '🇺🇸 USD'}
             </button>
 
             {!loading && (

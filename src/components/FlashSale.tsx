@@ -10,10 +10,16 @@ export default function FlashSale() {
   useEffect(() => {
     const checkFlashSale = () => {
       const now = new Date();
-      const saleStart = new Date(now);
+      let saleStart = new Date(now);
       saleStart.setHours(21, 0, 0, 0); // 9 PM
-      const saleEnd = new Date(now);
+      let saleEnd = new Date(now);
       saleEnd.setHours(22, 0, 0, 0); // 10 PM
+
+      // If it's past 10 PM today, target 9 PM tomorrow
+      if (now >= saleEnd) {
+        saleStart.setDate(saleStart.getDate() + 1);
+        saleEnd.setDate(saleEnd.getDate() + 1);
+      }
 
       if (now >= saleStart && now < saleEnd) {
         setIsActive(true);
@@ -23,16 +29,14 @@ export default function FlashSale() {
           minutes: Math.floor((diff / 1000 / 60) % 60),
           seconds: Math.floor((diff / 1000) % 60)
         });
-      } else if (now < saleStart) {
+      } else {
         setIsActive(false);
         const diff = saleStart.getTime() - now.getTime();
         setTimeLeft({
-          hours: Math.floor(diff / 1000 / 60 / 60),
+          hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((diff / 1000 / 60) % 60),
           seconds: Math.floor((diff / 1000) % 60)
         });
-      } else {
-        setIsActive(false);
       }
     };
 

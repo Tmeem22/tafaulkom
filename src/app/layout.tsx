@@ -6,6 +6,7 @@ import Notification from "@/components/Notification";
 import SpinWheel from "@/components/SpinWheel";
 import FlashSale from "@/components/FlashSale";
 import LiveSalesPopup from "@/components/LiveSalesPopup";
+import { CurrencyProvider } from "@/components/CurrencyProvider";
 
 export const metadata: Metadata = {
   title: "تفاعلكم - أرخص وأسرع منصة خدمات SMM عربية",
@@ -39,12 +40,14 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
-          {children}
-          <FlashSale />
-          <SpinWheel />
-          <LiveSalesPopup />
-          <TelegramPopup />
-          <Notification />
+          <CurrencyProvider>
+            {children}
+            <FlashSale />
+            <SpinWheel />
+            <LiveSalesPopup />
+            <TelegramPopup />
+            <Notification />
+          </CurrencyProvider>
         </ThemeProvider>
       </body>
     </html>

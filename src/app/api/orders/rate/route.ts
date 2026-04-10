@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     await prisma.$transaction([
       prisma.user.update({
         where: { id: user.id },
-        data: { points: { increment: 10 } }
+        data: { points: { increment: 10 } } as any
       }),
       prisma.notification.create({
         data: {

@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
+import { useCurrency } from '@/components/CurrencyProvider';
 
+// Prices are in USD. (1 USD = 3.75 SAR). 
+// The discounts are structured to give a 5-15 SAR savings (1.33 to 4.00 USD).
 const BUNDLES = [
   {
     id: 'insta-starter',
@@ -12,8 +14,8 @@ const BUNDLES = [
     platform: 'Instagram',
     icon: 'https://img.icons8.com/color/96/instagram-new.png',
     color: 'from-pink-500 to-purple-600',
-    originalPrice: 7.50,
-    price: 4.99,
+    originalPrice: 7.99, // ~29.96 SAR
+    price: 6.66, // ~24.97 SAR (Saving ~5 SAR)
     items: [
       { name: '1,000 متابع حقيقي', qty: '1K' },
       { name: '500 لايك على آخر صورة', qty: '500' },
@@ -28,8 +30,8 @@ const BUNDLES = [
     platform: 'TikTok',
     icon: 'https://img.icons8.com/color/96/tiktok.png',
     color: 'from-[#fe2c55] to-[#25f4ee]',
-    originalPrice: 14.99,
-    price: 9.99,
+    originalPrice: 12.00, // ~45.00 SAR
+    price: 9.33,  // ~34.98 SAR (Saving ~10 SAR)
     items: [
       { name: '5,000 متابع', qty: '5K' },
       { name: '2,000 لايك', qty: '2K' },
@@ -44,8 +46,8 @@ const BUNDLES = [
     platform: 'YouTube',
     icon: 'https://img.icons8.com/color/96/youtube-play.png',
     color: 'from-red-500 to-red-700',
-    originalPrice: 22.99,
-    price: 14.99,
+    originalPrice: 18.00, // ~67.50 SAR
+    price: 15.33, // ~57.48 SAR (Saving ~10 SAR)
     items: [
       { name: '1,000 مشترك', qty: '1K' },
       { name: '5,000 مشاهدة', qty: '5K' },
@@ -60,8 +62,8 @@ const BUNDLES = [
     platform: 'Twitter / X',
     icon: 'https://img.icons8.com/color/96/twitter.png',
     color: 'from-blue-400 to-blue-600',
-    originalPrice: 9.99,
-    price: 5.99,
+    originalPrice: 8.50, // ~31.87 SAR
+    price: 7.16, // ~26.85 SAR (Saving ~5 SAR)
     items: [
       { name: '1,000 متابع', qty: '1K' },
       { name: '500 لايك', qty: '500' },
@@ -76,8 +78,8 @@ const BUNDLES = [
     platform: 'Snapchat',
     icon: 'https://img.icons8.com/color/96/snapchat.png',
     color: 'from-yellow-400 to-yellow-500',
-    originalPrice: 12.99,
-    price: 7.99,
+    originalPrice: 15.00, // ~56.25 SAR
+    price: 13.00, // ~48.75 SAR (Saving ~7.5 SAR)
     items: [
       { name: '2,000 متابع', qty: '2K' },
       { name: '1,000 مشاهدة قصة', qty: '1K' },
@@ -92,8 +94,8 @@ const BUNDLES = [
     platform: 'Multi-Platform',
     icon: 'https://img.icons8.com/fluency/256/social-media.png',
     color: 'from-purple-600 via-pink-500 to-amber-500',
-    originalPrice: 49.99,
-    price: 29.99,
+    originalPrice: 35.00, // 131.25 SAR
+    price: 31.00, // 116.25 SAR (Saving ~15 SAR)
     items: [
       { name: '5K متابع انستقرام', qty: '5K' },
       { name: '3K متابع تيك توك', qty: '3K' },
@@ -109,6 +111,7 @@ export default function BundlesPage() {
   const [cart, setCart] = useState<typeof BUNDLES>([]);
   const [showCart, setShowCart] = useState(false);
   const [ordering, setOrdering] = useState(false);
+  const { formatPrice } = useCurrency();
 
   const addToCart = (bundle: typeof BUNDLES[0]) => {
     if (cart.find(b => b.id === bundle.id)) {
@@ -186,10 +189,10 @@ export default function BundlesPage() {
 
                   {/* Pricing */}
                   <div className="flex items-center gap-3 mb-5">
-                    <p className="text-[2rem] font-black text-[var(--text-primary)]" dir="ltr">${bundle.price}</p>
-                    <p className="text-[1rem] font-bold text-[var(--text-tertiary)] line-through" dir="ltr">${bundle.originalPrice}</p>
+                    <p className="text-[2rem] font-black text-[var(--text-primary)]" dir="ltr">{formatPrice(bundle.price)}</p>
+                    <p className="text-[1rem] font-bold text-[var(--text-tertiary)] line-through" dir="ltr">{formatPrice(bundle.originalPrice)}</p>
                     <span className="bg-red-500/10 text-red-500 text-[0.7rem] font-black py-1 px-2 rounded-full">
-                      -{Math.round(((bundle.originalPrice - bundle.price) / bundle.originalPrice) * 100)}%
+                      توفير {formatPrice(bundle.originalPrice - bundle.price)}
                     </span>
                   </div>
 
@@ -217,7 +220,7 @@ export default function BundlesPage() {
               className="fixed bottom-6 left-6 z-50 bg-[var(--brand-primary)] text-white px-6 py-4 rounded-2xl shadow-2xl shadow-purple-500/30 font-black flex items-center gap-3 hover:scale-105 transition-all"
             >
               🛒 السلة ({cart.length})
-              <span className="bg-white/20 px-3 py-1 rounded-xl text-[0.9rem]" dir="ltr">${totalPrice.toFixed(2)}</span>
+              <span className="bg-white/20 px-3 py-1 rounded-xl text-[0.9rem]" dir="ltr">{formatPrice(totalPrice)}</span>
             </button>
           )}
 
@@ -240,7 +243,7 @@ export default function BundlesPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
-                        <p className="font-black text-emerald-500" dir="ltr">${b.price}</p>
+                        <p className="font-black text-emerald-500" dir="ltr">{formatPrice(b.price)}</p>
                         <button onClick={() => removeFromCart(b.id)} className="w-7 h-7 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center text-[0.7rem] font-black hover:bg-red-500 hover:text-white transition-all">✕</button>
                       </div>
                     </div>
@@ -250,15 +253,15 @@ export default function BundlesPage() {
                 <div className="border-t border-[var(--border-color)] pt-4 mb-4 space-y-2">
                   <div className="flex justify-between text-[0.85rem]">
                     <span className="text-[var(--text-secondary)] font-bold">السعر الأصلي</span>
-                    <span className="text-[var(--text-tertiary)] line-through" dir="ltr">${totalOriginal.toFixed(2)}</span>
+                    <span className="text-[var(--text-tertiary)] line-through" dir="ltr">{formatPrice(totalOriginal)}</span>
                   </div>
                   <div className="flex justify-between text-[0.85rem]">
-                    <span className="text-emerald-500 font-bold">التوفير</span>
-                    <span className="text-emerald-500 font-black" dir="ltr">-${cartDiscount.toFixed(2)}</span>
+                    <span className="text-emerald-500 font-bold">توفير حقيقي</span>
+                    <span className="text-emerald-500 font-black" dir="ltr">-{formatPrice(cartDiscount)}</span>
                   </div>
                   <div className="flex justify-between text-[1.1rem] font-black border-t border-[var(--border-color)] pt-2">
                     <span className="text-[var(--text-primary)]">الإجمالي</span>
-                    <span className="text-[var(--brand-primary)]" dir="ltr">${totalPrice.toFixed(2)}</span>
+                    <span className="text-[var(--brand-primary)]" dir="ltr">{formatPrice(totalPrice)}</span>
                   </div>
                 </div>
 

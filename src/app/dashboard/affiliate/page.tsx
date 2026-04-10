@@ -168,7 +168,7 @@ export default function AffiliatePage() {
             <div className="card p-0 rounded-[28px] overflow-hidden border-2 border-amber-500/20">
               {/* Header Banner */}
               <div className="bg-gradient-to-l from-amber-500 via-yellow-500 to-amber-600 p-6 md:p-8 text-center relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'url(https://img.icons8.com/fluency/256/trophy.png)', backgroundSize: '80px', backgroundRepeat: 'repeat'}} />
+                <div className="absolute inset-0 opacity-10 bg-[url('https://img.icons8.com/fluency/256/trophy.png')] bg-[length:80px] bg-repeat" />
                 <div className="relative z-10">
                   <h2 className="text-[1.8rem] md:text-[2.2rem] font-black text-white mb-2 tracking-tight">🏆 مسابقة أفضل مسوّق</h2>
                   <p className="text-white/90 font-bold text-[0.95rem] mb-4">شهر {leaderboard?.currentMonth} {leaderboard?.currentYear} | جوائز نقدية حقيقية لأفضل 5!</p>
