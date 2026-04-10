@@ -7,6 +7,37 @@ export default function AccountPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [unlockedTier, setUnlockedTier] = useState<any>(null);
+
+  // 🎵 Celebration Sounds
+  const playCelebrate = () => {
+    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
+    audio.play().catch(() => {});
+  };
+  const playClick = () => {
+    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
+    audio.play().catch(() => {});
+  };
+
+  const TIERS = [
+    { id: 'new', name: 'جديد', spend: 0, discount: '0%', icon: 'https://img.icons8.com/papercut/256/medal.png', perks: [true, false, false, false, false] },
+    { id: 'beginner', name: 'مبتدئ', spend: 10, discount: '0.5%', icon: 'https://img.icons8.com/fluency/256/medal.png', perks: [true, true, true, false, false] },
+    { id: 'active', name: 'نشيط', spend: 100, discount: '2%', icon: 'https://img.icons8.com/fluency/256/trophy.png', perks: [true, true, true, true, false] },
+    { id: 'elite', name: 'مميز', spend: 1000, discount: '5%', icon: 'https://img.icons8.com/fluency/256/vip.png', perks: [true, true, true, true, true] },
+    { id: 'vip', name: 'VIP', spend: 5000, discount: '8%', icon: 'https://img.icons8.com/fluency/256/crown.png', perks: [true, true, true, true, true] },
+    { id: 'royal', name: 'ملكي', spend: 10000, discount: '10%', icon: 'https://img.icons8.com/fluency/256/guarantee.png', perks: [true, true, true, true, true] },
+  ];
+
+  const handleClaim = () => {
+    playClick();
+    setUnlockedTier(null);
+    showToast(`تم تفعيل ميزات باقة ${unlockedTier.name} بنجاح! 🔥`, "success");
+  };
+
+  const simulateUnlock = (idx: number) => {
+    setUnlockedTier(TIERS[idx]);
+    playCelebrate();
+  };
 
   const [formData, setFormData] = useState({
     username: '',
@@ -97,6 +128,47 @@ export default function AccountPage() {
         </div>
       )}
 
+      {/* 🎊 Celebration Modal - UNLOCKED! */}
+      {unlockedTier && (
+        <div className="fixed inset-0 z-[6000] flex items-center justify-center p-6 bg-black/95 backdrop-blur-3xl animate-in zoom-in duration-500 overflow-hidden">
+           <div className="relative max-w-lg w-full bg-[#0a0a0c] rounded-[3.5rem] p-10 border-4 border-yellow-400 shadow-[0_0_100px_rgba(250,204,21,0.2)] text-center">
+              <div className="absolute top-0 left-0 w-full h-[6px] bg-gradient-to-r from-transparent via-yellow-400 to-transparent animate-pulse"></div>
+              
+              <div className="mb-8 relative">
+                 <div className="absolute inset-0 bg-yellow-400/20 blur-3xl rounded-full scale-150 animate-pulse"></div>
+                 <img src={unlockedTier.icon} className="w-48 h-48 mx-auto drop-shadow-[0_0_40px_rgba(250,204,21,0.6)] animate-bounce" alt="Gold" />
+              </div>
+
+              <h2 className="text-[2.8rem] font-black text-white mb-2 leading-tight tracking-tighter">مبروووك! 🎉</h2>
+              <p className="text-yellow-400 text-[1.4rem] font-black mb-8 px-4">لقد قمت بفتح باقة: {unlockedTier.name}</p>
+              
+              <div className="bg-white/5 rounded-[2.5rem] p-8 mb-10 text-right space-y-4 border border-white/5">
+                 <p className="text-white/40 text-[0.8rem] font-black uppercase tracking-widest mb-2">المميزات الجديدة المكتسبة:</p>
+                 <div className="flex items-center gap-4 text-[1.1rem] text-white font-black">
+                    <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+                    <span>خصم {unlockedTier.discount} دائم على الخدمات</span>
+                 </div>
+                 <div className="flex items-center gap-4 text-[1.1rem] text-white font-black">
+                    <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+                    <span>دعم فني أولوية ملكية 24/7</span>
+                 </div>
+                 <div className="flex items-center gap-4 text-[1.1rem] text-white font-black">
+                    <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+                    <span>دخول تلقائي في سحوبات الـ 100$</span>
+                 </div>
+              </div>
+
+              <button 
+                onClick={handleClaim}
+                className="group relative w-full py-6 rounded-3xl text-[1.6rem] font-black bg-yellow-400 text-black hover:bg-yellow-500 transition-all active:scale-95 shadow-2xl shadow-yellow-400/20"
+              >
+                استلام الجائزة 🔥
+                <span className="absolute -top-3 -right-3 bg-red-600 text-white text-[0.7rem] px-3 py-1 rounded-full animate-bounce">1 هدية</span>
+              </button>
+           </div>
+        </div>
+      )}
+
       {/* Top Header & Back Button */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
         <div className="flex items-center gap-4">
@@ -108,13 +180,21 @@ export default function AccountPage() {
              <p className="text-[var(--text-secondary)] text-[0.8rem] font-medium">التحكم في بياناتك الشخصية</p>
            </div>
         </div>
-        <button 
-           onClick={() => window.location.href = '/dashboard'}
-           className="btn-secondary px-6 py-3 rounded-xl flex items-center gap-3 text-[0.85rem] font-black hover:border-[var(--brand-primary)] transition-all"
-        >
-           <img src="https://img.icons8.com/fluency/256/back.png" width={18} height={18} alt="Back" />
-           العودة للمتجر
-        </button>
+        <div className="flex gap-3">
+           <button 
+              onClick={() => simulateUnlock(Math.floor(Math.random() * 6))}
+              className="btn-accent px-6 py-3 rounded-xl flex items-center gap-3 text-[0.85rem] font-black shadow-lg"
+           >
+              اختبار الهدية 🎁
+           </button>
+           <button 
+              onClick={() => window.location.href = '/dashboard'}
+              className="btn-secondary px-6 py-3 rounded-xl flex items-center gap-3 text-[0.85rem] font-black hover:border-[var(--brand-primary)] transition-all"
+           >
+              <img src="https://img.icons8.com/fluency/256/back.png" width={18} height={18} alt="Back" />
+              العودة للمتجر
+           </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_280px] gap-8">
@@ -233,52 +313,44 @@ export default function AccountPage() {
         </div>
       </div>
 
-      {/* 👑 VIP Membership System - New Section */}
-      <div className="mt-16 mb-20">
+      {/* 👑 VIP Membership System - Redesigned Section */}
+      <div className="mt-16 mb-20 animate-in slide-in-from-bottom duration-1000">
          <div className="flex flex-col gap-2 mb-8 text-center md:text-right">
-            <h2 className="text-[1.8rem] font-black text-[var(--text-primary)]">نظام مستويات العضوية 🏆</h2>
-            <p className="text-[var(--text-secondary)] text-[0.9rem] font-medium">كلما زاد شحنك، زادت ميزاتك وخصوماتك!</p>
+            <h2 className="text-[2.2rem] font-black text-white tracking-tight">نظام مستويات العضوية 🏆</h2>
+            <p className="text-white/40 text-[1rem] font-medium">كلما زاد شحنك، زادت ميزاتك وخصوماتك التلقائية!</p>
          </div>
 
-         {/* Grid 6 Tiers */}
+         {/* Grid 6 Tiers - Obsidian Style */}
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {[
-               { id: 'new', name: 'جديد', spend: '0', discount: '0%', color: 'bg-zinc-200', icon: 'https://img.icons8.com/fluency/256/medal.png', perks: [true, false, false, false, false, false] },
-               { id: 'beginner', name: 'مبتدئ', spend: '10', discount: '0.5%', color: 'bg-emerald-100', icon: 'https://img.icons8.com/color/256/military-medal.png', perks: [true, true, true, false, false, false] },
-               { id: 'active', name: 'نشيط', spend: '100', discount: '2%', color: 'bg-blue-100', icon: 'https://img.icons8.com/fluency/256/trophy.png', perks: [true, true, true, true, false, false] },
-               { id: 'elite', name: 'مميز', spend: '1,000', discount: '5%', color: 'bg-amber-100', icon: 'https://img.icons8.com/fluency/256/vip.png', perks: [true, true, true, true, true, false] },
-               { id: 'vip', name: 'VIP', spend: '5,000', discount: '8%', color: 'bg-purple-100', icon: 'https://img.icons8.com/fluency/256/crown.png', perks: [true, true, true, true, true, true] },
-               { id: 'royal', name: 'ملكي', spend: '10,000+', discount: '10%', color: 'bg-yellow-400', icon: 'https://img.icons8.com/fluency/256/guarantee.png', perks: [true, true, true, true, true, true] },
-            ].map((tier, idx) => (
-               <div key={idx} className={`relative overflow-hidden rounded-[2.5rem] p-6 flex flex-col gap-6 shadow-xl border-4 transition-all hover:scale-[1.03] ${tier.id === 'royal' ? 'bg-black border-yellow-400' : 'bg-[var(--bg-card)] border-[var(--border-color)]'}`}>
-                  <div className={`p-4 rounded-[1.8rem] flex justify-between items-center ${tier.id === 'royal' ? 'bg-yellow-400' : 'bg-[var(--bg-secondary)]'}`}>
+            {TIERS.map((tier, idx) => (
+               <div key={idx} className={`relative overflow-hidden rounded-[2.5rem] p-6 flex flex-col gap-6 shadow-xl border-4 transition-all hover:scale-[1.03] ${tier.id === 'royal' ? 'bg-[#0a0a0c] border-yellow-400 shadow-yellow-400/20' : 'bg-[#0f1118] border-white/5 hover:border-white/10'}`}>
+                  <div className={`p-4 rounded-[1.8rem] flex justify-between items-center ${tier.id === 'royal' ? 'bg-yellow-400' : 'bg-white/5'}`}>
                      <div className="flex flex-col">
-                        <span className={`text-[0.65rem] font-black uppercase tracking-widest ${tier.id === 'royal' ? 'text-black/60' : 'text-[var(--text-secondary)]'}`}>انفق أكثر من</span>
-                        <span className={`text-[1.3rem] font-black ${tier.id === 'royal' ? 'text-black' : 'text-[var(--brand-primary)]'}`}>${tier.spend}</span>
+                        <span className={`text-[0.65rem] font-black uppercase tracking-widest ${tier.id === 'royal' ? 'text-black/60' : 'text-white/40'}`}>انفق أكثر من</span>
+                        <span className={`text-[1.3rem] font-black ${tier.id === 'royal' ? 'text-black' : 'text-white'}`}>${tier.spend}</span>
                      </div>
                      <img src={tier.icon} width={45} height={45} alt={tier.name} className="drop-shadow-lg" />
                   </div>
 
                   <div className="flex flex-col gap-3">
-                     <h3 className={`text-[1.5rem] font-black mb-2 ${tier.id === 'royal' ? 'text-white' : 'text-[var(--text-primary)]'}`}>{tier.name}</h3>
+                     <h3 className="text-[1.8rem] font-black mb-2 text-white">{tier.name}</h3>
                      <div className="space-y-4">
                         {[
                            "دعم فني 24/7",
                            "نظام النقاط",
                            `خصم ${tier.discount} على الخدمات`,
                            "سحب على 100 دولار",
-                           "متجر مجانا لعام",
                            "دعم عبر الواتساب"
                         ].map((perk, pIdx) => (
                            <div key={pIdx} className="flex justify-between items-center gap-3">
-                              <span className={`text-[0.8rem] font-bold ${tier.id === 'royal' ? 'text-white/60' : 'text-[var(--text-secondary)]'}`}>{perk}</span>
+                              <span className="text-[0.9rem] font-bold text-white/50">{perk}</span>
                               {tier.perks[pIdx] ? (
-                                 <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                                 <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_10px_#10b981]">
                                     <svg viewBox="0 0 24 24" className="w-3 h-3 text-white fill-current"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                                  </div>
                               ) : (
-                                 <div className="w-5 h-5 rounded-full bg-red-400 flex items-center justify-center">
-                                    <svg viewBox="0 0 24 24" className="w-3 h-3 text-white fill-current"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
+                                 <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                                    <svg viewBox="0 0 24 24" className="w-3 h-3 text-white/10 fill-current"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
                                  </div>
                               )}
                            </div>
@@ -290,39 +362,38 @@ export default function AccountPage() {
          </div>
 
          {/* Comparison Header Table Logic */}
-         <div className="hidden lg:block overflow-hidden rounded-[2rem] border-4 border-yellow-400 shadow-2xl bg-[#111111]">
-            <div className="bg-yellow-400 p-6 flex justify-between items-center">
-               <span className="text-black font-black text-[1.4rem]">جدول ميزات حالة الحساب</span>
-               <div className="flex gap-12 ml-4">
-                  <span className="text-black font-black text-[0.9rem] w-16 text-center">جديد</span>
-                  <span className="text-black font-black text-[0.9rem] w-16 text-center">مبتدئ</span>
-                  <span className="text-black font-black text-[0.9rem] w-16 text-center">نشيط</span>
-                  <span className="text-black font-black text-[0.9rem] w-16 text-center">مميز</span>
-                  <span className="text-black font-black text-[0.9rem] w-16 text-center">VIP</span>
-                  <span className="text-black font-black text-[0.9rem] w-16 text-center">ملكي</span>
+         <div className="hidden lg:block overflow-hidden rounded-[3rem] border-4 border-white/5 bg-[#0a0a0c] shadow-2xl">
+            <div className="bg-white/5 p-8 flex justify-between items-center border-b border-white/5">
+               <span className="text-white font-black text-[1.6rem]">جدول ميزات حالة الحساب</span>
+               <div className="flex gap-12 ml-4 text-white/20">
+                  <span className="font-black text-[0.8rem] w-16 text-center">جديد</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center text-yellow-500">مبتدئ</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center">نشيط</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center">مميز</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center text-purple-400">VIP</span>
+                  <span className="font-black text-[0.8rem] w-16 text-center text-yellow-400">ملكي</span>
                </div>
             </div>
-            <div className="p-6 flex flex-col gap-4">
+            <div className="p-8 flex flex-col gap-4">
                {[
                   { name: 'دعم فني 24/7', checks: [true, true, true, true, true, true] },
                   { name: 'نظام النقاط', checks: [false, true, true, true, true, true] },
                   { name: 'خصم على الخدمات', checks: [false, true, true, true, true, true] },
                   { name: 'سحب على 100 دولار', checks: [false, false, true, true, true, true] },
-                  { name: 'متجر مجانا لمدة شهر', checks: [false, false, false, true, true, true] },
                   { name: 'دعم فني عبر الواتساب', checks: [false, false, false, false, true, true] },
                ].map((row, rIdx) => (
-                  <div key={rIdx} className="bg-white/5 rounded-2xl p-4 flex justify-between items-center hover:bg-white/10 transition-all border border-white/5">
-                     <span className="text-white font-black text-[1rem]">{row.name}</span>
+                  <div key={rIdx} className="bg-white/5 rounded-3xl p-5 flex justify-between items-center hover:bg-white/10 transition-all border border-white/5">
+                     <span className="text-white font-black text-[1.1rem]">{row.name}</span>
                      <div className="flex gap-12 ml-4">
                         {row.checks.map((check, cIdx) => (
                            <div key={cIdx} className="w-16 flex justify-center">
                               {check ? (
-                                 <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_10px_rgba(16,185,129,0.3)]">
-                                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-white fill-current"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+                                 <div className="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                                    <svg viewBox="0 0 24 24" className="w-4 h-4 text-white fill-current"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
                                  </div>
                               ) : (
-                                 <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30">
-                                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-red-500 fill-current"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
+                                 <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                                    <svg viewBox="0 0 24 24" className="w-4 h-4 text-white/10 fill-current"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"/></svg>
                                  </div>
                               )}
                            </div>
@@ -330,9 +401,9 @@ export default function AccountPage() {
                      </div>
                   </div>
                ))}
-            </div>
          </div>
       </div>
     </div>
   );
 }
+
