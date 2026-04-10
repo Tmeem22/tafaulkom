@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-export default function Register() {
+function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get('ref') || '';
 
   const [formData, setFormData] = useState({
     email: '',
@@ -29,7 +31,7 @@ export default function Register() {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, ref: refCode })
       });
       const data = await res.json();
       
@@ -83,6 +85,15 @@ export default function Register() {
               <p className="text-[var(--text-secondary)] mb-8 text-[0.95rem]">
                 افتح حساباً في <strong className="text-[var(--brand-primary)]">تفاعلكم</strong> الآن! وابدأ في رحلة نمو حساباتك. تفصلك خطوة واحدة عن أفضل تجربة تسويق عربية.
               </p>
+              {refCode && (
+                <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center gap-3">
+                  <img src="https://img.icons8.com/fluency/256/gift.png" width={28} height={28} alt="gift" />
+                  <div>
+                    <p className="font-black text-emerald-600 text-[0.85rem]">تم تطبيق رابط إحالة!</p>
+                    <p className="text-[0.7rem] text-[var(--text-secondary)]">سجّل الآن واستمتع بخدمات تفاعلكم المميزة</p>
+                  </div>
+                </div>
+              )}
 
               <form onSubmit={handleRegister} className="flex flex-col gap-5">
                 {fields.map((field, i) => (
@@ -152,5 +163,13 @@ export default function Register() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function Register() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
   );
 }

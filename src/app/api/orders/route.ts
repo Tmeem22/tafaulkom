@@ -161,6 +161,33 @@ export async function POST(request: Request) {
       })
     ]);
 
+    // Affiliate Commission (1.5%)
+    if (user.referredById) {
+      const commission = finalCharge * 0.015;
+      await prisma.$transaction([
+        prisma.referral.create({
+          data: {
+            referrerId: user.referredById,
+            referredId: user.id,
+            orderId: newOrder.id,
+            orderAmount: finalCharge,
+            commission
+          }
+        }),
+        prisma.user.update({
+          where: { id: user.referredById },
+          data: { totalCommission: { increment: commission } }
+        }),
+        prisma.notification.create({
+          data: {
+            userId: user.referredById,
+            title: 'عمولة جديدة! 💰',
+            message: `حصلت على ${commission.toFixed(4)}$ عمولة من عملية شراء أحد إحالاتك.`
+          }
+        })
+      ]);
+    }
+
     return NextResponse.json({ 
       success: true, 
       order: newOrder,

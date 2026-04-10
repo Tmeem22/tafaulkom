@@ -13,7 +13,7 @@ const resolveMx = promisify(dns.resolveMx);
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    const { username, email, password } = data;
+    const { username, email, password, ref } = data;
 
     // 2. Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,7 +42,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'البريد الإلكتروني أو اسم المستخدم مستخدم مسبقاً' }, { status: 400 });
     }
     
-    // 4. Create user
+    // 4. Referral lookup
+    let referrerId: string | null = null;
+    if (ref) {
+      const referrer = await prisma.user.findUnique({ where: { referralCode: ref } });
+      if (referrer) referrerId = referrer.id;
+    }
+
+    // 5. Create user
     const hashedPassword = await bcrypt.hash(password, 10);
     const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
     
@@ -57,9 +64,21 @@ export async function POST(req: Request) {
         password: hashedPassword,
         balance: isInitialAdmin ? 1000.00 : 0.00,
         role: role,
-        emailVerified: true 
+        emailVerified: true,
+        referredById: referrerId
       }
     });
+
+    // Notify referrer
+    if (referrerId) {
+      await prisma.notification.create({
+        data: {
+          userId: referrerId,
+          title: 'إحالة جديدة! 🎉',
+          message: `مستخدم جديد سجّل عبر رابط الإحالة الخاص بك. ستحصل على 1.5% من كل عملية شراء يقوم بها!`
+        }
+      });
+    }
 
     return NextResponse.json({ success: true, message: 'تم إنشاء حسابك وتفعيله بنجاح! يمكنك الآن تسجيل الدخول.' });
   } catch (error: any) {

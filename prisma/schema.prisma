@@ -26,6 +26,26 @@ model User {
   notifications     Notification[]
   videoTasks        VideoTask[]
   isProfitViewer    Boolean   @default(false)
+  // Affiliate System
+  referralCode      String?   @unique
+  referredById      String?
+  referredBy        User?     @relation("Referrals", fields: [referredById], references: [id])
+  referrals         User[]    @relation("Referrals")
+  commissionsEarned Referral[] @relation("CommissionEarner")
+  commissionsSource Referral[] @relation("CommissionSource")
+  totalCommission   Float     @default(0.0)
+}
+
+model Referral {
+  id            String   @id @default(cuid())
+  referrerId    String
+  referredId    String
+  orderId       Int
+  orderAmount   Float
+  commission    Float
+  createdAt     DateTime @default(now())
+  referrer      User     @relation("CommissionEarner", fields: [referrerId], references: [id])
+  referred      User     @relation("CommissionSource", fields: [referredId], references: [id])
 }
 
 model VideoTask {
