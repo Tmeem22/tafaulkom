@@ -13,6 +13,7 @@ model User {
   email             String    @unique
   password          String
   balance           Float     @default(0.0)
+  points            Int       @default(0)
   role              String    @default("USER")
   apiKey            String    @unique @default(uuid())
   emailVerified     Boolean   @default(false)
