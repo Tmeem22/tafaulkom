@@ -231,7 +231,10 @@ export default function Navbar() {
                     <img src="https://img.icons8.com/fluency/256/manager.png" width={18} height={18} className="brightness-0 invert" alt="حسابي" />
                     <span>حسابي</span>
                   </Link>
-                  <Link href="/dashboard" className="btn-secondary flex-1 text-center py-3" onClick={() => setMobileOpen(false)}>لوحة التحكم</Link>
+                  <Link href="/dashboard" className="btn-secondary flex-1 text-center py-3" onClick={() => setMobileOpen(false)}>المتجر</Link>
+                  <Link href="/dashboard/points" className="p-3 bg-amber-500/10 rounded-[14px] flex items-center justify-center border border-amber-500/20" onClick={() => setMobileOpen(false)}>
+                    <img src="https://img.icons8.com/fluency/256/coins.png" width={24} height={24} alt="النقاط" />
+                  </Link>
                   <Link href="/dashboard/support" className="p-3 bg-[var(--bg-secondary)] rounded-[14px] flex items-center justify-center" onClick={() => setMobileOpen(false)}>
                     <img src="https://img.icons8.com/fluency/256/bell.png" width={24} height={24} alt="التنبيهات" />
                   </Link>

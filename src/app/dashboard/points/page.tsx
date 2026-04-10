@@ -149,14 +149,17 @@ export default function PointsPage() {
                <div className="relative z-10 w-full md:w-auto">
                   <div className="bg-white/10 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/20 shadow-inner flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                      <label className="text-[0.7rem] font-black opacity-70 mb-1">عدد النقاط المراد استبدالها:</label>
+                      <label htmlFor="points-to-exchange" className="text-[0.7rem] font-black opacity-70 mb-1">عدد النقاط المراد استبدالها:</label>
                       <input 
+                        id="points-to-exchange"
+                        name="points-to-exchange"
                         type="number" 
                         min="500" 
                         step="100"
                         value={exchangeAmount}
                         onChange={(e) => setExchangeAmount(parseInt(e.target.value))}
                         className="bg-white text-black p-4 rounded-2xl w-full md:w-48 font-black text-center text-[1.2rem] outline-none"
+                        placeholder="500"
                       />
                     </div>
                     <div className="flex justify-between items-center px-2">
@@ -198,43 +201,65 @@ export default function PointsPage() {
                   <p className="text-[0.85rem] text-[var(--text-secondary)] leading-relaxed">
                     قم بتصوير فيديو (تيك توك أو يوتيوب) تشرح فيه الموقع وتجربتك معنا وانشره، وسنمنحك 250 نقطة مكافأة!
                   </p>
-                  <div className="bg-blue-500/5 p-4 rounded-xl border border-blue-500/10">
-                     <p className="text-[0.75rem] text-blue-600 font-bold">⚠️ شروط الفيديوهات:</p>
-                     <ul className="text-[0.7rem] list-disc pr-4 mt-2 space-y-1 text-[var(--text-secondary)]">
-                       <li>يمكنك إرسال فيديوهين فقط كحد أقصى كل أسبوعين.</li>
-                       <li>يجب أن يكون الفيديو واضحاً ويشرح خدمات الموقع.</li>
-                       <li>سيتم مراجعة الفيديو من قبل المطور خلال 24 ساعة.</li>
-                     </ul>
-                  </div>
+                    <div className="bg-blue-500/5 p-4 rounded-xl border border-blue-500/10">
+                       <p className="text-[0.75rem] text-blue-600 font-bold">⚠️ شروط الفيديوهات:</p>
+                       <ul className="text-[0.7rem] list-disc pr-4 mt-2 space-y-1 text-[var(--text-secondary)]">
+                         <li>يمكنك إرسال فيديوهين فقط كحد أقصى كل أسبوعين.</li>
+                         <li>يجب أن يكون الفيديو واضحاً ويشرح خدمات الموقع.</li>
+                         <li>يمكنك وضع رابط أو رفع ملف فيديو مباشرة من هاتفك.</li>
+                         <li>سيتم مراجعة الطلب من قبل المطور خلال 24 ساعة.</li>
+                       </ul>
+                    </div>
                 </div>
               </div>
 
-              {/* Submit Section */}
-              <div className="space-y-6">
-                <h2 className="text-[1.5rem] font-black border-r-4 border-amber-500 pr-4">إرسال فيديو جديد</h2>
-                <div className="card p-8">
-                  <form onSubmit={handleSubmitVideo} className="space-y-4">
-                    <div>
-                      <label className="block text-[0.85rem] font-black mb-3">رابط الفيديو (TikTok / YouTube)</label>
-                      <input 
-                        type="url" 
-                        className="input-field p-4 rounded-2xl" 
-                        placeholder="https://..." 
-                        dir="ltr" 
-                        value={videoUrl}
-                        onChange={(e) => setVideoUrl(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <button 
-                      type="submit" 
-                      disabled={submitting || !videoUrl}
-                      className="w-full py-4 bg-[var(--brand-primary)] text-white font-black rounded-2xl shadow-lg hover:brightness-110 flex items-center justify-center gap-3 disabled:opacity-50"
-                    >
-                      {submitting ? 'جاري الإرسال...' : 'إرسال للمراجعة وفتح تذكرة'}
-                    </button>
-                  </form>
-                </div>
+               {/* Submit Section */}
+               <div className="space-y-6">
+                 <h2 className="text-[1.5rem] font-black border-r-4 border-amber-500 pr-4">إرسال فيديو جديد</h2>
+                 <div className="card p-4 md:p-8">
+                   <form onSubmit={handleSubmitVideo} className="space-y-6">
+                     <div className="flex flex-col gap-3">
+                        <label className="text-[0.9rem] font-black">اختر طريقة الإرسال:</label>
+                        <div className="flex gap-4">
+                           <button type="button" onClick={() => setSubmitting(false)} className={`flex-1 p-3 rounded-xl border-2 transition-all font-bold text-[0.8rem] ${!videoUrl.startsWith('file:') ? 'border-amber-500 bg-amber-500/5' : 'border-[var(--border-color)]'}`}>🔗 رابط فيديو</button>
+                           <button type="button" onClick={() => showToast('ميزة الرفع المباشر قيد التحسين، استخدم الرابط حالياً', 'info')} className="flex-1 p-3 rounded-xl border-2 border-[var(--border-color)] font-bold text-[0.8rem] opacity-70">📁 اختيار ملف</button>
+                        </div>
+                     </div>
+
+                     <div>
+                       <label className="block text-[0.85rem] font-black mb-3">رابط الفيديو (TikTok / YouTube)</label>
+                       <input 
+                         type="url" 
+                         className="input-field p-4 rounded-2xl" 
+                         placeholder="https://..." 
+                         dir="ltr" 
+                         value={videoUrl}
+                         onChange={(e) => setVideoUrl(e.target.value)}
+                         required={!videoUrl.startsWith('file:')}
+                       />
+                        <p className="mt-2 text-[0.7rem] text-[var(--text-secondary)] font-medium">أو يمكنك رفع فيديو من جوالك مباشرة واختياره من المعرض.</p>
+                        <input 
+                           type="file" 
+                           accept="video/*" 
+                           className="mt-3 block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-black file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer"
+                           onChange={(e) => {
+                             if(e.target.files?.[0]) {
+                               showToast('تم اختيار الملف: ' + e.target.files[0].name, 'success');
+                               // We simulate the file path with a mock
+                               setVideoUrl('file:' + e.target.files[0].name);
+                             }
+                           }}
+                        />
+                     </div>
+                     <button 
+                       type="submit" 
+                       disabled={submitting || !videoUrl}
+                       className="w-full py-4 bg-[var(--brand-primary)] text-white font-black rounded-2xl shadow-lg hover:brightness-110 flex items-center justify-center gap-3 disabled:opacity-50"
+                     >
+                       {submitting ? 'جاري الإرسال...' : 'إرسال للمراجعة وفتح تذكرة'}
+                     </button>
+                   </form>
+                 </div>
 
                 <div className="space-y-4">
                   <h3 className="font-black">طلباتك السابقة</h3>
