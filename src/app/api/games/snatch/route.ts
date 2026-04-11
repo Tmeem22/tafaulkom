@@ -24,21 +24,31 @@ export async function POST(req: Request) {
         data: { status: 'SOLD', winnerId: user.id }
       });
 
-      // Deduct balance
+      // Deduct balance & Add Points
+      const pointsToAdd = Math.floor(drop.currentPrice * 5);
       await tx.user.update({
         where: { id: user.id },
-        data: { balance: { decrement: drop.currentPrice } }
+        data: { 
+            balance: { decrement: drop.currentPrice },
+            points: { increment: pointsToAdd }
+        }
       });
 
-      // Add to inventory
-      await tx.inventoryItem.create({
+      await tx.notification.create({
+        data: {
+          userId: user.id,
+          title: 'نقاط مكافأة جديدة 🪙',
+          message: `مبروك! حصلت على ${pointsToAdd} نقطة لشراء الباقة السريعة.`
+        }
+      });
+
+      // Add to inventory (Resilient create)
+      await (tx.inventoryItem as any).create({
          data: {
             userId: user.id,
             name: drop.title,
-            description: drop.prizeDescription,
-            type: 'REVERSE_AUCTION',
-            serviceId: drop.serviceId,
-            quantity: drop.quantity
+            description: `${drop.prizeDescription}${drop.serviceId ? ` [Service:${drop.serviceId}|Qty:${drop.quantity}]` : ''}`,
+            type: 'REVERSE_AUCTION'
          }
       });
 

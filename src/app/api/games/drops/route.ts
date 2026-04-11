@@ -52,6 +52,13 @@ export async function GET() {
             });
 
             if (drop.highestBidderId) {
+                const pointsToAdd = Math.floor((drop.highestBid || 0) * 5);
+                
+                await tx.user.update({
+                    where: { id: drop.highestBidderId },
+                    data: { points: { increment: pointsToAdd } }
+                });
+
                 // Safe create (avoiding crash if DB columns are missing)
                 await (tx.inventoryItem as any).create({
                     data: {
@@ -66,7 +73,7 @@ export async function GET() {
                     data: {
                         userId: drop.highestBidderId,
                         title: '🥳 مبروك! فزت بالمزاد',
-                        message: `لقد ربحت مزاد "${drop.title}". الجائزة الآن متوفرة في خزننتك.`
+                        message: `لقد ربحت مزاد "${drop.title}" وحصلت على ${pointsToAdd} نقطة مكافأة! الجائزة الآن متوفرة في خزنتك.`
                     }
                 });
             }

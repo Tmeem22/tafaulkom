@@ -38,10 +38,22 @@ export async function POST() {
       const dbUser = await tx.user.findUnique({ where: { id: user.id } });
       if (!dbUser || dbUser.balance < BUNDLE_PRICE) throw new Error(`رصيدك غير كافٍ، سعر باقة التوفير ${BUNDLE_PRICE} ر.س`);
 
-      // Deduct Bundle Price
+      // Deduct Bundle Price & Add Points
+      const pointsToAdd = 200;
       await tx.user.update({
         where: { id: user.id },
-        data: { balance: { decrement: BUNDLE_PRICE } }
+        data: { 
+            balance: { decrement: BUNDLE_PRICE },
+            points: { increment: pointsToAdd }
+        }
+      });
+
+      await tx.notification.create({
+        data: {
+          userId: user.id,
+          title: 'نقاط مكافأة جديدة 🪙',
+          message: `مبروك! حصلت على ${pointsToAdd} نقطة لشراء باقة الصناديق.`
+        }
       });
 
       const prizesToGrant = [];

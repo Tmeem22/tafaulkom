@@ -50,19 +50,29 @@ export async function POST() {
       const prize = getRandomPrize();
       const balanceChange = (prize.type === 'BALANCE' ? prize.value : 0) - BOX_PRICE;
 
+      const pointsToAdd = 50;
       await tx.user.update({
         where: { id: user.id },
-        data: { balance: { increment: balanceChange } }
+        data: { 
+            balance: { increment: balanceChange },
+            points: { increment: pointsToAdd }
+        }
       });
 
-      const item = await tx.inventoryItem.create({
+      await tx.notification.create({
+        data: {
+          userId: user.id,
+          title: 'نقاط مكافأة جديدة 🪙',
+          message: `مبروك! حصلت على ${pointsToAdd} نقطة لفتح صندوق الغموض.`
+        }
+      });
+
+      const item = await (tx.inventoryItem as any).create({
          data: {
             userId: user.id,
             name: prize.name,
-            description: prize.description,
-            type: 'MYSTERY_BOX',
-            serviceId: prize.serviceId,
-            quantity: prize.quantity
+            description: `${prize.description}${prize.serviceId ? ` [Service:${prize.serviceId}|Qty:${prize.quantity}]` : ''}`,
+            type: 'MYSTERY_BOX'
          }
       });
       return item;
