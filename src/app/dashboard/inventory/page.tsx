@@ -28,7 +28,15 @@ export default function InventoryPage() {
     setLoading(true);
     fetch('/api/inventory')
       .then(r => r.json())
-      .then(setItems)
+      .then(data => {
+        if (Array.isArray(data)) {
+          setItems(data);
+        } else {
+          console.error("Inventory error:", data);
+          setItems([]);
+          if (data.error) showToast(data.error, "error");
+        }
+      })
       .finally(() => setLoading(false));
   };
 

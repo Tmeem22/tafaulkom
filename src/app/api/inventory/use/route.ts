@@ -13,8 +13,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'يرجى إدخال الرابط المطلوب' }, { status: 400 });
     }
 
-    // 1. Find the item
-    const item = await prisma.inventoryItem.findUnique({
+    // 1. Find the item (using any for safety)
+    const item = await (prisma.inventoryItem as any).findUnique({
       where: { id: itemId }
     });
 
@@ -22,7 +22,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'الجائزة غير صالحة أو تم استخدامها بالفعل' }, { status: 400 });
     }
 
-    if (!item.serviceId || !item.quantity) {
+    // Try to get serviceId and quantity either from columns or description fallback
+    let sId = item.serviceId;
+    let qty = item.quantity;
+
+    if (!sId && item.description.includes('[Service:')) {
+      const match = item.description.match(/\[Service:(\d+)\|Qty:(\d+)\]/);
+      if (match) {
+        sId = parseInt(match[1]);
+        qty = parseInt(match[2]);
+      }
+    }
+
+    if (!sId || !qty) {
       return NextResponse.json({ error: 'هذه الجائزة غير مرتبطة بخدمة SMM تلقائية، يرجى التواصل مع الدعم' }, { status: 400 });
     }
 
@@ -35,7 +47,7 @@ export async function POST(req: Request) {
     }
 
     // 3. Place order to Provider
-    const providerResponse = await createProviderOrder(item.serviceId, link, item.quantity);
+    const providerResponse = await createProviderOrder(sId, link, qty);
 
     if (providerResponse.error) {
       return NextResponse.json({ error: `فشل تنفيذ الطلب: ${providerResponse.error}` }, { status: 400 });
@@ -58,9 +70,9 @@ export async function POST(req: Request) {
           providerOrderId: providerOrderId,
           service: `[جائزة] ${item.name}`,
           link: link,
-          quantity: item.quantity,
+          quantity: qty,
           charge: 0, // It's a prize
-          remains: item.quantity,
+          remains: qty,
           status: 'pending'
         }
       })
