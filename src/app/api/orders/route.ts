@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { createProviderOrder, getProviderOrderStatuses } from '@/lib/smm-api';
+import { createProviderOrder, createProviderSubscription, getProviderOrderStatuses } from '@/lib/smm-api';
 import { getUserFromSession } from '@/lib/auth';
 import { USD_TO_SAR_RATE, DEFAULT_PROFIT_MARGIN } from '@/lib/constants';
 
@@ -76,11 +76,21 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { serviceId, link, quantity } = body;
+    const { serviceId, link, quantity, isSubscription, username, minQty, maxQty, posts, delay } = body;
 
     // 1. Validate basic input
-    if (!serviceId || !link || !quantity) {
+    if (!serviceId) {
       return NextResponse.json({ error: 'الرجاء إدخال كافة الحقول المطلوبة' }, { status: 400 });
+    }
+
+    if (isSubscription) {
+      if (!username || !minQty || !maxQty || !posts) {
+        return NextResponse.json({ error: 'الرجاء إدخال الحقول المطلوبة للاشتراك.' }, { status: 400 });
+      }
+    } else {
+      if (!link || !quantity) {
+        return NextResponse.json({ error: 'الرجاء إدخال كافة الحقول المطلوبة' }, { status: 400 });
+      }
     }
 
     // 2. Fetch service from DB to get the actual rate and limits
@@ -93,16 +103,27 @@ export async function POST(request: Request) {
     }
 
     // 3. Validate Quantity
-    if (quantity < service.min || quantity > service.max) {
-      return NextResponse.json({ 
-        error: `الكمية يجب أن تكون بين ${service.min} و ${service.max}` 
-      }, { status: 400 });
+    let totalQuantity = 0;
+    if (isSubscription) {
+      if (minQty < service.min || maxQty > service.max || minQty > maxQty) {
+        return NextResponse.json({ 
+          error: `كمية الاشتراك يجب أن تكون بين ${service.min} و ${service.max}` 
+        }, { status: 400 });
+      }
+      totalQuantity = Number(posts) * Number(maxQty);
+    } else {
+      if (quantity < service.min || quantity > service.max) {
+        return NextResponse.json({ 
+          error: `الكمية يجب أن تكون بين ${service.min} و ${service.max}` 
+        }, { status: 400 });
+      }
+      totalQuantity = Number(quantity);
     }
 
     // 4. Calculate Charge on Backend
     const costInSar = service.originalRate * USD_TO_SAR_RATE;
     const ratePer1000 = service.customRate ? service.customRate : costInSar * DEFAULT_PROFIT_MARGIN;
-    const finalCharge = (quantity / 1000) * ratePer1000;
+    const finalCharge = (totalQuantity / 1000) * ratePer1000;
 
     // 5. Check Balance
     if (user.balance < finalCharge) {
@@ -110,7 +131,14 @@ export async function POST(request: Request) {
     }
 
     // 6. Send order to Provider
-    const providerResponse = await createProviderOrder(service.id, link, quantity);
+    let providerResponse;
+    
+    // Check if we need to call createProviderOrder or createProviderSubscription
+    if (isSubscription) {
+      providerResponse = await createProviderSubscription(service.id, username, minQty, maxQty, posts, delay || 0);
+    } else {
+      providerResponse = await createProviderOrder(service.id, link, quantity);
+    }
     
     if (providerResponse.error) {
       console.error("[Order API] Provider Error:", providerResponse.error);
@@ -122,7 +150,7 @@ export async function POST(request: Request) {
     }
 
     // 7. Deduct balance and Save order
-    const providerOrderId = providerResponse.order ? String(providerResponse.order) : null;
+    const providerOrderId = (providerResponse.order || providerResponse.subscription) ? String(providerResponse.order || providerResponse.subscription) : null;
     
     if (!providerOrderId) {
       return NextResponse.json({ error: 'فشل في الحصول على رقم الطلب من المزود' }, { status: 400 });
@@ -131,6 +159,9 @@ export async function POST(request: Request) {
     const pointsToAdd = finalCharge < 10 ? 10 : 50;
     const newBalance = user.balance - finalCharge;
     
+    const dbLink = isSubscription ? username : link;
+    const dbService = isSubscription ? `${service.name} (اشتراك لـ ${posts} بوست)` : service.name;
+
     // Use a transaction for reliability
     const [updatedUser, newOrder] = await prisma.$transaction([
       prisma.user.update({
@@ -144,11 +175,11 @@ export async function POST(request: Request) {
         data: {
           userId: user.id,
           providerOrderId: providerOrderId,
-          service: service.name,
-          link,
-          quantity: Number(quantity),
+          service: dbService,
+          link: dbLink,
+          quantity: totalQuantity,
           charge: finalCharge,
-          remains: Number(quantity),
+          remains: totalQuantity,
           status: 'pending',
         }
       }),

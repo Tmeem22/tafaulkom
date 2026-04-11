@@ -15,6 +15,8 @@ const sideLinks = [
   { label: 'نظام النقاط', href: '/dashboard/points', icon: 'https://img.icons8.com/fluency/256/coins.png' },
   { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/fluency/256/headset.png' },
   { label: 'التسويق بالعمولة', href: '/dashboard/affiliate', icon: 'https://img.icons8.com/fluency/256/share.png' },
+  { label: 'صالة الألعاب', href: '/dashboard/games', icon: 'https://img.icons8.com/fluency/256/controller.png' },
+  { label: 'خزنتي والسلة', href: '/dashboard/inventory', icon: 'https://img.icons8.com/fluency/256/treasure-chest.png' },
   { label: 'تقاريري', href: '/dashboard/analytics', icon: 'https://img.icons8.com/fluency/256/combo-chart.png' },
   { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
 ];
@@ -134,6 +136,14 @@ function DashboardContent() {
   const [catSearch, setCatSearch] = useState('');
   const [serviceSearch, setServiceSearch] = useState('');
 
+  // Subscription States
+  const [isSubscription, setIsSubscription] = useState(false);
+  const [subUsername, setSubUsername] = useState('');
+  const [subMin, setSubMin] = useState(10);
+  const [subMax, setSubMax] = useState(100);
+  const [subPosts, setSubPosts] = useState(10);
+  const [subDelay, setSubDelay] = useState(0);
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -233,8 +243,14 @@ function DashboardContent() {
 
   const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!link) {
+    
+    // Validation
+    if (!isSubscription && !link) {
       setMessage({ type: 'error', text: 'الرجاء إدخال الرابط' });
+      return;
+    }
+    if (isSubscription && !subUsername) {
+      setMessage({ type: 'error', text: 'الرجاء إدخال يوزر الحساب للاشتراك' });
       return;
     }
     
@@ -242,14 +258,26 @@ function DashboardContent() {
     setMessage({ type: '', text: '' });
 
     try {
+      const payload: any = {
+        serviceId: selectedServiceId,
+        isSubscription
+      };
+      
+      if (isSubscription) {
+        payload.username = subUsername;
+        payload.minQty = subMin;
+        payload.maxQty = subMax;
+        payload.posts = subPosts;
+        payload.delay = subDelay;
+      } else {
+        payload.link = link;
+        payload.quantity = quantity;
+      }
+
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          serviceId: selectedServiceId,
-          link,
-          quantity,
-        })
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
@@ -258,9 +286,10 @@ function DashboardContent() {
         throw new Error(data.error || 'حدث خطأ أثناء الطلب');
       }
 
-      setMessage({ type: 'success', text: 'تم استلام طلبك بنجاح!' });
+      setMessage({ type: 'success', text: isSubscription ? 'تم تفعيل الاشتراك التلقائي بنجاح!' : 'تم استلام طلبك بنجاح!' });
       setBalance(data.newBalance);
-      setLink(''); 
+      if (!isSubscription) setLink('');
+      else setSubUsername('');
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message });
     } finally {
@@ -270,7 +299,14 @@ function DashboardContent() {
 
   const availableServices = servicesData[selectedCategory] || [];
   const selectedService = availableServices.find(s => String(s.id) === String(selectedServiceId)) || availableServices[0];
-  const totalCostFloat = selectedService ? (quantity / 1000) * selectedService.rate : 0;
+  let totalCostFloat = 0;
+  if (selectedService) {
+    if (isSubscription) {
+      totalCostFloat = ((subPosts * subMax) / 1000) * selectedService.rate;
+    } else {
+      totalCostFloat = (quantity / 1000) * selectedService.rate;
+    }
+  }
   const totalCost = totalCostFloat.toFixed(4);
 
   // Profit Calculation (Retail = Cost * 1.5)
@@ -337,7 +373,7 @@ function DashboardContent() {
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 lg:mr-[240px] p-10 px-4 md:px-14">
+        <div className="flex-1 lg:mr-[240px] pt-[130px] md:pt-14 p-10 px-4 md:px-14">
           <div className="max-w-[1100px] mx-auto">
             
             <div className="flex justify-between items-center mb-12 flex-wrap gap-6">

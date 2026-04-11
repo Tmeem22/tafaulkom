@@ -86,6 +86,43 @@ export async function createProviderOrder(serviceId: string | number, link: stri
   }
 }
 
+export async function createProviderSubscription(serviceId: string | number, username: string, min: number, max: number, posts: number, delay: number = 0) {
+  if (DEMO_MODE) {
+    console.log(`[DEMO MODE] Simulating subscription for service ${serviceId}`);
+    return { subscription: Math.floor(Math.random() * 1000000) };
+  }
+  
+  try {
+    const url = new URL(API_URL);
+    url.searchParams.append('key', API_KEY);
+
+    const params = new URLSearchParams();
+    params.append('key', API_KEY);
+    params.append('action', 'add');
+    params.append('service', String(serviceId));
+    params.append('username', username);
+    params.append('min', String(min));
+    params.append('max', String(max));
+    params.append('posts', String(posts));
+    if (delay > 0) {
+      params.append('delay', String(delay));
+    }
+
+    const response = await fetch(url.toString(), { 
+      method: 'POST',
+      body: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to create provider subscription", error);
+    return { error: "Internal provider error" };
+  }
+}
+
 export async function getProviderOrderStatus(orderId: number | string) {
   try {
     const url = new URL(API_URL);

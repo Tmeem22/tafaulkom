@@ -19,6 +19,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { label: 'الإيداعات', href: '/admin/deposits', icon: 'https://img.icons8.com/fluency/256/safe.png' },
     { label: 'مركز الأمن', href: '/admin/security', icon: 'https://img.icons8.com/fluency/256/checked-shield.png' },
     { label: 'طلبات التعويض', href: '/admin/refills', icon: 'https://img.icons8.com/fluency/256/help.png' },
+    { label: 'طلبات النقاط', href: '/admin/video-tasks', icon: 'https://img.icons8.com/fluency/256/video.png' },
+    { label: 'إدارة الألعاب والمزادات', href: '/admin/games', icon: 'https://img.icons8.com/fluency/256/controller.png' },
+    { label: 'طلبات تنفيذ الهدايا', href: '/admin/game-orders', icon: 'https://img.icons8.com/fluency/256/gift.png' },
   ];
 
   return (

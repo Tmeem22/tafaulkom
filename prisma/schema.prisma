@@ -25,6 +25,7 @@ model User {
   tickets           Ticket[]
   notifications     Notification[]
   videoTasks        VideoTask[]
+  inventoryItems    InventoryItem[]
   isProfitViewer    Boolean   @default(false)
   // Affiliate System
   referralCode      String?   @unique
@@ -176,4 +177,38 @@ model SpinResult {
   prize     String
   value     Float
   createdAt DateTime @default(now())
+}
+
+model GameDrop {
+  id                  String   @id @default(cuid())
+  type                String   // "REVERSE_AUCTION" or "MYSTERY_BOX"
+  title               String
+  prizeDescription    String
+  startPrice          Float
+  currentPrice        Float
+  minPrice            Float
+  dropAmount          Float
+  dropIntervalSeconds Int
+  serviceId           Int?
+  quantity            Int?
+  startTime           DateTime
+  status              String   @default("WAITING") // WAITING, ACTIVE, SOLD, ENDED
+  winnerId            String?
+  highestBid          Float?   @default(0)
+  highestBidderId     String?
+  endTime             DateTime?
+  createdAt           DateTime @default(now())
+}
+
+model InventoryItem {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  type        String   @default("PRIZE")
+  serviceId   Int?
+  quantity    Int?
+  isUsed      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
 }

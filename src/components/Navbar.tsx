@@ -102,7 +102,7 @@ export default function Navbar() {
   }, [user]);
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''} z-[110]`}>
       <div className="max-w-[1280px] mx-auto px-6">
         <div className="flex items-center justify-between h-[70px]">
           

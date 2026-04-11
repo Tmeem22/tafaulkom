@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import TelegramPopup from "@/components/TelegramPopup";
@@ -7,6 +7,15 @@ import SpinWheel from "@/components/SpinWheel";
 import FlashSale from "@/components/FlashSale";
 import LiveSalesPopup from "@/components/LiveSalesPopup";
 import { CurrencyProvider } from "@/components/CurrencyProvider";
+import DeviceOptimizer from "@/components/DeviceOptimizer";
+
+export const viewport: Viewport = {
+  themeColor: "#6C3CE1",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "تفاعلكم - أرخص وأسرع منصة خدمات SMM عربية",
@@ -25,6 +34,10 @@ export const metadata: Metadata = {
     title: "تفاعلكم - منصة التسويق الذكي",
     description: "زد متابعينك وتفاعلك الآن مع أرخص سيرفر عربي.",
     images: ["/logo.png"],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
   }
 };
 
@@ -36,11 +49,12 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
           <CurrencyProvider>
+            <DeviceOptimizer showDebug={false} />
             {children}
             <FlashSale />
             <SpinWheel />
@@ -53,3 +67,4 @@ export default function RootLayout({
     </html>
   );
 }
+

@@ -10,9 +10,11 @@ const sideLinks = [
   { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/fluency/256/list.png' },
   { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/fluency/256/flash-on.png' },
   { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/fluency/256/card-exchange.png', active: true },
+  { label: 'نظام النقاط', href: '/dashboard/points', icon: 'https://img.icons8.com/fluency/256/coins.png' },
   { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/fluency/256/headset.png' },
   { label: 'التسويق بالعمولة', href: '/dashboard/affiliate', icon: 'https://img.icons8.com/fluency/256/share.png' },
-  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
+  { label: 'صالة الألعاب', href: '/dashboard/games', icon: 'https://img.icons8.com/fluency/256/controller.png' },
+  { label: 'خزنتي والسلة', href: '/dashboard/inventory', icon: 'https://img.icons8.com/fluency/256/treasure-chest.png' },
 ];
 
 export default function Deposit() {
@@ -41,6 +43,11 @@ export default function Deposit() {
   const handleSubmit = async () => {
     if (!amount || !image) {
       showToast("الرجاء إدخال المبلغ وإرفاق صورة الإيصال", "error");
+      return;
+    }
+
+    if (Number(amount) < 5) {
+      showToast("أقل مبلغ للايداع هو 5 ر.س", "error");
       return;
     }
 
@@ -130,114 +137,58 @@ export default function Deposit() {
               <h1 className="text-[1.8rem] font-black text-[var(--text-primary)] mb-2 flex items-center gap-3">
                 <img src="https://img.icons8.com/fluency/256/card-exchange.png" width={32} height={32} alt="أيقونة الشحن" /> إضافة رصيد
               </h1>
-              <p className="text-[var(--text-secondary)] text-[0.9rem]">فضلاً قم بتحويل المبلغ على الحسابات المتوفرة ثم أرفق إيصال الدفع</p>
+              <p className="text-[var(--text-secondary)] text-[0.9rem]">فضلاً قم بتحويل المبلغ على الحسابات المتوفرة ثم أرفق إيصال الدفع (أقل مبلغ 5 ر.س)</p>
             </div>
 
             <div className="flex flex-col gap-6">
-              
-              {/* Bank Details Warning */}
-              <div className="card p-6 border-2 border-[var(--brand-primary)] animate-fade-in relative overflow-hidden">
-                 <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--brand-primary)]/5 rounded-full -mr-12 -mt-12 pointer-events-none" />
-                <h3 className="text-[1rem] font-bold text-[var(--brand-primary)] mb-3 relative flex items-center gap-2">
-                   <img src="https://img.icons8.com/fluency/256/info.png" width={18} height={18} alt="معلومات" /> معلومات التحويل
+              <div className="card p-6 border-2 border-[var(--brand-primary)] animate-fade-in relative overflow-hidden bg-gradient-to-br from-[var(--bg-card)] to-[var(--brand-primary)]/5">
+                <h3 className="text-[1.1rem] font-black text-[var(--brand-primary)] mb-4 flex items-center gap-2">
+                   <img src="https://img.icons8.com/fluency/256/info.png" alt="Info icon" width={20} /> تفاصيل التحويل البنكي
                 </h3>
-                <p className="text-[var(--text-secondary)] text-[0.85rem] leading-[1.8] relative">
-                  الرجاء تحويل المبلغ إلى الحساب البنكي التالي:<br/><br/>
-                  <strong>اسم المستفيد:</strong> مؤسسة تسويق فيرال<br/>
-                  <strong>رقم الحساب:</strong> 12345678901234<br/>
-                  <strong>الآيبان:</strong> SA1234000000123456789012<br/><br/>
-                  بعد التحويل، قم بتحديد المبلغ المودع وإرفاق صورة واضحة ومقروءة لإيصال التحويل، وستتم مراجعة طلبك وإضافة الرصيد في أقرب وقت.
-                </p>
+                <div className="space-y-3 text-[0.9rem] font-bold text-[var(--text-secondary)]">
+                   <p><span className="text-[var(--text-tertiary)] ml-2">اسم المستفيد:</span> مؤسسة تسويق فيرال</p>
+                   <p><span className="text-[var(--text-tertiary)] ml-2">الآيبان:</span> <span className="font-mono text-[var(--text-primary)] tracking-wider">SA2080000523608016083089</span></p>
+                   <p className="text-[0.75rem] text-red-500 font-bold mt-4">⚠️ أقل مبلغ للشحن هو 5 ر.س. لضمان قبول الطلب فوراً.</p>
+                </div>
               </div>
 
-              {/* Deposit Form */}
               <div className="card p-8 shadow-xl">
                 {showSuccess ? (
-                  <div className="text-center p-8 space-y-6 animate-fade-in-up">
-                    <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto shadow-inner">
-                      <img src="https://img.icons8.com/fluency/256/checkmark.png" width={48} height={48} alt="نجاح" />
-                    </div>
-                    <div>
-                      <h2 className="text-[1.5rem] font-black text-[var(--text-primary)] mb-3">تم إرسال طلب الشحن بنجاح</h2>
-                      <p className="text-[var(--text-secondary)] max-w-md mx-auto">تتم الآن مراجعة إيصالك من قبل الإدارة، سيتم إضافة الرصيد لحسابك فور التحقق منه.</p>
-                    </div>
-                    <button className="btn-secondary !px-10 !py-3 !rounded-full !font-bold" onClick={() => setShowSuccess(false)}>إرسال طلب آخر</button>
+                  <div className="text-center p-8 space-y-6">
+                    <img src="https://img.icons8.com/fluency/256/checkmark.png" alt="Success checkmark" width={48} className="mx-auto" />
+                    <h2 className="text-xl font-bold">تم الإرسال بنجاح</h2>
+                    <button className="btn-secondary px-8 py-2" onClick={() => setShowSuccess(false)}>إرسال طلب آخر</button>
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-[1.1rem] font-bold text-[var(--text-primary)] mb-4">1. مبلغ الحوالة المودع (بـ {CURRENCY_SYMBOL})</h2>
-                    <div className="relative mb-4">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[1.2rem] font-black text-[var(--brand-primary)]">{CURRENCY_SYMBOL}</span>
-                      <input 
-                        type="number" 
-                        className="input-field !pl-10 !text-[1.3rem] !font-black !text-center" 
-                        placeholder="0.00" 
-                        value={amount} 
-                        onChange={e => setAmount(e.target.value)} 
-                        aria-label="مبلغ الإيداع"
-                        dir="ltr" 
-                      />
-                    </div>
-                    <div className="flex gap-2 flex-wrap mb-8">
+                    <h2 className="text-[1.1rem] font-bold mb-4">1. مبلغ الحوالة المودع (بـ {CURRENCY_SYMBOL})</h2>
+                    <input 
+                      type="number" 
+                      className="input-field !text-center !text-xl" 
+                      placeholder="0.00" 
+                      value={amount} 
+                      onChange={e => setAmount(e.target.value)} 
+                    />
+                    <div className="flex gap-2 flex-wrap mt-4 mb-8">
                       {quickAmounts.map(qa => (
-                        <button 
-                          key={qa} 
-                          onClick={() => setAmount(qa.toString())} 
-                          className={`px-4 py-2 rounded-full border-2 font-bold text-[0.85rem] transition-all duration-300 ${
-                            amount === qa.toString() 
-                              ? 'bg-[var(--gradient-cta)] border-transparent text-white shadow-lg shadow-purple-500/20' 
-                              : 'bg-transparent border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--brand-primary)]'
-                          }`}
-                        >
+                        <button key={qa} onClick={() => setAmount(qa.toString())} className="px-4 py-2 rounded-full border border-[var(--border-color)]">
                           {qa} {CURRENCY_SYMBOL}
                         </button>
                       ))}
                     </div>
 
-                    <h2 className="text-[1.1rem] font-bold text-[var(--text-primary)] mb-4">2. إرفاق إيصال التحويل</h2>
-                    <div className="group">
-                      <label className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-[var(--border-color)] rounded-[var(--radius-lg)] bg-[var(--bg-secondary)] cursor-pointer mb-8 transition-all duration-300 group-hover:border-[var(--brand-primary)] group-hover:bg-[var(--brand-primary)]/5">
-                        {image ? (
-                          <div className="text-center animate-fade-in">
-                            <img src={image} alt="Receipt Preview" className="max-h-[180px] rounded-[var(--radius-md)] mb-4 shadow-lg ring-4 ring-white" />
-                            <p className="text-[0.85rem] font-bold text-[var(--brand-primary)]">تم إرفاق الصورة، اضغط لتغييرها</p>
-                          </div>
-                        ) : (
-                          <div className="text-center space-y-4">
-                            <div className="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
-                               <img src="https://img.icons8.com/fluency/256/camera.png" width={40} height={40} alt="كاميرا" />
-                            </div>
-                            <div>
-                               <span className="text-[1rem] font-bold text-[var(--text-primary)] block mb-1">اسحب وأفلت صورة الإيصال أو اضغط للاختيار</span>
-                               <span className="text-[0.75rem] text-[var(--text-tertiary)] uppercase tracking-wide">الصيغ المدعومة: JPG, PNG, WEBP (بحد أقصى 5MB)</span>
-                            </div>
-                          </div>
-                        )}
-                        <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-                      </label>
-                    </div>
+                    <h2 className="text-[1.1rem] font-bold mb-4">2. إرفاق إيصال التحويل</h2>
+                    <label className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-[var(--border-color)] rounded-xl cursor-pointer mb-8">
+                      {image ? <img src={image} alt="Uploaded receipt preview" className="max-h-[150px] rounded-lg" /> : <span>اضغط لرفع الإيصال</span>}
+                      <input type="file" className="hidden" onChange={handleImageUpload} />
+                    </label>
 
-                    <button 
-                      className="btn-primary w-full !py-4 !text-[1.1rem] !rounded-[var(--radius-lg)] !font-black flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.01] transition-transform shadow-lg shadow-purple-500/20" 
-                      onClick={handleSubmit} 
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <img src="https://img.icons8.com/fluency/256/hourglass.png" width={24} height={24} className="animate-spin brightness-0 invert" alt="جاري التحميل" />
-                          جاري الإرسال...
-                        </>
-                      ) : (
-                        <>
-                          <img src="https://img.icons8.com/fluency/256/cloud-upload.png" width={24} height={24} className="brightness-0 invert" alt="رفع" />
-                          إرسال طلب الشحن
-                        </>
-                      )}
+                    <button className="btn-primary w-full py-4 text-lg font-bold" onClick={handleSubmit} disabled={isSubmitting}>
+                      {isSubmitting ? 'جاري الإرسال...' : 'إرسال طلب الشحن'}
                     </button>
                   </>
                 )}
               </div>
-
             </div>
           </div>
         </div>

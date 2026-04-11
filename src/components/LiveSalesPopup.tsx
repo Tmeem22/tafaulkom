@@ -49,10 +49,10 @@ export default function LiveSalesPopup() {
 
   return (
     <div 
-      className={`fixed z-40 transition-all duration-700 ease-in-out ${
+      className={`fixed z-[100] transition-all duration-700 ease-in-out ${
         visible 
-          ? 'bottom-24 md:bottom-8 left-6 md:left-24 opacity-100 translate-y-0' 
-          : 'bottom-24 md:bottom-8 left-6 md:left-24 opacity-0 translate-y-10 pointer-events-none'
+          ? 'bottom-6 md:bottom-8 left-4 md:left-12 opacity-100 translate-y-0 scale-90 md:scale-100' 
+          : 'bottom-6 md:bottom-8 left-4 md:left-12 opacity-0 translate-y-10 scale-75 pointer-events-none'
       }`}
       dir="rtl"
     >
