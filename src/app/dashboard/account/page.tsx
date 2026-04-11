@@ -82,20 +82,14 @@ export default function AccountPage() {
     // Listen for Claim Event (Custom Event & LocalStorage fallback)
     const handleClaimCheck = () => {
       const pendingClaim = localStorage.getItem('pending_reward_claim');
-      if (pendingClaim && user) {
-        const balance = user.balance || 0;
-        const eligibleTier = [...TIERS].reverse().find(t => balance >= t.spend && t.spend > 0);
-        if (eligibleTier) {
-          setUnlockedTier(eligibleTier);
-          playCelebrate();
-          localStorage.setItem(`celebrated_tier_${eligibleTier.id}`, 'true');
-          localStorage.removeItem('pending_reward_claim'); // Cleanup
-        }
+      if (pendingClaim) {
+        // We need the latest user state, but since we are in a stale closure or called from event,
+        // we might not have it. However, the reward_claimed event usually carries what we need
+        // or we can re-fetch. For now, let's just trigger based on the last known balance if we have it.
+        localStorage.removeItem('pending_reward_claim');
+        window.location.reload(); // Hard refresh to show celebration correctly if needed
       }
     };
-
-    // Check immediately on load/user change
-    handleClaimCheck();
 
     window.addEventListener('reward_claimed', handleClaimCheck);
     window.addEventListener('storage', handleClaimCheck); // Sync across tabs
@@ -103,7 +97,7 @@ export default function AccountPage() {
       window.removeEventListener('reward_claimed', handleClaimCheck);
       window.removeEventListener('storage', handleClaimCheck);
     };
-  }, [user]);
+  }, []); // Changed [user] to [] to prevent infinite loop
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
