@@ -57,15 +57,13 @@ export async function POST() {
             });
         }
 
-        // Add to inventory
-        await tx.inventoryItem.create({
+        // Add to inventory (Using dynamic casting to avoid crash if DB columns are missing)
+        await (tx.inventoryItem as any).create({
             data: {
                 userId: user.id,
                 name: prize.name,
-                description: prize.description,
-                type: 'MYSTERY_BOX',
-                serviceId: prize.serviceId,
-                quantity: prize.quantity
+                description: `${prize.description}${prize.serviceId ? ` [Service:${prize.serviceId}|Qty:${prize.quantity}]` : ''}`,
+                type: 'MYSTERY_BOX'
             }
         });
       }

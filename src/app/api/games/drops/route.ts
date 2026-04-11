@@ -52,14 +52,13 @@ export async function GET() {
             });
 
             if (drop.highestBidderId) {
-                await tx.inventoryItem.create({
+                // Safe create (avoiding crash if DB columns are missing)
+                await (tx.inventoryItem as any).create({
                     data: {
                         userId: drop.highestBidderId,
                         name: `[مزاد] ${drop.title}`,
-                        description: drop.prizeDescription,
-                        type: 'STANDARD_AUCTION',
-                        serviceId: drop.serviceId,
-                        quantity: drop.quantity
+                        description: `${drop.prizeDescription}${drop.serviceId ? ` [Service:${drop.serviceId}|Qty:${drop.quantity}]` : ''}`,
+                        type: 'STANDARD_AUCTION'
                     }
                 });
                 
