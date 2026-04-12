@@ -7,6 +7,8 @@ import Navbar from '@/components/Navbar';
 import { useCurrency } from '@/components/CurrencyProvider';
 
 const sideLinks = [
+  { label: 'الاشتراكات الذكية', href: '/dashboard/subscriptions', icon: 'https://img.icons8.com/fluency/256/subscription.png' },
+  { label: 'باقات المشاهير', href: '/dashboard/packages', icon: 'https://img.icons8.com/fluency/256/star.png' },
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png', active: true },
   { label: 'الطلب الجماعي', href: '/dashboard/mass-order', icon: 'https://img.icons8.com/fluency/256/add-list.png' },
   { label: 'سلة المشتريات', href: '/dashboard/cart', icon: 'https://img.icons8.com/color/96/shopping-basket.png' },
