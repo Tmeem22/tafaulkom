@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+export const revalidate = 600; // Cache for 10 minutes
 import prisma from '@/lib/prisma';
 import { USD_TO_SAR_RATE, DEFAULT_PROFIT_MARGIN } from '@/lib/constants';
 

@@ -149,8 +149,15 @@ function DashboardContent() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await fetch('/api/services');
-        const data = await res.json();
+        const cached = sessionStorage.getItem('smm_services_cache');
+        let data;
+        if (cached) {
+          data = JSON.parse(cached);
+        } else {
+          const res = await fetch('/api/services');
+          data = await res.json();
+          if (Array.isArray(data)) sessionStorage.setItem('smm_services_cache', JSON.stringify(data));
+        }
         if (Array.isArray(data)) {
           const grouped: Record<string, any[]> = {};
           const plats: Record<string, string[]> = {};
@@ -337,9 +344,9 @@ function DashboardContent() {
       <div dir="rtl" className="flex min-h-screen pt-[70px] bg-[var(--bg-secondary)]">
         {/* Sidebar */}
         <aside className="w-[240px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 px-4 flex flex-col gap-1 fixed top-[70px] bottom-0 overflow-y-auto z-10 hidden lg:flex">
-          <div className="p-6 px-5 bg-[var(--gradient-primary)] rounded-[24px] mb-6 text-center shadow-[var(--shadow-md)]">
-            <p className="text-white/85 text-[0.75rem] font-bold uppercase tracking-wider mb-2">رصيدك الحالي</p>
-            <p className="text-white text-[2rem] font-black mb-3 drop-shadow-md" dir="ltr">{balance !== null ? formatPrice(balance) : '...'}</p>
+          <div className="p-6 px-5 bg-[var(--gradient-primary)] rounded-[24px] mb-6 text-center shadow-[var(--shadow-md)] animate-shimmer">
+            <p className="text-white/85 text-[0.75rem] font-bold uppercase tracking-wider mb-2 animate-fade-in">رصيدك الحالي</p>
+            <p className="text-white text-[2rem] font-black mb-3 drop-shadow-md animate-fade-in-up" dir="ltr">{balance !== null ? formatPrice(balance) : '...'}</p>
             <Link href="/dashboard/deposit" className="flex items-center justify-center gap-2 p-3 rounded-[15px] bg-white/20 text-white text-[0.85rem] font-extrabold no-underline transition-all hover:scale-[1.02] backdrop-blur-sm">
               <img src="https://img.icons8.com/fluency/256/plus.png" width={16} height={16} className="brightness-0 invert" alt="إضافة رصيد" /> شحن رصيدك
             </Link>
