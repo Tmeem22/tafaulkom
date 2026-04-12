@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-import { CURRENCY_SYMBOL } from '@/lib/constants';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
@@ -18,6 +18,7 @@ const sideLinks = [
 ];
 
 export default function AnalyticsPage() {
+  const { currency, formatPrice } = useCurrency();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -68,8 +69,7 @@ export default function AnalyticsPage() {
               <div className="relative z-10">
                 <p className="text-white/80 font-bold text-[0.9rem] mb-2">🎉 مبروك! أنت وفّرت مقارنة بالمواقع الأخرى</p>
                 <div className="flex items-center justify-center gap-2" dir="ltr">
-                  <span className="text-white font-black text-[3rem] md:text-[4rem]">{data?.savings || '0.00'}</span>
-                  <span className="text-white/90 font-bold text-[1.5rem]">{CURRENCY_SYMBOL}</span>
+                  <span className="text-white font-black text-[3rem] md:text-[4rem]">{formatPrice(Number(data?.savings || 0))}</span>
                 </div>
                 <p className="text-white/70 font-bold text-[0.8rem] mt-2">منذ {new Date(data?.memberSince).toLocaleDateString('ar-EG')}</p>
               </div>
@@ -78,9 +78,9 @@ export default function AnalyticsPage() {
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: 'إجمالي الإنفاق', value: `${(data?.totalSpent || 0).toFixed(2)} ${CURRENCY_SYMBOL}`, icon: 'https://img.icons8.com/fluency/256/card-exchange.png', color: 'from-purple-500/10 border-purple-500/20' },
+                { label: 'إجمالي الإنفاق', value: formatPrice(data?.totalSpent || 0), icon: 'https://img.icons8.com/fluency/256/card-exchange.png', color: 'from-purple-500/10 border-purple-500/20' },
                 { label: 'إجمالي الطلبات', value: data?.totalOrders || 0, icon: 'https://img.icons8.com/fluency/256/list.png', color: 'from-blue-500/10 border-blue-500/20' },
-                { label: 'هذا الشهر', value: `${(data?.thisMonthSpent || 0).toFixed(2)} ${CURRENCY_SYMBOL}`, icon: 'https://img.icons8.com/fluency/256/calendar.png', color: 'from-amber-500/10 border-amber-500/20' },
+                { label: 'هذا الشهر', value: formatPrice(data?.thisMonthSpent || 0), icon: 'https://img.icons8.com/fluency/256/calendar.png', color: 'from-amber-500/10 border-amber-500/20' },
                 { label: 'طلبات الشهر', value: data?.thisMonthOrders || 0, icon: 'https://img.icons8.com/fluency/256/shopping-cart.png', color: 'from-emerald-500/10 border-emerald-500/20' },
               ].map((s, i) => (
                 <div key={i} className={`card p-5 rounded-[20px] bg-gradient-to-br ${s.color} border text-center`}>
@@ -100,7 +100,7 @@ export default function AnalyticsPage() {
               <div className="flex items-end gap-3 h-[200px]">
                 {data?.monthlyHistory?.map((m: any, i: number) => (
                   <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                    <p className="text-[0.6rem] font-black text-[var(--text-primary)]" dir="ltr">{m.spent.toFixed(1)} {CURRENCY_SYMBOL}</p>
+                    <p className="text-[0.6rem] font-black text-[var(--text-primary)]" dir="ltr">{formatPrice(m.spent)}</p>
                     <div 
                       className="chart-bar transition-all hover:brightness-110" 
                       style={{ '--bar-height': `${Math.max((m.spent / maxSpent) * 160, 8)}px` } as any} 
@@ -128,7 +128,7 @@ export default function AnalyticsPage() {
                         <div className="flex-1">
                           <div className="flex justify-between items-center mb-1">
                             <p className="font-bold text-[0.8rem] text-[var(--text-primary)] truncate max-w-[200px]">{s.name}</p>
-                            <p className="text-[0.7rem] font-black text-[var(--text-secondary)]">{s.count} طلب • {s.total.toFixed(2)} {CURRENCY_SYMBOL}</p>
+                            <p className="text-[0.7rem] font-black text-[var(--text-secondary)]">{s.count} طلب • {formatPrice(s.total)}</p>
                           </div>
                           <div className="w-full h-2 bg-[var(--bg-secondary)] rounded-full overflow-hidden">
                             <div 

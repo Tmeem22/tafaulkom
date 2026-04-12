@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
 import { showToast } from '@/hooks/useNotification';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
@@ -17,6 +18,7 @@ const sideLinks = [
 ];
 
 export default function PointsPage() {
+  const { currency, formatPrice } = useCurrency();
   const [user, setUser] = useState<any>(null);
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +33,7 @@ export default function PointsPage() {
       const [uRes, tRes, sRes] = await Promise.all([
         fetch('/api/user/me'),
         fetch('/api/user/points-tasks'),
-        fetch('/api/tickets') // Assuming this exists to check tickets
+        fetch('/api/tickets')
       ]);
       const userData = await uRes.json();
       const taskData = await tRes.json();
@@ -40,7 +42,6 @@ export default function PointsPage() {
       setUser(userData);
       setTasks(taskData);
       
-      // Check for unread support messages (last message is admin)
       if (Array.isArray(tickets)) {
         const unread = tickets.some((t: any) => t.status === 'OPEN' && t.messages?.[t.messages.length - 1]?.isAdmin);
         setHasSupportUnread(unread);
@@ -131,12 +132,11 @@ export default function PointsPage() {
         {/* Main Content */}
         <div className="flex-1 md:mr-[250px] p-6 lg:p-12 relative">
           
-          {/* Top Right Floating Stats */}
           <div className="absolute top-6 left-6 md:left-12 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-700 z-10">
              <div className="bg-[var(--bg-card)] p-3 px-5 rounded-2xl border border-[var(--border-color)] shadow-xl flex items-center gap-3">
                 <div className="flex flex-col text-left" dir="ltr">
                    <span className="text-[0.6rem] font-bold text-[var(--text-secondary)] uppercase">Balance</span>
-                   <span className="text-[0.9rem] font-black text-emerald-500">{user?.balance?.toFixed(2) || '0.00'} $</span>
+                   <span className="text-[0.9rem] font-black text-emerald-500">{formatPrice(user?.balance || 0)}</span>
                 </div>
                 <div className="w-[1px] h-8 bg-[var(--border-color)] mx-1"></div>
                 <div className="flex flex-col text-left" dir="ltr">
@@ -152,13 +152,12 @@ export default function PointsPage() {
                 <img src="https://img.icons8.com/fluency/256/coins.png" width={56} height={56} alt="Points" />
                 نظام المكافآت والنقاط
               </h1>
-              <p className="text-[1.1rem] text-[var(--text-secondary)] font-bold">كل 500 نقطة تساوي 0.50$ تضاف لرصيدك تلقائياً!</p>
+              <p className="text-[1.1rem] text-[var(--text-secondary)] font-bold">كل 500 نقطة تساوي {formatPrice(1.875)} تضاف لرصيدك تلقائياً!</p>
             </div>
 
-            {/* Current Balance Card */}
             <div className="card p-8 bg-[var(--gradient-primary)] text-white rounded-[32px] shadow-xl mb-12 flex flex-col md:flex-row justify-between items-center gap-8 relative overflow-hidden">
                <div className="absolute -right-20 -bottom-20 opacity-10 rotate-12">
-                  <img src="https://img.icons8.com/fluency/512/coins.png" width={300} alt="Background decoration coin" />
+                  <img src="https://img.icons8.com/fluency/512/coins.png" width={300} alt="Decoration" />
                </div>
                <div className="relative z-10 text-center md:text-right">
                   <p className="text-white/80 font-bold uppercase tracking-widest mb-2 text-[0.8rem]">رصيد نقاطك الحالي</p>
@@ -171,19 +170,17 @@ export default function PointsPage() {
                       <label htmlFor="points-to-exchange" className="text-[0.7rem] font-black opacity-70 mb-1">عدد النقاط المراد استبدالها:</label>
                       <input 
                         id="points-to-exchange"
-                        name="points-to-exchange"
                         type="number" 
                         min="500" 
                         step="100"
                         value={exchangeAmount}
                         onChange={(e) => setExchangeAmount(parseInt(e.target.value))}
                         className="bg-white text-black p-4 rounded-2xl w-full md:w-48 font-black text-center text-[1.2rem] outline-none"
-                        placeholder="500"
                       />
                     </div>
                     <div className="flex justify-between items-center px-2">
                        <span className="text-[0.8rem] font-bold opacity-80">سوف تحصل على:</span>
-                       <span className="text-[1.1rem] font-black">{(exchangeAmount * 0.001).toFixed(2)} $</span>
+                       <span className="text-[1.1rem] font-black">{formatPrice(exchangeAmount * 0.00375)}</span>
                     </div>
                     <button 
                       onClick={handleExchange}
@@ -197,110 +194,55 @@ export default function PointsPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* How to collect */}
               <div className="space-y-6">
                 <h2 className="text-[1.5rem] font-black border-r-4 border-amber-500 pr-4">كيف تجمع النقاط؟</h2>
-                
                 <div className="card p-6 border-r-4 border-emerald-500 space-y-4">
                   <div className="flex items-center gap-3">
-                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={32} alt="Cart icon" />
+                    <img src="https://img.icons8.com/fluency/256/shopping-cart.png" width={32} alt="Orders" />
                     <h3 className="font-black text-[1.1rem]">1. عبر الطلبات (تلقائياً)</h3>
                   </div>
                   <ul className="text-[0.9rem] text-[var(--text-secondary)] font-bold space-y-2 list-none p-0">
-                    <li className="flex gap-2">✅ أي طلب بأقل من <span className="text-emerald-500">10 ر.س</span> يمنحك <span className="text-[var(--text-primary)]">10 نقاط</span></li>
-                    <li className="flex gap-2">✅ أي طلب بـ <span className="text-emerald-500">10 ر.س</span> أو أكثر يمنحك <span className="text-[var(--text-primary)]">50 نقطة</span></li>
+                    <li>✅ أي طلب بأقل من <span className="text-emerald-500">10 ر.س</span> يمنحك 10 نقاط</li>
+                    <li>✅ أي طلب بـ 10 ر.س أو أكثر يمنحك 50 نقطة</li>
                   </ul>
                 </div>
-
                 <div className="card p-6 border-r-4 border-blue-500 space-y-4">
                   <div className="flex items-center gap-3">
-                    <img src="https://img.icons8.com/fluency/256/video.png" width={32} alt="Video content creation icon" />
+                    <img src="https://img.icons8.com/fluency/256/video.png" width={32} alt="Video" />
                     <h3 className="font-black text-[1.1rem]">2. صانع المحتوى (250 نقطة)</h3>
                   </div>
                   <p className="text-[0.85rem] text-[var(--text-secondary)] leading-relaxed">
-                    قم بتصوير فيديو (تيك توك أو يوتيوب) تشرح فيه الموقع وتجربتك معنا وانشره، وسنمنحك 250 نقطة مكافأة!
+                    قم بتصوير فيديو تشرح فيه الموقع وتجربتك معنا وانشره، وسنمنحك 250 نقطة مكافأة!
                   </p>
-                    <div className="bg-blue-500/5 p-4 rounded-xl border border-blue-500/10">
-                       <p className="text-[0.75rem] text-blue-600 font-bold">⚠️ شروط الفيديوهات:</p>
-                       <ul className="text-[0.7rem] list-disc pr-4 mt-2 space-y-1 text-[var(--text-secondary)]">
-                         <li>يمكنك إرسال فيديوهين فقط كحد أقصى كل أسبوعين.</li>
-                         <li>يجب أن يكون الفيديو واضحاً ويشرح خدمات الموقع.</li>
-                         <li>يمكنك وضع رابط أو رفع ملف فيديو مباشرة من هاتفك.</li>
-                         <li>سيتم مراجعة الطلب من قبل المطور خلال 24 ساعة.</li>
-                       </ul>
-                    </div>
                 </div>
               </div>
 
-               {/* Submit Section */}
-               <div className="space-y-6">
-                 <h2 className="text-[1.5rem] font-black border-r-4 border-amber-500 pr-4">إرسال فيديو جديد</h2>
-                 <div className="card p-4 md:p-8">
-                   <form onSubmit={handleSubmitVideo} className="space-y-6">
-                     <div className="flex flex-col gap-3">
-                        <label className="text-[0.9rem] font-black">اختر طريقة الإرسال:</label>
-                        <div className="flex gap-4">
-                           <button type="button" onClick={() => setVideoUrl('')} className={`flex-1 p-3 rounded-xl border-2 transition-all font-bold text-[0.8rem] ${!videoUrl.startsWith('/uploads/') ? 'border-amber-500 bg-amber-500/5' : 'border-[var(--border-color)]'}`}>🔗 رابط فيديو</button>
-                           <button type="button" onClick={() => showToast('ميزة الرفع المباشر قيد التحسين، استخدم الرابط حالياً', 'info')} className="flex-1 p-3 rounded-xl border-2 border-[var(--border-color)] font-bold text-[0.8rem] opacity-70">📁 اختيار ملف</button>
-                        </div>
-                     </div>
-
-                     <div>
-                       <label htmlFor="video-url-input" className="block text-[0.85rem] font-black mb-3">رابط الفيديو (TikTok / YouTube)</label>
-                       <input 
-                         id="video-url-input"
-                         type="url" 
-                         className="input-field p-4 rounded-2xl" 
-                         placeholder="ضع الرابط هنا..." 
-                         dir="ltr" 
-                         value={videoUrl}
-                         onChange={(e) => setVideoUrl(e.target.value)}
-                         required={!videoUrl.startsWith('file:') && !videoUrl.startsWith('/uploads/')}
-                       />
-                        <p className="mt-2 text-[0.7rem] text-[var(--text-secondary)] font-medium">أو يمكنك رفع فيديو من جوالك مباشرة واختياره من المعرض.</p>
-                        <div className="flex flex-col gap-2 mt-3">
-                           <label htmlFor="video-file-upload" className="sr-only">رفع ملف فيديو</label>
-                           <input 
-                              id="video-file-upload"
-                              type="file" 
-                              accept="video/*" 
-                              className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-black file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 cursor-pointer"
-                              onChange={async (e) => {
-                                if(e.target.files?.[0]) {
-                                   const file = e.target.files[0];
-                                   const formData = new FormData();
-                                   formData.append('file', file);
-                                   
-                                   showToast('جاري رفع الفيديو...', 'info');
-                                   try {
-                                      const res = await fetch('/api/user/points-tasks/upload', {
-                                         method: 'POST',
-                                         body: formData
-                                      });
-                                      const data = await res.json();
-                                      if (res.ok) {
-                                         setVideoUrl(data.url);
-                                         showToast('تم رفع الفيديو بنجاح! ✅', 'success');
-                                      } else {
-                                         showToast(data.error || 'فشل الرفع', 'error');
-                                      }
-                                   } catch (err) {
-                                      showToast('حدث خطأ أثناء الرفع', 'error');
-                                   }
-                                }
-                              }}
-                           />
-                        </div>
-                     </div>
-                     <button 
-                       type="submit" 
-                       disabled={submitting || !videoUrl}
-                       className="w-full py-4 bg-[var(--brand-primary)] text-white font-black rounded-2xl shadow-lg hover:brightness-110 flex items-center justify-center gap-3 disabled:opacity-50"
-                     >
-                       {submitting ? 'جاري الإرسال...' : 'إرسال للمراجعة وفتح تذكرة'}
-                     </button>
-                   </form>
-                 </div>
+              <div className="space-y-6">
+                <h2 className="text-[1.5rem] font-black border-r-4 border-amber-500 pr-4">إرسال فيديو جديد</h2>
+                <div className="card p-8">
+                  <form onSubmit={handleSubmitVideo} className="space-y-6">
+                    <div>
+                      <label htmlFor="video-url-input" className="block text-[0.85rem] font-black mb-3">رابط الفيديو (TikTok / YouTube)</label>
+                      <input 
+                        id="video-url-input"
+                        type="url" 
+                        className="input-field p-4 rounded-2xl" 
+                        placeholder="ضع الرابط هنا..." 
+                        dir="ltr" 
+                        value={videoUrl}
+                        onChange={(e) => setVideoUrl(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <button 
+                      type="submit" 
+                      disabled={submitting || !videoUrl}
+                      className="w-full py-4 bg-[var(--brand-primary)] text-white font-black rounded-2xl shadow-lg hover:brightness-110 flex items-center justify-center gap-3 disabled:opacity-50"
+                    >
+                      {submitting ? 'جاري الإرسال...' : 'إرسال للمراجعة'}
+                    </button>
+                  </form>
+                </div>
 
                 <div className="space-y-4">
                   <h3 className="font-black">طلباتك السابقة</h3>

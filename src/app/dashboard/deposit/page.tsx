@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { showToast } from '@/hooks/useNotification';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import { CURRENCY_SYMBOL } from '@/lib/constants';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png' },
@@ -18,6 +18,7 @@ const sideLinks = [
 ];
 
 export default function Deposit() {
+  const { currency, formatPrice } = useCurrency();
   const [amount, setAmount] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,7 +103,7 @@ export default function Deposit() {
         <aside className="w-[250px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 flex flex-col gap-1 fixed top-[70px] bottom-0 overflow-y-auto hidden md:flex transition-all">
           <div className="p-4 bg-[var(--gradient-primary)] rounded-[var(--radius-lg)] mb-4 text-center shadow-lg shadow-purple-500/20">
             <p className="text-white/80 text-[0.75rem] font-bold uppercase tracking-wider mb-1">الرصيد الحالي</p>
-            <p className="text-white text-[1.8rem] font-black tracking-tight" dir="ltr">0.00 {CURRENCY_SYMBOL}</p>
+            <p className="text-white text-[1.8rem] font-black tracking-tight" dir="ltr">{formatPrice(0)}</p>
           </div>
           {sideLinks.map((l, i) => (
             <Link 
@@ -161,7 +162,7 @@ export default function Deposit() {
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-[1.1rem] font-bold mb-4">1. مبلغ الحوالة المودع (بـ {CURRENCY_SYMBOL})</h2>
+                    <h2 className="text-[1.1rem] font-bold mb-4">1. مبلغ الحوالة المودع (بـ {currency === 'SAR' ? 'ر.س' : '$'})</h2>
                     <input 
                       type="number" 
                       className="input-field !text-center !text-xl" 
@@ -172,7 +173,7 @@ export default function Deposit() {
                     <div className="flex gap-2 flex-wrap mt-4 mb-8">
                       {quickAmounts.map(qa => (
                         <button key={qa} onClick={() => setAmount(qa.toString())} className="px-4 py-2 rounded-full border border-[var(--border-color)]">
-                          {qa} {CURRENCY_SYMBOL}
+                          {qa} {currency === 'SAR' ? 'ر.س' : '$'}
                         </button>
                       ))}
                     </div>

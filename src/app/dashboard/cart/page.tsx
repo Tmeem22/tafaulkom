@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
-import { CURRENCY_SYMBOL } from '@/lib/constants';
+import { useCurrency } from '@/components/CurrencyProvider';
 import { showToast } from '@/hooks/useNotification';
 
 const sideLinks = [
@@ -20,6 +20,7 @@ const sideLinks = [
 ];
 
 export default function CartPage() {
+  const { currency, formatPrice } = useCurrency();
   const [cart, setCart] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -33,7 +34,6 @@ export default function CartPage() {
   const saveCart = (newCart: any[]) => {
     setCart(newCart);
     localStorage.setItem('smm_cart', JSON.stringify(newCart));
-    // Trigger storage event for navbar counter
     window.dispatchEvent(new Event('storage'));
   };
 
@@ -122,8 +122,6 @@ export default function CartPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-6">
-                
-                {/* Cart Items */}
                 <div className="space-y-4">
                   {cart.map((item, i) => (
                     <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-color)] p-4 rounded-[16px] flex items-center justify-between gap-4">
@@ -136,9 +134,9 @@ export default function CartPage() {
                         <span className="font-black text-[var(--text-primary)]" dir="ltr">{item.quantity}</span>
                       </div>
                       <div className="flex flex-col items-center justify-center min-w-[80px]">
-                        <span className="text-[1.1rem] font-black text-[var(--brand-primary)]" dir="ltr">{item.cost} {CURRENCY_SYMBOL}</span>
+                        <span className="text-[1.1rem] font-black text-[var(--brand-primary)]" dir="ltr">{formatPrice(parseFloat(item.cost))}</span>
                       </div>
-                      <button onClick={() => removeItem(i)} className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex flex-shrink-0 items-center justify-center transition-all" title="إزالة">
+                      <button onClick={() => removeItem(i)} className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex flex-shrink-0 items-center justify-center transition-all">
                         ×
                       </button>
                     </div>
@@ -148,29 +146,21 @@ export default function CartPage() {
                   </button>
                 </div>
 
-                {/* Summary Panel */}
                 <div>
                   <div className="bg-[var(--bg-card)] border border-[var(--border-color)] p-6 rounded-[24px] sticky top-[100px]">
                     <h3 className="font-black text-[1.2rem] mb-4 border-b border-[var(--border-color)] pb-4">ملخص السلة</h3>
-                    
                     <div className="space-y-3 mb-6">
                       <div className="flex justify-between items-center text-[0.9rem]">
                         <span className="text-[var(--text-secondary)]">عدد الخدمات</span>
                         <span className="font-bold">{cart.length}</span>
                       </div>
-                      <div className="flex justify-between items-center text-[0.9rem]">
-                        <span className="text-[var(--text-secondary)]">إجمالي الكميات</span>
-                        <span className="font-bold" dir="ltr">{cart.reduce((a, b) => a + b.quantity, 0)}</span>
-                      </div>
                     </div>
-
                     <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl mb-6">
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-[var(--text-secondary)]">الإجمالي</span>
-                        <span className="font-black text-[1.5rem] text-[var(--brand-primary)]" dir="ltr">{total.toFixed(4)} {CURRENCY_SYMBOL}</span>
+                        <span className="font-black text-[1.5rem] text-[var(--brand-primary)]" dir="ltr">{formatPrice(total)}</span>
                       </div>
                     </div>
-
                     <button 
                       onClick={handleCheckout}
                       disabled={submitting}
@@ -180,7 +170,6 @@ export default function CartPage() {
                     </button>
                   </div>
                 </div>
-
               </div>
             )}
           </div>

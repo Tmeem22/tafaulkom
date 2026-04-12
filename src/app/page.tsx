@@ -5,17 +5,19 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Faq from '@/components/Faq';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 const services = [
-  { name: 'متابعين انستقرام', icon: 'https://img.icons8.com/fluency/256/instagram-new.png', price: '0.10', category: 'Instagram' },
-  { name: 'لايكات تيك توك', icon: 'https://img.icons8.com/fluency/256/tiktok.png', price: '0.05', category: 'TikTok' },
-  { name: 'مشاهدات يوتيوب', icon: 'https://img.icons8.com/fluency/256/youtube-play.png', price: '1.20', category: 'YouTube' },
-  { name: 'رسم تويتر (X)', icon: 'https://img.icons8.com/fluency/256/twitter.png', price: '0.40', category: 'Twitter' },
-  { name: 'تفاعل سناب شات', icon: 'https://img.icons8.com/fluency/256/snapchat.png', price: '0.80', category: 'Snapchat' },
-  { name: 'أعضاء تيليجرام', icon: 'https://img.icons8.com/fluency/256/telegram-app.png', price: '0.15', category: 'Telegram' },
+  { name: 'متابعين انستقرام', icon: 'https://img.icons8.com/fluency/256/instagram-new.png', price: 0.375, category: 'Instagram' },
+  { name: 'لايكات تيك توك', icon: 'https://img.icons8.com/fluency/256/tiktok.png', price: 0.1875, category: 'TikTok' },
+  { name: 'مشاهدات يوتيوب', icon: 'https://img.icons8.com/fluency/256/youtube-play.png', price: 4.5, category: 'YouTube' },
+  { name: 'رسم تويتر (X)', icon: 'https://img.icons8.com/fluency/256/twitter.png', price: 1.5, category: 'Twitter' },
+  { name: 'تفاعل سناب شات', icon: 'https://img.icons8.com/fluency/256/snapchat.png', price: 3, category: 'Snapchat' },
+  { name: 'أعضاء تيليجرام', icon: 'https://img.icons8.com/fluency/256/telegram-app.png', price: 0.5625, category: 'Telegram' },
 ];
 
 export default function Home() {
+  const { currency, formatPrice } = useCurrency();
   const [stats, setStats] = useState({ users: 0, orders: 0 });
   const [reviews, setReviews] = useState<any[]>([]);
 
@@ -125,7 +127,7 @@ export default function Home() {
                   <h4 className="text-[1.3rem] font-black text-[var(--text-primary)] mb-3">{s.name}</h4>
                   <div className="flex items-center gap-2 mb-8">
                     <span className="text-[0.85rem] font-bold text-[var(--text-tertiary)]">تبدأ من:</span>
-                    <span className="text-[1.4rem] font-black text-[var(--brand-primary)]" dir="ltr">${s.price}</span>
+                    <span className="text-[1.4rem] font-black text-[var(--brand-primary)]" dir="ltr">{formatPrice(s.price)}</span>
                     <span className="text-[0.85rem] font-bold text-[var(--text-tertiary)]">/ 1,000</span>
                   </div>
                   <Link href={`/register?serviceId=${s.category}`} className="w-full py-4 rounded-[18px] bg-[var(--bg-secondary)] text-[var(--text-primary)] font-black text-[0.95rem] no-underline flex items-center justify-center gap-3 transition-all group-hover:bg-[var(--brand-primary)] group-hover:text-white group-hover:shadow-[0_10px_20px_rgba(108,60,225,0.3)]">

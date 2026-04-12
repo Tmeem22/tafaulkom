@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import { CURRENCY_SYMBOL } from '@/lib/constants';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png', active: true },
@@ -112,7 +112,9 @@ const getPlatformKey = (name: string) => {
 };
 
 function DashboardContent() {
+    const { currency, formatPrice } = useCurrency();
   const searchParams = useSearchParams();
+
   const preSelectedServiceId = searchParams.get('serviceId');
 
   const [servicesData, setServicesData] = useState<Record<string, any[]>>({});
@@ -337,7 +339,7 @@ function DashboardContent() {
         <aside className="w-[240px] bg-[var(--bg-card)] border-l border-[var(--border-color)] p-6 px-4 flex flex-col gap-1 fixed top-[70px] bottom-0 overflow-y-auto z-10 hidden lg:flex">
           <div className="p-6 px-5 bg-[var(--gradient-primary)] rounded-[24px] mb-6 text-center shadow-[var(--shadow-md)]">
             <p className="text-white/85 text-[0.75rem] font-bold uppercase tracking-wider mb-2">رصيدك الحالي</p>
-            <p className="text-white text-[2rem] font-black mb-3 drop-shadow-md" dir="ltr">{balance !== null ? balance.toFixed(2) : '...'} {CURRENCY_SYMBOL}</p>
+            <p className="text-white text-[2rem] font-black mb-3 drop-shadow-md" dir="ltr">{balance !== null ? formatPrice(balance) : '...'}</p>
             <Link href="/dashboard/deposit" className="flex items-center justify-center gap-2 p-3 rounded-[15px] bg-white/20 text-white text-[0.85rem] font-extrabold no-underline transition-all hover:scale-[1.02] backdrop-blur-sm">
               <img src="https://img.icons8.com/fluency/256/plus.png" width={16} height={16} className="brightness-0 invert" alt="إضافة رصيد" /> شحن رصيدك
             </Link>
@@ -540,7 +542,7 @@ function DashboardContent() {
                                     >
                                       <div className="flex justify-between items-center gap-4">
                                         <span className="text-[0.75rem] font-bold text-[var(--text-primary)] leading-snug" dir="ltr">{s.name}</span>
-                                        <span className="text-[0.7rem] font-black text-[var(--brand-primary)] whitespace-nowrap">{s.rate.toFixed(3)} {CURRENCY_SYMBOL}</span>
+                                        <span className="text-[0.7rem] font-black text-[var(--brand-primary)] whitespace-nowrap">{formatPrice(s.rate)}</span>
                                       </div>
                                     </div>
                                   ))}
@@ -640,7 +642,7 @@ function DashboardContent() {
                     <div className="p-5 px-6 rounded-[22px] bg-[var(--bg-secondary)] border border-[var(--border-color)] shadow-inner">
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-[0.9rem] font-bold text-[var(--text-secondary)]">التكلفة الإجمالية:</span>
-                        <span className="text-[1.8rem] font-black text-[var(--brand-primary)]" dir="ltr">{totalCost} {CURRENCY_SYMBOL}</span>
+                        <span className="text-[1.8rem] font-black text-[var(--brand-primary)]" dir="ltr">{formatPrice(Number(totalCost))}</span>
                       </div>
                       
                       {/* Admin Profit Comparison View */}
@@ -648,11 +650,11 @@ function DashboardContent() {
                         <div className="mt-3 pt-3 border-t border-[var(--border-color)] border-dashed grid grid-cols-2 gap-4">
                           <div className="flex flex-col">
                             <span className="text-[0.7rem] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">سعر التكلفة (قبل)</span>
-                            <span className="text-[1rem] font-black text-[var(--text-secondary)] opacity-70" dir="ltr">{baseCost} {CURRENCY_SYMBOL}</span>
+                            <span className="text-[1rem] font-black text-[var(--text-secondary)] opacity-70" dir="ltr">{formatPrice(Number(baseCost))}</span>
                           </div>
                           <div className="flex flex-col text-left">
                             <span className="text-[0.7rem] font-bold text-emerald-500 uppercase tracking-wider">الربح الصافي (50%)</span>
-                            <span className="text-[1rem] font-black text-emerald-500" dir="ltr">+{profit} {CURRENCY_SYMBOL}</span>
+                            <span className="text-[1rem] font-black text-emerald-500" dir="ltr">+{formatPrice(Number(profit))}</span>
                           </div>
                         </div>
                       )}
@@ -716,7 +718,7 @@ function DashboardContent() {
                   </h3>
                   <div className="flex flex-col gap-4">
                     {[
-                      { label: 'إجمالي المصروفات', value: loadingStats ? '...' : `${stats.totalSpent} ${CURRENCY_SYMBOL}`, color: 'var(--text-primary)' },
+                      { label: 'إجمالي المصروفات', value: loadingStats ? '...' : formatPrice(parseFloat(stats.totalSpent || '0')), color: 'var(--text-primary)' },
                       { label: 'إجمالي الطلبات', value: loadingStats ? '...' : stats.totalOrders, color: 'var(--text-primary)' },
                       { label: 'طلبات قيد المراجعة', value: loadingStats ? '...' : stats.pendingOrders, color: 'var(--brand-accent)' },
                       { label: 'حالة الحساب', value: loadingStats ? '...' : stats.accountStatus, color: 'var(--brand-success)' },

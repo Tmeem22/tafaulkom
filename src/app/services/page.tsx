@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { CURRENCY_SYMBOL } from '@/lib/constants';
+import { useCurrency } from '@/components/CurrencyProvider';
 
 const platformIcons: Record<string, string> = {
   instagram: 'https://img.icons8.com/fluency/256/instagram-new.png',
@@ -43,6 +43,7 @@ const categories = [
 
 
 export default function Services() {
+  const { currency, formatPrice } = useCurrency();
   const [activeCategory, setActiveCategory] = useState('all');
   const [allServices, setAllServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -154,7 +155,7 @@ export default function Services() {
                           <span className="text-[0.9rem] font-semibold text-[var(--text-primary)]" dir="ltr">{s.name}</span>
                         </td>
                         <td className="p-4 px-6 text-center">
-                          <span className="text-[0.9rem] font-extrabold text-[var(--brand-primary)]" dir="ltr">{s.rate.toFixed(2)} {CURRENCY_SYMBOL}</span>
+                          <span className="text-[0.9rem] font-extrabold text-[var(--brand-primary)]" dir="ltr">{formatPrice(s.rate)}</span>
                         </td>
                         <td className="p-4 px-6 text-center text-[0.85rem] text-[var(--text-secondary)]">{s.min.toLocaleString()}</td>
                         <td className="p-4 px-6 text-center text-[0.85rem] text-[var(--text-secondary)]">{s.max.toLocaleString()}</td>

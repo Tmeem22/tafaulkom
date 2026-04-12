@@ -29,12 +29,15 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('smm_currency', c);
   };
 
-  const formatPrice = (usdPrice: number) => {
-    if (!mounted) return `${(usdPrice * 3.75).toFixed(2)} ر.س`; // Default SSR
+  const formatPrice = (sarPrice: number) => {
+    if (!mounted) return `${sarPrice.toFixed(2)} ر.س`; // Default SSR is SAR
+    
     if (currency === 'SAR') {
-      return `${(usdPrice * 3.75).toFixed(2)} ر.س`;
+      return `${sarPrice.toFixed(2)} ر.س`;
     }
-    return `$${usdPrice.toFixed(2)}`;
+    
+    // Convert SAR to USD (SAR / 3.75)
+    return `$${(sarPrice / 3.75).toFixed(2)}`;
   };
 
   return (
