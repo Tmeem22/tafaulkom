@@ -21,7 +21,8 @@ export async function GET() {
       currency: 'USD',
       role: user.role,
       isProfitViewer: user.isProfitViewer,
-      points: user.points || 0
+      points: user.points || 0,
+      apiKey: user.apiKey
     });
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

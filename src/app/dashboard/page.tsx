@@ -8,17 +8,18 @@ import { useCurrency } from '@/components/CurrencyProvider';
 
 const sideLinks = [
   { label: 'طلب جديد', href: '/dashboard', icon: 'https://img.icons8.com/fluency/256/shopping-cart.png', active: true },
+  { label: 'الطلب الجماعي', href: '/dashboard/mass-order', icon: 'https://img.icons8.com/fluency/256/add-list.png' },
   { label: 'سلة المشتريات', href: '/dashboard/cart', icon: 'https://img.icons8.com/color/96/shopping-basket.png' },
   { label: 'طلباتي', href: '/dashboard/orders', icon: 'https://img.icons8.com/fluency/256/list.png' },
   { label: 'خدماتنا', href: '/services', icon: 'https://img.icons8.com/fluency/256/flash-on.png' },
   { label: 'إضافة رصيد', href: '/dashboard/deposit', icon: 'https://img.icons8.com/fluency/256/card-exchange.png' },
+  { label: 'الربط البرمجي (API)', href: '/dashboard/api-docs', icon: 'https://img.icons8.com/fluency/256/api.png' },
   { label: 'نظام النقاط', href: '/dashboard/points', icon: 'https://img.icons8.com/fluency/256/coins.png' },
   { label: 'الدعم الفني', href: '/dashboard/support', icon: 'https://img.icons8.com/fluency/256/headset.png' },
   { label: 'التسويق بالعمولة', href: '/dashboard/affiliate', icon: 'https://img.icons8.com/fluency/256/share.png' },
   { label: 'صالة الألعاب', href: '/dashboard/games', icon: 'https://img.icons8.com/fluency/256/controller.png' },
   { label: 'خزنتي والسلة', href: '/dashboard/inventory', icon: 'https://img.icons8.com/fluency/256/treasure-chest.png' },
   { label: 'تقاريري', href: '/dashboard/analytics', icon: 'https://img.icons8.com/fluency/256/combo-chart.png' },
-  { label: 'API', href: '/api-docs', icon: 'https://img.icons8.com/fluency/256/code.png' },
 ];
 
 const platformIcons: Record<string, { icon: string, color: string, keywords: string[] }> = {
