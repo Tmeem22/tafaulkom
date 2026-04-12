@@ -225,7 +225,7 @@ export default function Support() {
           <div className="card p-8 max-w-[500px] w-full mx-4" onClick={e => e.stopPropagation()} dir="rtl">
             <h2 className="font-black mb-6">تذكرة جديدة</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <select className="input-field" value={subject} onChange={e => setSubject(e.target.value)}>
+              <select className="input-field" title="موضوع التذكرة" value={subject} onChange={e => setSubject(e.target.value)}>
                 {subjects.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
               {subject.includes('تعويض') && <input className="input-field" placeholder="رقم الطلب" value={orderId} onChange={e => setOrderId(e.target.value)} required />}
