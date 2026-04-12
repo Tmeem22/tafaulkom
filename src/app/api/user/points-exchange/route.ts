@@ -22,9 +22,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'رصيد نقاطك غير كافٍ' }, { status: 400 });
     }
 
-    // Rate: 1 point = 0.001 currency units (e.g. SAR)
-    // 500 points = 0.50 SAR
-    const balanceToAdd = pointsToExchange * 0.001;
+    // Rate: 1 point = 0.00375 currency units (e.g. SAR)
+    // 500 points = 1.88 SAR
+    const balanceToAdd = pointsToExchange * 0.00375;
 
     const result = await prisma.$transaction([
       prisma.user.update({

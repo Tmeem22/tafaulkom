@@ -20,7 +20,8 @@ export async function GET() {
       balance: user.balance || 0.00,
       currency: 'USD',
       role: user.role,
-      isProfitViewer: user.isProfitViewer
+      isProfitViewer: user.isProfitViewer,
+      points: user.points || 0
     });
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
