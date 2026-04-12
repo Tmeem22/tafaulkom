@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { orders } = await request.json(); // array of { serviceId, link, quantity }
+    const { orders } = await request.json();
     if (!orders || !Array.isArray(orders) || orders.length === 0) {
       return NextResponse.json({ error: 'الرجاء إدخال بيانات صحيحة' }, { status: 400 });
     }
@@ -20,12 +20,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'الحد الأقصى للطلبات في المرة الواحدة هو 50 طلب' }, { status: 400 });
     }
 
-    // Process validations upfront to ensure funds
     let totalCost = 0;
     const validatedOrders = [];
 
-    // Pre-fetch all requested services
-    const serviceIds = Array.from(new Set(orders.map(o => Number(o.serviceId))));
+    const serviceIds = Array.from(new Set(orders.map((o: any) => Number(o.serviceId))));
     const services = await prisma.service.findMany({
       where: { id: { in: serviceIds }, active: true }
     });
@@ -38,22 +36,22 @@ export async function POST(request: Request) {
       const qty = Number(quantity);
 
       if (!sid || !link || !qty) {
-        return NextResponse.json({ error: \`السطر \${i + 1} يفتقد بعض البيانات\` }, { status: 400 });
+        return NextResponse.json({ error: 'السطر ' + (i + 1) + ' يفتقد بعض البيانات' }, { status: 400 });
       }
 
       const svc = serviceMap.get(sid);
       if (!svc) {
-        return NextResponse.json({ error: \`الخدمة \${sid} غير متوفرة (السطر \${i + 1})\` }, { status: 400 });
+        return NextResponse.json({ error: 'الخدمة ' + sid + ' غير متوفرة (السطر ' + (i + 1) + ')' }, { status: 400 });
       }
 
       if (qty < svc.min || qty > svc.max) {
-        return NextResponse.json({ error: \`لخدمة \${sid} الكمية يجب أن تكون بين \${svc.min} و \${svc.max}\` }, { status: 400 });
+        return NextResponse.json({ error: 'لخدمة ' + sid + ' الكمية يجب أن تكون بين ' + svc.min + ' و ' + svc.max }, { status: 400 });
       }
 
       const costInSar = svc.originalRate * USD_TO_SAR_RATE;
       const ratePer1000 = svc.customRate ? svc.customRate : costInSar * DEFAULT_PROFIT_MARGIN;
       const charge = (qty / 1000) * ratePer1000;
-      
+
       totalCost += charge;
 
       validatedOrders.push({
@@ -64,20 +62,18 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check Balance
     if (user.balance < totalCost) {
-      return NextResponse.json({ error: \`رصيدك غير كافٍ. إجمالي التكلفة هو \${totalCost.toFixed(3)} \${CURRENCY_SYMBOL}\` }, { status: 400 });
+      return NextResponse.json({ error: 'رصيدك غير كافٍ. إجمالي التكلفة هو ' + totalCost.toFixed(3) + ' ' + CURRENCY_SYMBOL }, { status: 400 });
     }
 
-    // Process Orders via Provider and DB
     let currentUserBalance = user.balance;
     let successCount = 0;
     let pointsToAdd = 0;
-    
+
     for (const vOrder of validatedOrders) {
       try {
         const providerResponse = await createProviderOrder(vOrder.service.id, vOrder.link, vOrder.quantity);
-        
+
         if (!providerResponse.error && providerResponse.order) {
            currentUserBalance -= vOrder.charge;
            pointsToAdd += (vOrder.charge < 10 ? 10 : 50);
@@ -104,7 +100,6 @@ export async function POST(request: Request) {
         }
       } catch (err) {
         console.error("Mass Order Item Error:", err);
-        // Continue trying other orders even if one fails
       }
     }
 
@@ -112,7 +107,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'عذراً، فشل تنفيذ جميع الطلبات بسبب مشكلة في المزود الأساسي' }, { status: 500 });
     }
 
-    // Optional Affiliate Logic
     if (user.referredById && totalCost > 0) {
       const commission = totalCost * 0.015;
       try {
@@ -122,16 +116,16 @@ export async function POST(request: Request) {
                   data: {
                       userId: user.referredById,
                       title: 'عمولة طلب جماعي! 🛒',
-                      message: \`حصلت على \${commission.toFixed(4)} \${CURRENCY_SYMBOL} عمولة نظير طلب ضخم لإحدى إحالاتك.\`
+                      message: 'حصلت على ' + commission.toFixed(4) + ' ' + CURRENCY_SYMBOL + ' عمولة نظير طلب ضخم لإحدى إحالاتك.'
                   }
               })
           ]);
-      } catch(e) {}
+      } catch(e) { /* ignore */ }
     }
 
     return NextResponse.json({
       success: true,
-      message: \`تم تنفيذ \${successCount} طلب بنجاح مخصوماً من الرصيد.\`,
+      message: 'تم تنفيذ ' + successCount + ' طلب بنجاح مخصوماً من الرصيد.',
       totalCost,
       newBalance: currentUserBalance
     });

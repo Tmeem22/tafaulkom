@@ -148,7 +148,7 @@ export default function MassOrderPage() {
                        disabled={isSubmitting || parsedCount === 0}
                        className="w-full btn-primary py-5 rounded-[20px] font-black text-[1.1rem] shadow-lg disabled:opacity-50 transition-all flex justify-center items-center gap-3"
                     >
-                        {isSubmitting ? 'جاري المعالجة والاتصال بالمزود...' : \`🚀 تنفيذ \${parsedCount} طلب الآن\`}
+                        {isSubmitting ? 'جاري المعالجة والاتصال بالمزود...' : '🚀 تنفيذ ' + parsedCount + ' طلب الآن'}
                     </button>
                     {lineCount > 0 && lineCount !== parsedCount && (
                         <p className="text-red-500 font-bold text-center text-[0.85rem] mt-4">

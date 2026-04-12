@@ -163,7 +163,7 @@ export async function POST(req: Request) {
        data: {
           userId: user.id,
           title: '🔥 باقة مشاهير مباعة!',
-          message: \`تم البدء في تنفيذ \${pkg.name}. استعد للانفجار! حصلت على \${pointsToAdd} نقطة كهدية.\`
+          message: 'تم البدء في تنفيذ ' + pkg.name + '. استعد للانفجار! حصلت على ' + pointsToAdd + ' نقطة كهدية.'
        }
     });
 
