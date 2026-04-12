@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     }
 
     // Normalize API Key extraction
+    const { searchParams } = new URL(req.url);
     let key = body.key || searchParams.get('key');
     const action = body.action || searchParams.get('action');
 

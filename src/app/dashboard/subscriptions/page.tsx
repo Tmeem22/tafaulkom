@@ -137,6 +137,7 @@ export default function SubscriptionsPage() {
                    <select 
                      value={selectedCategory} 
                      onChange={handleCategoryChange}
+                     aria-label="اختر المنصة أو القسم"
                      className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-[16px] p-4 focus:border-[var(--brand-primary)] outline-none transition-all font-bold"
                    >
                      <option value="">-- اختر القسم --</option>
@@ -153,6 +154,7 @@ export default function SubscriptionsPage() {
                        setSelectedService(srv);
                      }}
                      disabled={!selectedCategory}
+                     aria-label="اختر خدمة الاشتراك"
                      className="w-full bg-[var(--bg-input)] border border-[var(--border-color)] rounded-[16px] p-4 focus:border-[var(--brand-primary)] outline-none transition-all font-bold disabled:opacity-50"
                    >
                      <option value="">-- اختر الخدمة --</option>

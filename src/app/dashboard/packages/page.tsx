@@ -138,7 +138,7 @@ export default function PackagesPage() {
           <div className="bg-[var(--bg-card)] max-w-[500px] w-full rounded-[30px] shadow-2xl p-8 border border-[var(--border-color)] animate-fade-in-up flex flex-col" onClick={e => e.stopPropagation()}>
              <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-black">{selectedPkg.name}</h2>
-                <img src={selectedPkg.icon} width={40} height={40} />
+                <img src={selectedPkg.icon} width={40} height={40} alt={selectedPkg.name} />
              </div>
              <p className="text-[0.95rem] text-[var(--text-secondary)] mb-6 leading-relaxed">
                {selectedPkg.description}

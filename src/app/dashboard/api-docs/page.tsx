@@ -76,7 +76,7 @@ export default function ApiDocsPage() {
                 </h1>
                 <p className="text-[1.1rem] text-[var(--text-secondary)] font-bold">اربط متجرك الخاص أو لوحتك بسيرفرنا آلياً وضاعف مبيعاتك.</p>
               </div>
-              <a href="https://smmcpan.com/api" target="_blank" className="btn-secondary py-3 px-6 rounded-2xl flex items-center gap-2 font-bold opacity-70 hover:opacity-100">
+              <a href="https://smmcpan.com/api" target="_blank" rel="noopener noreferrer" className="btn-secondary py-3 px-6 rounded-2xl flex items-center gap-2 font-bold opacity-70 hover:opacity-100">
                 📄 توثيق API الكامل
               </a>
             </div>
