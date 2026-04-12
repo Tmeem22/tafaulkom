@@ -1517,12 +1517,8 @@ body[data-device="mobile"] .mobile-bottom-nav a img {
     padding-bottom: env(safe-area-inset-bottom, 20px);
   }
 
-  /* Momentum scrolling (defaults in modern iOS, keeping for fallback) */
-  .overflow-y-auto,
-  .overflow-x-auto {
-    /* -webkit-overflow-scrolling: touch; */
-  }
-}
+
+ }
 
 /* ========================================
    📱 Samsung Internet Browser Fix

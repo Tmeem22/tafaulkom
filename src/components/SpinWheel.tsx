@@ -94,26 +94,23 @@ export default function SpinWheel() {
 
               {/* Spinning Wheel */}
               <div
-                className="w-full h-full rounded-full border-4 border-amber-400 shadow-lg overflow-hidden relative"
-                style={{
-                  transform: `rotate(${rotation}deg)`,
-                  transition: spinning ? 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)' : 'none'
-                }}
+                className={`w-full h-full rounded-full border-4 border-amber-400 shadow-lg overflow-hidden relative ${spinning ? 'spinning' : ''}`}
+                style={{ '--wheel-rotation': `${rotation}deg` } as any}
               >
                 {SEGMENTS.map((seg, i) => {
                   const angle = (360 / SEGMENTS.length) * i;
                   return (
                     <div
                       key={i}
-                      className="absolute w-full h-full"
-                      style={{
-                        transform: `rotate(${angle}deg)`,
-                        clipPath: 'polygon(50% 50%, 50% 0%, 100% 0%)',
-                      }}
+                      className="segment-container"
+                      style={{ 
+                        '--seg-angle': `${angle}deg`,
+                        '--seg-color': seg.color,
+                        '--text-angle': `${360 / SEGMENTS.length / 2}deg`
+                      } as any}
                     >
-                      <div className="w-full h-full" style={{ backgroundColor: seg.color }}>
-                        <span className="absolute top-[18%] left-[52%] text-white text-[0.6rem] font-black -rotate-12 whitespace-nowrap"
-                          style={{ transform: `rotate(${360 / SEGMENTS.length / 2}deg)` }}>
+                      <div className="segment">
+                        <span className="segment-label">
                           {seg.emoji}
                         </span>
                       </div>
@@ -131,7 +128,7 @@ export default function SpinWheel() {
             <div className="grid grid-cols-4 gap-1.5 mb-5">
               {SEGMENTS.map((seg, i) => (
                 <div key={i} className="flex items-center gap-1 text-[0.6rem] font-bold text-[var(--text-secondary)]">
-                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: seg.color }} />
+                  <span className="legend-dot" style={{ '--dot-color': seg.color } as any} />
                   {seg.name}
                 </div>
               ))}
@@ -165,6 +162,42 @@ export default function SpinWheel() {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        .spinning {
+          transform: rotate(var(--wheel-rotation));
+          transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+        .segment-container {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          transform: rotate(var(--seg-angle));
+          clip-path: polygon(50% 50%, 50% 0%, 100% 0%);
+        }
+        .segment {
+          width: 100%;
+          height: 100%;
+          background-color: var(--seg-color);
+        }
+        .segment-label {
+          position: absolute;
+          top: 18%;
+          left: 52%;
+          color: white;
+          font-size: 0.6rem;
+          font-weight: 900;
+          white-space: nowrap;
+          transform: rotate(var(--text-angle));
+        }
+        .legend-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          flex-shrink: 0;
+          background-color: var(--dot-color);
+        }
+      `}</style>
     </>
   );
 }

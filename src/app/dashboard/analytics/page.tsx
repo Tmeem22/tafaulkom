@@ -63,8 +63,8 @@ export default function AnalyticsPage() {
             </h1>
 
             {/* Savings Banner */}
-            <div className="bg-gradient-to-l from-emerald-500 to-teal-600 rounded-[24px] p-6 md:p-8 text-center relative overflow-hidden">
-              <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'url(https://img.icons8.com/fluency/256/money-bag.png)', backgroundSize: '60px', backgroundRepeat: 'repeat'}} />
+            <div className="savings-banner">
+              <div className="banner-overlay" />
               <div className="relative z-10">
                 <p className="text-white/80 font-bold text-[0.9rem] mb-2">🎉 مبروك! أنت وفّرت مقارنة بالمواقع الأخرى</p>
                 <div className="flex items-center justify-center gap-2" dir="ltr">
@@ -101,8 +101,10 @@ export default function AnalyticsPage() {
                 {data?.monthlyHistory?.map((m: any, i: number) => (
                   <div key={i} className="flex-1 flex flex-col items-center gap-2">
                     <p className="text-[0.6rem] font-black text-[var(--text-primary)]" dir="ltr">{m.spent.toFixed(1)} {CURRENCY_SYMBOL}</p>
-                    <div className="w-full rounded-t-xl bg-gradient-to-t from-[var(--brand-primary)] to-[var(--brand-primary)]/60 transition-all hover:brightness-110" 
-                      style={{ height: `${Math.max((m.spent / maxSpent) * 160, 8)}px` }} />
+                    <div 
+                      className="chart-bar transition-all hover:brightness-110" 
+                      style={{ '--bar-height': `${Math.max((m.spent / maxSpent) * 160, 8)}px` } as any} 
+                    />
                     <p className="text-[0.65rem] font-bold text-[var(--text-tertiary)]">{m.month}</p>
                     <p className="text-[0.55rem] text-[var(--text-tertiary)]">{m.orders} طلب</p>
                   </div>
@@ -129,7 +131,10 @@ export default function AnalyticsPage() {
                             <p className="text-[0.7rem] font-black text-[var(--text-secondary)]">{s.count} طلب • {s.total.toFixed(2)} {CURRENCY_SYMBOL}</p>
                           </div>
                           <div className="w-full h-2 bg-[var(--bg-secondary)] rounded-full overflow-hidden">
-                            <div className="h-full bg-gradient-to-l from-[var(--brand-primary)] to-purple-400 rounded-full transition-all" style={{ width: `${(s.count / maxCount) * 100}%` }} />
+                            <div 
+                              className="h-full bg-gradient-to-l from-[var(--brand-primary)] to-purple-400 rounded-full transition-all" 
+                              style={{ '--progress-width': `${(s.count / maxCount) * 100}%` } as any} 
+                            />
                           </div>
                         </div>
                       </div>
@@ -145,6 +150,34 @@ export default function AnalyticsPage() {
 
           </div>
         </div>
+        <style jsx>{`
+          .savings-banner {
+            background: linear-gradient(to left, #10b981, #0d9488);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+          }
+          .banner-overlay {
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+            background-image: url(https://img.icons8.com/fluency/256/money-bag.png);
+            background-size: 60px;
+            background-repeat: repeat;
+          }
+          .chart-bar {
+            width: 100%;
+            height: var(--bar-height);
+            border-radius: 12px 12px 0 0;
+            background: linear-gradient(to top, var(--brand-primary), rgba(108, 60, 225, 0.6));
+          }
+          .progress-fill {
+            height: 100%;
+            width: var(--progress-width);
+          }
+        `}</style>
       </div>
     </>
   );

@@ -241,9 +241,9 @@ export default function DeviceOptimizer({ showDebug = false }: DeviceOptimizerPr
 
 function InfoRow({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
-    <div className="info-row">
+    <div className="info-row" style={{ '--row-color': color } as any}>
       <span className="label">{label}</span>
-      <span className="value" style={{ color }}>{value}</span>
+      <span className="value">{value}</span>
       <style jsx>{`
         .info-row {
           display: flex;
@@ -251,7 +251,7 @@ function InfoRow({ label, value, color }: { label: string; value: string | numbe
           align-items: center;
         }
         .label { color: #9CA3AF; font-size: 11px; }
-        .value { font-weight: bold; font-size: 11px; }
+        .value { font-weight: bold; font-size: 11px; color: var(--row-color); }
       `}</style>
     </div>
   );
