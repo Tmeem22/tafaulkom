@@ -12,11 +12,15 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const { currency, setCurrency } = useCurrency();
   const router = useRouter();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+      setShowBackToTop(window.scrollY > 300);
+    };
     window.addEventListener('scroll', handleScroll);
     
     // Check session
@@ -83,6 +87,17 @@ export default function Navbar() {
   };
 
   const [hasSupportUnread, setHasSupportUnread] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = JSON.parse(localStorage.getItem('smm_cart') || '[]');
+      setCartCount(cart.length);
+    };
+    updateCartCount();
+    window.addEventListener('storage', updateCartCount);
+    return () => window.removeEventListener('storage', updateCartCount);
+  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -150,6 +165,16 @@ export default function Navbar() {
             {!loading && (
               user ? (
                 <div className="flex items-center gap-4 mr-4">
+                  {/* Cart Icon */}
+                  <Link href="/dashboard/cart" className="relative cursor-pointer group p-2 hover:bg-[var(--bg-secondary)] rounded-full transition-all no-underline">
+                    <img src="https://img.icons8.com/color/256/shopping-basket.png" width={22} height={22} alt="السلة" />
+                    {cartCount > 0 && (
+                      <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-[var(--brand-primary)] text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-[var(--bg-card)] shadow-md px-1">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Link>
+
                   <div className="relative cursor-pointer group p-2 hover:bg-[var(--bg-secondary)] rounded-full transition-all"
                        onClick={() => {
                          setShowNotifications(!showNotifications);
@@ -287,10 +312,116 @@ export default function Navbar() {
         )}
       </div>
 
+      {/* Back to Top / Mobile Side Access */}
+      <button 
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (window.innerWidth < 768) setMobileOpen(true);
+        }}
+        className={`back-to-top ${showBackToTop ? 'visible' : ''}`}
+        aria-label="العودة للأعلى"
+        style={{ right: '20px' }}
+      >
+        <img src="https://img.icons8.com/fluency/256/chevron-up.png" width={24} height={24} alt="Up" className="brightness-0 invert" />
+      </button>
+
+      {/* Mobile Bottom Navigation */}
+      {user && (
+        <div className="mobile-bottom-nav md:hidden">
+          <Link href="/dashboard" className="bottom-nav-item">
+            <img src="https://img.icons8.com/fluency/256/shopping-cart.png" alt="Order" />
+            <span>متجرنا</span>
+          </Link>
+          <Link href="/dashboard/orders" className="bottom-nav-item">
+            <img src="https://img.icons8.com/fluency/256/list.png" alt="Orders" />
+            <span>طلباتي</span>
+          </Link>
+          <Link href="/dashboard/cart" className="bottom-nav-item relative">
+            <img src="https://img.icons8.com/color/256/shopping-basket.png" alt="Cart" />
+            {cartCount > 0 && <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">{cartCount}</span>}
+            <span>السلة</span>
+          </Link>
+          <Link href="/dashboard/support" className="bottom-nav-item relative">
+            <img src="https://img.icons8.com/fluency/256/headset.png" alt="Support" />
+            {hasSupportUnread && <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full animate-pulse border-2 border-[var(--bg-card)]"></div>}
+            <span>الدعم</span>
+          </Link>
+          <button onClick={() => setMobileOpen(true)} className="bottom-nav-item bg-transparent border-none">
+            <img src="https://img.icons8.com/fluency/256/menu.png" alt="Menu" />
+            <span>القائمة</span>
+          </button>
+        </div>
+      )}
+
       <style jsx>{`
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-nav-toggle { display: flex !important; align-items: center; gap: 0.25rem; }
+        }
+
+        .mobile-bottom-nav {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 65px;
+          background: var(--bg-card);
+          -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+          border-top: 1px solid var(--border-color);
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          z-index: 2000;
+          padding-bottom: env(safe-area-inset-bottom);
+          box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+
+        .bottom-nav-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          color: var(--text-tertiary);
+          text-decoration: none;
+          font-size: 0.65rem;
+          font-weight: 800;
+          transition: all 0.3s ease;
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+
+        .bottom-nav-item img {
+          width: 20px;
+          height: 20px;
+        }
+
+        .back-to-top {
+          position: fixed;
+          bottom: 85px;
+          right: 20px;
+          width: 45px;
+          height: 45px;
+          background: var(--brand-primary);
+          border: none;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 8px 20px rgba(108, 60, 225, 0.3);
+          cursor: pointer;
+          z-index: 1999;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          opacity: 0;
+          transform: translateY(20px);
+          pointer-events: none;
+        }
+
+        .back-to-top.visible {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
         }
       `}</style>
     </nav>

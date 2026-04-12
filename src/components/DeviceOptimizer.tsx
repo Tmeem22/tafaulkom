@@ -87,25 +87,7 @@ export default function DeviceOptimizer({ showDebug = false }: DeviceOptimizerPr
         {/* Floating Debug Button */}
         <button
           onClick={() => setShowIndicator(!showIndicator)}
-          style={{
-            position: 'fixed',
-            bottom: '120px',
-            left: '16px',
-            zIndex: 99999,
-            width: '44px',
-            height: '44px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #6C3CE1, #06B6D4)',
-            border: '2px solid rgba(255,255,255,0.2)',
-            color: 'white',
-            fontSize: '18px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0 4px 20px rgba(108,60,225,0.4)',
-            backdropFilter: 'blur(10px)',
-          }}
+          className="debug-trigger"
           title="معلومات الجهاز - AI Device Detection"
         >
           📱
@@ -113,48 +95,25 @@ export default function DeviceOptimizer({ showDebug = false }: DeviceOptimizerPr
 
         {/* Debug Panel */}
         {showIndicator && (
-          <div
-            style={{
-              position: 'fixed',
-              bottom: '170px',
-              left: '16px',
-              zIndex: 99999,
-              width: '320px',
-              maxHeight: '60vh',
-              overflowY: 'auto',
-              background: 'rgba(8, 9, 21, 0.95)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(108, 60, 225, 0.3)',
-              borderRadius: '20px',
-              padding: '20px',
-              color: 'white',
-              fontFamily: 'monospace',
-              fontSize: '12px',
-              direction: 'ltr',
-              textAlign: 'left',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.8)',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 'bold', background: 'linear-gradient(90deg, #6C3CE1, #06B6D4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                🤖 AI Device Detection
-              </span>
+          <div className="debug-panel">
+            <div className="debug-header">
+              <span className="brand-text">🤖 AI Device Detection</span>
               <button
                 onClick={() => setShowIndicator(false)}
-                style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', fontSize: '18px' }}
+                className="close-btn"
               >
                 ✕
               </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="debug-content">
               <InfoRow label="Type" value={device.type} color="#10B981" />
               <InfoRow label="Brand" value={device.brand} color="#8B5CF6" />
               <InfoRow label="Model" value={device.model} color="#8B5CF6" />
               <InfoRow label="OS" value={`${device.os} ${device.osVersion}`} color="#06B6D4" />
               <InfoRow label="Browser" value={device.browser} color="#06B6D4" />
               
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
+              <div className="divider" />
               
               <InfoRow label="Viewport" value={`${device.viewportWidth} × ${device.viewportHeight}`} color="#F59E0B" />
               <InfoRow label="Screen" value={`${device.screenWidth} × ${device.screenHeight}`} color="#F59E0B" />
@@ -162,7 +121,7 @@ export default function DeviceOptimizer({ showDebug = false }: DeviceOptimizerPr
               <InfoRow label="Ratio" value={device.aspectRatio} color="#F59E0B" />
               <InfoRow label="Orient" value={device.orientation} color="#F59E0B" />
               
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
+              <div className="divider" />
               
               <InfoRow label="Touch" value={device.isTouchDevice ? `✅ (${device.maxTouchPoints}pts)` : '❌'} color="#EF4444" />
               <InfoRow label="Hover" value={device.hasHover ? '✅' : '❌'} color="#EF4444" />
@@ -170,7 +129,7 @@ export default function DeviceOptimizer({ showDebug = false }: DeviceOptimizerPr
               <InfoRow label="Memory" value={`${device.deviceMemoryGB}GB`} color="#10B981" />
               <InfoRow label="CPU" value={`${device.cpuCores} cores`} color="#10B981" />
               
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '4px 0' }} />
+              <div className="divider" />
               
               <InfoRow label="Font Size" value={`${device.sizing.baseFontSize}px`} color="#C4B5FD" />
               <InfoRow label="Scale" value={`${device.sizing.scaleFactor}x`} color="#C4B5FD" />
@@ -181,6 +140,97 @@ export default function DeviceOptimizer({ showDebug = false }: DeviceOptimizerPr
             </div>
           </div>
         )}
+
+        <style jsx>{`
+          .debug-trigger {
+            position: fixed;
+            bottom: 120px;
+            left: 16px;
+            z-index: 99999;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6C3CE1, #06B6D4);
+            border: 2px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(108,60,225,0.4);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s ease;
+          }
+          .debug-trigger:hover { transform: scale(1.1); }
+          
+          .debug-panel {
+            position: fixed;
+            bottom: 170px;
+            left: 16px;
+            z-index: 99999;
+            width: 320px;
+            max-height: 60vh;
+            overflow-y: auto;
+            background: rgba(8, 9, 21, 0.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(108, 60, 225, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            font-family: monospace;
+            font-size: 12px;
+            direction: ltr;
+            text-align: left;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+          }
+          
+          .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+          }
+          
+          .brand-text {
+            font-size: 14px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #6C3CE1, #06B6D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+          
+          .close-btn {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            font-size: 18px;
+          }
+          
+          .debug-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          }
+          
+          .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 4px 0;
+          }
+          
+          .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          
+          .label { color: #9CA3AF; font-size: 11px; }
+          .value { font-weight: bold; font-size: 11px; }
+        `}</style>
       </>
     );
   }
@@ -191,9 +241,18 @@ export default function DeviceOptimizer({ showDebug = false }: DeviceOptimizerPr
 
 function InfoRow({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span style={{ color: '#9CA3AF', fontSize: '11px' }}>{label}</span>
-      <span style={{ color, fontWeight: 'bold', fontSize: '11px' }}>{value}</span>
+    <div className="info-row">
+      <span className="label">{label}</span>
+      <span className="value" style={{ color }}>{value}</span>
+      <style jsx>{`
+        .info-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .label { color: #9CA3AF; font-size: 11px; }
+        .value { font-weight: bold; font-size: 11px; }
+      `}</style>
     </div>
   );
 }

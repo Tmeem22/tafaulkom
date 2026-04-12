@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { createProviderOrder, createProviderSubscription, getProviderOrderStatuses } from '@/lib/smm-api';
 import { getUserFromSession } from '@/lib/auth';
-import { USD_TO_SAR_RATE, DEFAULT_PROFIT_MARGIN } from '@/lib/constants';
+import { USD_TO_SAR_RATE, DEFAULT_PROFIT_MARGIN, CURRENCY_SYMBOL } from '@/lib/constants';
 
 export async function GET() {
   try {
@@ -213,7 +213,7 @@ export async function POST(request: Request) {
           data: {
             userId: user.referredById,
             title: 'عمولة جديدة! 💰',
-            message: `حصلت على ${commission.toFixed(4)}$ عمولة من عملية شراء أحد إحالاتك.`
+            message: `حصلت على ${commission.toFixed(4)} ${CURRENCY_SYMBOL} عمولة من عملية شراء أحد إحالاتك.`
           }
         })
       ]);

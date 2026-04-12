@@ -33,6 +33,8 @@ export default function CartPage() {
   const saveCart = (newCart: any[]) => {
     setCart(newCart);
     localStorage.setItem('smm_cart', JSON.stringify(newCart));
+    // Trigger storage event for navbar counter
+    window.dispatchEvent(new Event('storage'));
   };
 
   const removeItem = (index: number) => {
@@ -80,9 +82,9 @@ export default function CartPage() {
       if (successCount === cart.length) {
         clearCart();
       } else {
-        // Optimally, remove just the successful ones, but simple wipe if all good
         localStorage.removeItem('smm_cart');
         setCart([]);
+        window.dispatchEvent(new Event('storage'));
       }
     }
     setSubmitting(false);
@@ -134,7 +136,7 @@ export default function CartPage() {
                         <span className="font-black text-[var(--text-primary)]" dir="ltr">{item.quantity}</span>
                       </div>
                       <div className="flex flex-col items-center justify-center min-w-[80px]">
-                        <span className="text-[1.1rem] font-black text-[var(--brand-primary)]" dir="ltr">${item.cost}</span>
+                        <span className="text-[1.1rem] font-black text-[var(--brand-primary)]" dir="ltr">{item.cost} {CURRENCY_SYMBOL}</span>
                       </div>
                       <button onClick={() => removeItem(i)} className="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex flex-shrink-0 items-center justify-center transition-all" title="إزالة">
                         ×
@@ -165,7 +167,7 @@ export default function CartPage() {
                     <div className="bg-[var(--bg-secondary)] p-4 rounded-2xl mb-6">
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-[var(--text-secondary)]">الإجمالي</span>
-                        <span className="font-black text-[1.5rem] text-[var(--brand-primary)]" dir="ltr">${total.toFixed(4)}</span>
+                        <span className="font-black text-[1.5rem] text-[var(--brand-primary)]" dir="ltr">{total.toFixed(4)} {CURRENCY_SYMBOL}</span>
                       </div>
                     </div>
 

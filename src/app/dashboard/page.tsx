@@ -675,6 +675,8 @@ function DashboardContent() {
                             cost: totalCost
                           });
                           localStorage.setItem('smm_cart', JSON.stringify(cart));
+                          // Trigger storage event for navbar counter
+                          window.dispatchEvent(new Event('storage'));
                           // reset forms
                           setLink('');
                           setQuantity((selectedService as any)?.min || 100);

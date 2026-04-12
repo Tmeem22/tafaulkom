@@ -3,14 +3,14 @@ import { useState, useEffect, useRef } from 'react';
 import { showToast } from '@/hooks/useNotification';
 
 const SEGMENTS = [
-  { name: 'خصم 10%', color: '#6c3ce1', emoji: '🎫' },
-  { name: 'خصم 20%', color: '#f59e0b', emoji: '🔥' },
-  { name: 'خصم 50%', color: '#ef4444', emoji: '💎' },
-  { name: '25 نقطة', color: '#10b981', emoji: '🪙' },
-  { name: '50 نقطة', color: '#3b82f6', emoji: '💰' },
-  { name: '100 نقطة', color: '#8b5cf6', emoji: '👑' },
-  { name: '$0.25', color: '#14b8a6', emoji: '💵' },
-  { name: 'حظ أوفر', color: '#6b7280', emoji: '😅' },
+  { name: '0.25 ر.س', color: '#14b8a6', emoji: '💵' },
+  { name: '0.50 ر.س', color: '#0ea5e9', emoji: '💰' },
+  { name: '1.00 ر.س', color: '#6366f1', emoji: '💎' },
+  { name: 'حظ أوفر', color: '#94a3b8', emoji: '🚫' },
+  { name: '2.00 ر.س', color: '#a855f7', emoji: '🔥' },
+  { name: '5.00 ر.س', color: '#ec4899', emoji: '🚀' },
+  { name: '0.10 ر.س', color: '#f43f5e', emoji: '✨' },
+  { name: '10.00 ر.س', color: '#eab308', emoji: '👑' },
 ];
 
 export default function SpinWheel() {
@@ -71,7 +71,7 @@ export default function SpinWheel() {
       {/* Floating Trigger Button */}
       <button
         onClick={() => setShowModal(true)}
-        className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 transition-all animate-bounce"
+        className="fixed bottom-24 left-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 transition-all animate-bounce"
         title="عجلة الحظ"
       >
         <span className="text-[1.5rem]">🎰</span>
@@ -108,7 +108,7 @@ export default function SpinWheel() {
                       className="absolute w-full h-full"
                       style={{
                         transform: `rotate(${angle}deg)`,
-                        clipPath: 'polygon(50% 50%, 50% 0%, 73% 0%)',
+                        clipPath: 'polygon(50% 50%, 50% 0%, 100% 0%)',
                       }}
                     >
                       <div className="w-full h-full" style={{ backgroundColor: seg.color }}>
